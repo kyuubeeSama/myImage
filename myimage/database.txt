@@ -1,0 +1,24 @@
+website表
+id，name,url(网站地址)，url(网站地址)，is_delete(2:删除)
+sql:
+CREATE TABLE IF NOT EXISTS `website`  (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,name VARCHAR(200) NOT NULL,url VARCHAR(200) NOT NULL,is_delete INTEGER NOT NULL DEFAULT(1))
+
+category表
+id,website_id,name,value,is_delete(2:删除)
+sql:
+CREATE TABLE IF NOT EXISTS `category` (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,website_id INTEGER NOT NULL,name VARCHAR(200) NOT NULL,value VARCHAR(50) NOT NULL,is_delete NOT NULL DEFAULT(1))
+
+article表
+id，website_id,name,detail_url(详情地址),has_done(是否已保存所有图片到本地),is_delete(2:删除)
+sql:
+CREATE TABLE IF NOT EXISTS `article` (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,website_id INTEGER NOT NULL,name VARCHAR(200) NOT NULL,detail_url VARCHAR(200) NOT NULL,has_done NOT NULL INTEGER DEFAULT(1),is_delete INTEGER DEFAULT(1))
+
+image表
+id,imageurl(图片地址),width,height
+sql:
+CREATE TABLE IF NOT EXISTS `image` (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,imageurl VARCHAR(200) NOT NULL,width FLOAT DEFAULT(0),height FLOAT DEFAULT(0))
+
+collect表
+id，collect_id(对应的article_id,image_id),type(1:article,2:image)
+sql:
+CREATE TABLE IF NOT EXISTS `collect` (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,collect_id INTEGER NOT NULL,type INTEGER NOT NULL)

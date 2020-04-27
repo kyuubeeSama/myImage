@@ -1,0 +1,173 @@
+//
+//  CollectViewController.m
+//  myimage
+//
+//  Created by liuqingyuan on 2020/1/3.
+//  Copyright © 2020 liuqingyuan. All rights reserved.
+//
+
+#import "CollectViewController.h"
+#import "ImgListCollectionViewCell.h"
+#import "ImgCollectionViewCell.h"
+#import "ArticleModel.h"
+#import "ArticleCollectModel.h"
+#import "ImgDetailViewController.h"
+#import "ImgCollectModel.h"
+
+@interface CollectViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+
+@property(nonatomic, retain) UICollectionView *mainCollect;
+@property(nonatomic, strong) NSMutableArray *listArr;
+
+@end
+
+@implementation CollectViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
+    self.listArr = [[NSMutableArray alloc] init];
+    [self setNav];
+    [self makeUI];
+    [self getData];
+    [self getMoreData];
+}
+
+- (void)setNav {
+    self.navigationItem.title = @"收藏";
+}
+
+- (void)makeUI {
+    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+    self.mainCollect = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, screenW, screenH) collectionViewLayout:layout];
+    self.mainCollect.delegate = self;
+    self.mainCollect.dataSource = self;
+    [self.view addSubview:self.mainCollect];
+    self.mainCollect.backgroundColor = [UIColor whiteColor];
+    [self.mainCollect registerClass:[ImgListCollectionViewCell class] forCellWithReuseIdentifier:@"listCell"];
+    [self.mainCollect registerNib:[UINib nibWithNibName:@"ImgCollectionViewCell" bundle:[NSBundle mainBundle]] forCellWithReuseIdentifier:@"imgCell"];
+    [self.mainCollect mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.view.mas_left);
+        make.right.equalTo(self.view.mas_right);
+        make.top.equalTo(self.view.mas_top);
+        make.bottom.equalTo(self.view.mas_bottom);
+    }];
+}
+
+- (void)getData {
+    SqliteTool *sqlTool = [SqliteTool sharedInstance];
+    if (self.type == 1) {
+//    select article.*,website.url from article left join collect,website on collect.value = article.article_id and website.website_id = article.website_id where type = 1
+        NSMutableArray *array = [sqlTool selectDataFromTable:@"article"
+                                                        join:@"left join collect,website"
+                                                          on:@"article.article_id = collect.value and website.value = article.website_id"
+                                                       where:@"collect.type = 1"
+                                                       field:@"article.*,website.url"
+                                                       class:[ArticleCollectModel class]];
+        if (array.count > 0) {
+        } else {
+            [self.mainCollect.mj_footer endRefreshingWithNoMoreData];
+        }
+        [self.listArr addObjectsFromArray:array];
+    } else {
+//        select image.*,website.url from image left join collect,article,website on image.image_id = collect.value and image.article_id = article.article_id and article.website_id = website.website_id where collect.type = 2
+        NSMutableArray *array = [sqlTool selectDataFromTable:@"image"
+                                                        join:@"left join collect,article,website"
+                                                          on:@"image.image_id = collect.value and image.article_id = article.article_id and article.website_id = website.value"
+                                                       where:@"collect.type = 2"
+                                                       field:@"image.*,website.url"
+                                                       class:[ImgCollectModel class]];
+        if (array.count > 0) {
+        } else {
+            [self.mainCollect.mj_footer endRefreshingWithNoMoreData];
+        }
+        [self.listArr addObjectsFromArray:array];
+    }
+    [self.mainCollect.mj_footer endRefreshing];
+    [self.mainCollect reloadData];
+}
+
+- (void)getMoreData {
+    self.mainCollect.mj_footer = [MJRefreshBackFooter footerWithRefreshingBlock:^{
+        [self getData];
+    }];
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return self.listArr.count;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.type == 1) {
+        ImgListCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"listCell" forIndexPath:indexPath];
+        ArticleCollectModel *model = self.listArr[indexPath.row];
+        cell.titleLab.text = model.name;
+        [cell.headImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", model.url, model.img_url]] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
+
+        return cell;
+    } else {
+        ImgCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"imgCell" forIndexPath:indexPath];
+        ImgCollectModel *model = self.listArr[indexPath.row];
+        [cell.contentImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",model.url,model.image_url]] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
+        return cell;
+    }
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.type == 1) {
+        ArticleCollectModel *model = self.listArr[indexPath.row];
+        ImgDetailViewController *VC = [[ImgDetailViewController alloc] init];
+        VC.articleModel = [[ArticleModel alloc] init];
+        VC.articleModel.article_id = model.article_id;
+        VC.articleModel.website_id = model.website_id;
+        VC.articleModel.img_url = model.img_url;
+        VC.articleModel.detail_url = model.img_url;
+        VC.articleModel.name = model.name;
+        VC.articleModel.has_done = model.has_done;
+        VC.articleModel.is_delete = model.is_delete;
+        [self.navigationController pushViewController:VC animated:YES];
+
+    } else {
+        ImgCollectModel *model = self.listArr[(NSUInteger) indexPath.row];
+        HZPhotoBrowser *browser = [[HZPhotoBrowser alloc] init];
+        browser.isFullWidthForLandScape = YES;
+        browser.isNeedLandscape = YES;
+        browser.currentImageIndex = 0;
+        browser.btnArr = @[@"取消收藏"];
+        browser.imageArray = @[[NSString stringWithFormat:@"%@%@", model.url, model.image_url]];
+        [browser show];
+        browser.otherBtnBlock = ^(int index) {
+            if (index == 0) {
+                SqliteTool *sqlTool = [SqliteTool sharedInstance];
+                if ([sqlTool deleteDataFromTable:@"collect" where:[NSString stringWithFormat:@"value = %d and type = 2", model.image_id]]) {
+                    [self.listArr removeObjectAtIndex:indexPath.row];
+                    [self.mainCollect reloadData];
+                }
+            }
+        };
+    }
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.type == 1) {
+        return CGSizeMake(screenW / 2 - 5, screenW / 2 + 45);
+    } else {
+        return CGSizeMake(screenW / 3, screenW / 3 * 48 / 32);
+    }
+}
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
+    return UIEdgeInsetsMake(0, 0, 0, 0);
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end
