@@ -40,7 +40,6 @@
 		A98546442296895500BAEFB1 /* HZPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A985463F2296895500BAEFB1 /* HZPhotoBrowser.bundle */; };
 		A98546452296895500BAEFB1 /* HZPhotoBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = A98546402296895500BAEFB1 /* HZPhotoBrowserView.m */; };
 		A9C202E021D49B79006572DD /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C202DF21D49B79006572DD /* UserViewController.m */; };
-		A9C2030421D4C5D6006572DD /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C2030321D4C5D6006572DD /* SearchViewController.m */; };
 		A9C2030721D5BCDA006572DD /* MYPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C2030621D5BCDA006572DD /* MYPickerView.m */; };
 		A9F4ABA521C23EB100FE84E9 /* ImgListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F4ABA421C23EB100FE84E9 /* ImgListViewController.m */; };
 		A9F4ABA821C23EBC00FE84E9 /* ImgDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F4ABA721C23EBC00FE84E9 /* ImgDetailViewController.m */; };
@@ -118,8 +117,6 @@
 		A98546412296895500BAEFB1 /* HZPhotoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HZPhotoBrowser.h; sourceTree = "<group>"; };
 		A9C202DE21D49B79006572DD /* UserViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserViewController.h; sourceTree = "<group>"; };
 		A9C202DF21D49B79006572DD /* UserViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserViewController.m; sourceTree = "<group>"; };
-		A9C2030221D4C5D6006572DD /* SearchViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
-		A9C2030321D4C5D6006572DD /* SearchViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
 		A9C2030521D5BCDA006572DD /* MYPickerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MYPickerView.h; sourceTree = "<group>"; };
 		A9C2030621D5BCDA006572DD /* MYPickerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MYPickerView.m; sourceTree = "<group>"; };
 		A9F4ABA321C23EB100FE84E9 /* ImgListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImgListViewController.h; sourceTree = "<group>"; };
@@ -328,8 +325,6 @@
 			children = (
 				A9C202DE21D49B79006572DD /* UserViewController.h */,
 				A9C202DF21D49B79006572DD /* UserViewController.m */,
-				A9C2030221D4C5D6006572DD /* SearchViewController.h */,
-				A9C2030321D4C5D6006572DD /* SearchViewController.m */,
 				A904AC5023BF094C00E3281E /* CollectViewController.h */,
 				A904AC5123BF094C00E3281E /* CollectViewController.m */,
 				A9146E2D23C30E8D00E94193 /* WebsiteViewController.h */,
@@ -532,7 +527,6 @@
 				A904AC4F23BDEFF600E3281E /* WKWebViewController.m in Sources */,
 				A9F4ABA821C23EBC00FE84E9 /* ImgDetailViewController.m in Sources */,
 				A98546422296895500BAEFB1 /* HZWaitingView.m in Sources */,
-				A9C2030421D4C5D6006572DD /* SearchViewController.m in Sources */,
 				A904AC5223BF094C00E3281E /* CollectViewController.m in Sources */,
 				A9146E2F23C30E8D00E94193 /* WebsiteViewController.m in Sources */,
 				A938826421C1FBFF0085958B /* BaseViewController.m in Sources */,
