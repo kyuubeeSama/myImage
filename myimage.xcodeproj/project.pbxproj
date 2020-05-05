@@ -18,7 +18,6 @@
 		144DFB7FE4F2D284FE87FCEF /* database.txt in Resources */ = {isa = PBXBuildFile; fileRef = 144DF1DAFB8DBA5398B525B7 /* database.txt */; };
 		144DFE45B68135B215C346F1 /* NetWorkingTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 144DF5A9F03D5EF1B385726A /* NetWorkingTool.m */; };
 		A904AC4C23BDE2EA00E3281E /* ImageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A904AC4B23BDE2EA00E3281E /* ImageModel.m */; };
-		A904AC4F23BDEFF600E3281E /* WKWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A904AC4E23BDEFF600E3281E /* WKWebViewController.m */; };
 		A904AC5223BF094C00E3281E /* CollectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A904AC5123BF094C00E3281E /* CollectViewController.m */; };
 		A904AC5623BF0C8900E3281E /* ImgCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A904AC5423BF0C8900E3281E /* ImgCollectionViewCell.m */; };
 		A904AC5723BF0C8900E3281E /* ImgCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A904AC5523BF0C8900E3281E /* ImgCollectionViewCell.xib */; };
@@ -76,8 +75,6 @@
 		4CFE4A6DB1C57641DD0E0894 /* Pods-myimage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-myimage.release.xcconfig"; path = "Pods/Target Support Files/Pods-myimage/Pods-myimage.release.xcconfig"; sourceTree = "<group>"; };
 		A904AC4A23BDE2EA00E3281E /* ImageModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageModel.h; sourceTree = "<group>"; };
 		A904AC4B23BDE2EA00E3281E /* ImageModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageModel.m; sourceTree = "<group>"; };
-		A904AC4D23BDEFF600E3281E /* WKWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKWebViewController.h; sourceTree = "<group>"; };
-		A904AC4E23BDEFF600E3281E /* WKWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKWebViewController.m; sourceTree = "<group>"; };
 		A904AC5023BF094C00E3281E /* CollectViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CollectViewController.h; sourceTree = "<group>"; };
 		A904AC5123BF094C00E3281E /* CollectViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CollectViewController.m; sourceTree = "<group>"; };
 		A904AC5323BF0C8900E3281E /* ImgCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImgCollectionViewCell.h; sourceTree = "<group>"; };
@@ -239,8 +236,6 @@
 		A938825C21C1FB610085958B /* Base */ = {
 			isa = PBXGroup;
 			children = (
-				A904AC4D23BDEFF600E3281E /* WKWebViewController.h */,
-				A904AC4E23BDEFF600E3281E /* WKWebViewController.m */,
 				A938826221C1FBFF0085958B /* BaseViewController.h */,
 				A938826321C1FBFF0085958B /* BaseViewController.m */,
 			);
@@ -524,7 +519,6 @@
 				A938824921C1F8E90085958B /* ViewController.m in Sources */,
 				A9F4ABA521C23EB100FE84E9 /* ImgListViewController.m in Sources */,
 				A9F63F1C21C22F4100F29893 /* SqliteTool.m in Sources */,
-				A904AC4F23BDEFF600E3281E /* WKWebViewController.m in Sources */,
 				A9F4ABA821C23EBC00FE84E9 /* ImgDetailViewController.m in Sources */,
 				A98546422296895500BAEFB1 /* HZWaitingView.m in Sources */,
 				A904AC5223BF094C00E3281E /* CollectViewController.m in Sources */,

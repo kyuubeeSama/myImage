@@ -5,7 +5,7 @@
 //  Created by liuqingyuan on 2020/1/6.
 //  Copyright © 2020 liuqingyuan. All rights reserved.
 //
-// TODO:已经添加的站点，标记为已添加，并增加侧滑删除站点功能。
+// TODO:使用switch控件表示站点
 
 #import "WebsiteViewController.h"
 
@@ -109,7 +109,7 @@
             }
                 break;
             case 2:{
-                [sqlTool insertTable:@"website" element:@"name,url,value" value:@"\"24fa\",\"https://www.24fa.top/\",3"];
+                [sqlTool insertTable:@"website" element:@"name,url,value" value:@"\"24fa\",\"https://www.24fa.cc\",3"];
                 NSArray *titleArr = @[@"美女",@"欧美"];
                 NSArray *idArr = @[@"49",@"71"];
                 for (int i = 0; i < titleArr.count; ++i) {

@@ -9,7 +9,6 @@
 #import "ImgDetailViewController.h"
 #import "ImgDetailTableViewCell.h"
 #import "ImageModel.h"
-#import "WKWebViewController.h"
 #import "CollectModel.h"
 
 @interface ImgDetailViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -142,10 +141,8 @@
 }
 
 - (void)browserBtnClick:(UIButton *)button {
-    WKWebViewController *VC = [[WKWebViewController alloc] init];
-    VC.titleStr = self.articleModel.name;
-    VC.urlStr = [NSString stringWithFormat:@"%@%@", self.websiteModel.url, self.articleModel.detail_url];
-    [self.navigationController pushViewController:VC animated:YES];
+    NSString  *urlStr = [NSString stringWithFormat:@"%@%@", self.websiteModel.url, self.articleModel.detail_url];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlStr]];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
