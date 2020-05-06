@@ -8,7 +8,7 @@
 // TODO:使用switch控件表示站点
 
 #import "WebsiteViewController.h"
-
+#import "WebSiteTableViewCell.h"
 @interface WebsiteViewController ()<UITableViewDataSource,UITableViewDelegate>
 
 @property (nonatomic, retain)UITableView *mainTable;
@@ -51,6 +51,7 @@
     self.mainTable.estimatedRowHeight = 0;
     self.mainTable.estimatedSectionFooterHeight = 0;
     self.mainTable.estimatedSectionHeaderHeight = 0;
+    [self.mainTable registerNib:[UINib nibWithNibName:@"WebSiteTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"cell"];
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -58,75 +59,72 @@
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    WebSiteTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (!cell){
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
+        cell = [[NSBundle mainBundle] loadNibNamed:@"WebSiteTableViewCell" owner:nil options:nil][0];
     }
-    cell.textLabel.text = self.listArr[(NSUInteger) indexPath.row];
-    cell.detailTextLabel.text = [self.websiteArr containsObject:self.listArr[(NSUInteger) indexPath.row]] ? @"已添加" : @"添加";
+    cell.titleLab.text = self.listArr[indexPath.row];
+    cell.switchBtn.on = [self.websiteArr containsObject:self.listArr[(NSUInteger) indexPath.row]] ? YES : NO;
+    cell.switchValueChange = ^(BOOL value) {
+        if (value){
+            // 添加
+            [self beginProgressWithTitle:nil];
+            SqliteTool *sqlTool = [SqliteTool sharedInstance];
+            switch (indexPath.row){
+                case 0:{
+                    //        id，name,url(网站地址)，is_delete(2:删除)
+                    [sqlTool insertTable:@"website" element:@"name,url,value" value:@"\"撸女吧\",\"https://www.lunu8.com\",1"];
+                    // 插入分类数据
+                    NSArray *titleArr = @[@"撸女",@"撸吧",@"推图",@"亚洲",@"欧美",@"日韩"];
+                    NSArray *idArr = @[@"1",@"2",@"3",@"6",@"8",@"9"];
+                    for (int i=0;i<titleArr.count;i++){
+//            id,website_id,name,value,is_delete(2:删除)
+                        [sqlTool insertTable:@"category" element:@"website_id,name,value" value:[NSString stringWithFormat:@"1,\"%@\",\"%@\"", titleArr[(NSUInteger) i], idArr[(NSUInteger) i]]];
+                    }
+                    [self alertWithTitle:@"添加成功"];
+                }
+                    break;
+                case 1:{
+                    [sqlTool insertTable:@"website" element:@"name,url,value" value:@"\"撸哥吧\",\"https://www.lugex.top\",2"];
+                    // 插入分类数据
+                    NSArray *titleArr = @[@"欲女",@"撸女",@"亚洲",@"欧美",@"日韩"];
+                    NSArray *idArr = @[@"1",@"2",@"6",@"8",@"9"];
+                    for (int i=0;i<titleArr.count;i++){
+//            id,website_id,name,value,is_delete(2:删除)
+                        [sqlTool insertTable:@"category" element:@"website_id,name,value" value:[NSString stringWithFormat:@"2,\"%@\",\"%@\"", titleArr[(NSUInteger) i], idArr[(NSUInteger) i]]];
+                    }
+                    [self alertWithTitle:@"添加成功"];
+                }
+                    break;
+                case 2:{
+                    [sqlTool insertTable:@"website" element:@"name,url,value" value:@"\"24fa\",\"https://www.24fa.cc\",3"];
+                    NSArray *titleArr = @[@"美女",@"欧美"];
+                    NSArray *idArr = @[@"49",@"71"];
+                    for (int i = 0; i < titleArr.count; ++i) {
+                        [sqlTool insertTable:@"category" element:@"website_id,name,value" value:[NSString stringWithFormat:@"3,\"%@\",\"%@\"", titleArr[(NSUInteger) i], idArr[(NSUInteger) i]]];
+                    }
+                    [self alertWithTitle:@"添加成功"];
+                }
+                    break;
+                default:
+                    break;
+            }
+            [self endProgress];
+        }else{
+            // 删除
+            SqliteTool *sqlTool = [SqliteTool sharedInstance];
+            // FIXEME:需要删除三个表中的相关数据,方案一：联表删除  方案二：递归删除
+            if([sqlTool deleteDataFromTable:@"website" where:[NSString stringWithFormat:@"name = \"%@\"",self.listArr[(NSUInteger) indexPath.row]]]){
+                [self.websiteArr removeAllObjects];
+                [self alertWithTitle:@"删除成功"];
+                [self getData];
+            } else{
+                [self alertWithTitle:@"删除失败"];
+            }
+        }
+    };
     return cell;
 }
-
--(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return UITableViewCellEditingStyleDelete;
-}
-
--(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    return NO;
-}
-
--(NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return @"删除";
-}
-
--(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    SqliteTool *sqlTool = [SqliteTool sharedInstance];
-    // FIXEME:需要删除三个表中的相关数据,方案一：联表删除  方案二：递归删除
-    if([sqlTool deleteDataFromTable:@"website" where:[NSString stringWithFormat:@"name = \"%@\"",self.listArr[(NSUInteger) indexPath.row]]]){
-        [self alertWithTitle:@"删除成功"];
-        [self getData];
-    } else{
-        [self alertWithTitle:@"删除失败"];
-    }
-}
-
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    // 添加站点
-    if(![self.websiteArr containsObject:self.listArr[(NSUInteger) indexPath.row]]){
-        [self beginProgressWithTitle:nil];
-        SqliteTool *sqlTool = [SqliteTool sharedInstance];
-        switch (indexPath.row){
-            case 1:{
-                [sqlTool insertTable:@"website" element:@"name,url,value" value:@"\"撸哥吧\",\"https://www.lugex.top\",2"];
-                // 插入分类数据
-                NSArray *titleArr = @[@"欲女",@"撸女",@"亚洲",@"欧美",@"日韩"];
-                NSArray *idArr = @[@"1",@"2",@"6",@"8",@"9"];
-                for (int i=0;i<titleArr.count;i++){
-//            id,website_id,name,value,is_delete(2:删除)
-                    [sqlTool insertTable:@"category" element:@"website_id,name,value" value:[NSString stringWithFormat:@"2,\"%@\",\"%@\"", titleArr[(NSUInteger) i], idArr[(NSUInteger) i]]];
-                }
-                [self alertWithTitle:@"添加成功"];
-            }
-                break;
-            case 2:{
-                [sqlTool insertTable:@"website" element:@"name,url,value" value:@"\"24fa\",\"https://www.24fa.cc\",3"];
-                NSArray *titleArr = @[@"美女",@"欧美"];
-                NSArray *idArr = @[@"49",@"71"];
-                for (int i = 0; i < titleArr.count; ++i) {
-                    [sqlTool insertTable:@"category" element:@"website_id,name,value" value:[NSString stringWithFormat:@"3,\"%@\",\"%@\"", titleArr[(NSUInteger) i], idArr[(NSUInteger) i]]];
-                }
-                [self alertWithTitle:@"添加成功"];
-            }
-                break;
-            default:
-                break;
-        }
-        [self endProgress];
-    }else{
-        [self alertWithTitle:@"已添加"];
-    }
-}
-
 
 /*
 #pragma mark - Navigation

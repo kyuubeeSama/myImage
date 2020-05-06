@@ -33,6 +33,8 @@
 		A938825421C1F8EA0085958B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A938825321C1F8EA0085958B /* main.m */; };
 		A938826421C1FBFF0085958B /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A938826321C1FBFF0085958B /* BaseViewController.m */; };
 		A938826821C1FD3C0085958B /* IndexViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A938826721C1FD3C0085958B /* IndexViewController.m */; };
+		A93F765D2462A0E1005E9E51 /* WebSiteTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A93F765B2462A0E1005E9E51 /* WebSiteTableViewCell.m */; };
+		A93F765E2462A0E1005E9E51 /* WebSiteTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A93F765C2462A0E1005E9E51 /* WebSiteTableViewCell.xib */; };
 		A94296DB23BAE625003391B5 /* DataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A94296DA23BAE625003391B5 /* DataManager.m */; };
 		A98546422296895500BAEFB1 /* HZWaitingView.m in Sources */ = {isa = PBXBuildFile; fileRef = A985463A2296895500BAEFB1 /* HZWaitingView.m */; };
 		A98546432296895500BAEFB1 /* HZPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = A985463C2296895500BAEFB1 /* HZPhotoBrowser.m */; };
@@ -102,6 +104,9 @@
 		A938826321C1FBFF0085958B /* BaseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BaseViewController.m; sourceTree = "<group>"; };
 		A938826621C1FD3C0085958B /* IndexViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IndexViewController.h; sourceTree = "<group>"; };
 		A938826721C1FD3C0085958B /* IndexViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IndexViewController.m; sourceTree = "<group>"; };
+		A93F765A2462A0E1005E9E51 /* WebSiteTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WebSiteTableViewCell.h; sourceTree = "<group>"; };
+		A93F765B2462A0E1005E9E51 /* WebSiteTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WebSiteTableViewCell.m; sourceTree = "<group>"; };
+		A93F765C2462A0E1005E9E51 /* WebSiteTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WebSiteTableViewCell.xib; sourceTree = "<group>"; };
 		A94296D923BAE625003391B5 /* DataManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DataManager.h; sourceTree = "<group>"; };
 		A94296DA23BAE625003391B5 /* DataManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DataManager.m; sourceTree = "<group>"; };
 		A985463A2296895500BAEFB1 /* HZWaitingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HZWaitingView.m; sourceTree = "<group>"; };
@@ -333,6 +338,9 @@
 			children = (
 				A9FF6CDF21F9510C006F57DA /* UserTableHeaderView.h */,
 				A9FF6CE021F9510C006F57DA /* UserTableHeaderView.m */,
+				A93F765A2462A0E1005E9E51 /* WebSiteTableViewCell.h */,
+				A93F765B2462A0E1005E9E51 /* WebSiteTableViewCell.m */,
+				A93F765C2462A0E1005E9E51 /* WebSiteTableViewCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -458,6 +466,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A93F765E2462A0E1005E9E51 /* WebSiteTableViewCell.xib in Resources */,
 				A904AC5723BF0C8900E3281E /* ImgCollectionViewCell.xib in Resources */,
 				A98546442296895500BAEFB1 /* HZPhotoBrowser.bundle in Resources */,
 				A938825121C1F8EA0085958B /* LaunchScreen.storyboard in Resources */,
@@ -535,6 +544,7 @@
 				A9FF6CE121F9510C006F57DA /* UserTableHeaderView.m in Sources */,
 				A938824621C1F8E90085958B /* AppDelegate.m in Sources */,
 				A9F4ABC421C3AE0D00FE84E9 /* ImgDetailTableViewCell.m in Sources */,
+				A93F765D2462A0E1005E9E51 /* WebSiteTableViewCell.m in Sources */,
 				A938826821C1FD3C0085958B /* IndexViewController.m in Sources */,
 				A98546452296895500BAEFB1 /* HZPhotoBrowserView.m in Sources */,
 				A98546432296895500BAEFB1 /* HZPhotoBrowser.m in Sources */,
