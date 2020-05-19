@@ -7,7 +7,7 @@
 //
 
 #import "Tool.h"
-
+#import "NSObject+Tool.h"
 @implementation Tool
 
 +(NSString *)getMemonry
@@ -37,6 +37,18 @@
         [resultArr addObject:article];
     }
     return resultArr;
+}
+
++(void)showAlertWithTitle:(NSString *)title Message:(NSString *)message withSureBtnClick:(void (^)(void))sureBtnClick
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *sureAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        sureBtnClick();
+    }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+    [alert addAction:sureAction];
+    [alert addAction:cancelAction];
+    [[self currentViewController] presentViewController:alert animated:YES completion:nil];
 }
 
 @end

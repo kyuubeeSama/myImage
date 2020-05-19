@@ -9,4 +9,7 @@ target 'myimage' do
   pod 'Masonry'
   pod 'FLAnimatedImage'
   pod 'MJExtension'
+  pod 'hpple'
+  pod 'CWLateralSlide'
+
 end

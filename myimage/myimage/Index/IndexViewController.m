@@ -12,6 +12,7 @@
 #import "WebsiteModel.h"
 #import "UserViewController.h"
 #import "ImgListViewController.h"
+#import "UIViewController+CWLateralSlide.h"
 @interface IndexViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property(nonatomic,retain)UITableView *mainTable;
@@ -33,8 +34,23 @@
     self.title = @"首页";
     [self setNav];
     [self makeUI];
-    NSLog(@"%@",[FileTool getDocumentPath]);
+    WeakSelf(self)
+    [self cw_registerShowIntractiveWithEdgeGesture:YES transitionDirectionAutoBlock:^(CWDrawerTransitionDirection direction) {
+        if (direction == CWDrawerTransitionFromLeft) { // 左侧滑出
+            [weakself defaultAnimationFromLeft];
+        } else if (direction == CWDrawerTransitionFromRight) { // 右侧滑出
+        }
+    }];
 
+}
+
+- (void)defaultAnimationFromLeft {
+
+    // 强引用leftVC，不用每次创建新的,也可以每次在这里创建leftVC，抽屉收起的时候会释放掉
+    UserViewController *VC = [[UserViewController alloc] init];
+    [self cw_showDefaultDrawerViewController:VC];
+    // 或者这样调用
+//    [self cw_showDrawerViewController:vc animationType:CWDrawerAnimationTypeDefault configuration:nil];
 }
 
 -(void)getData{
@@ -61,17 +77,11 @@
         [sqlTool createTableWithSql:@"CREATE TABLE IF NOT EXISTS `image` (image_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,image_url VARCHAR(200) NOT NULL,article_id INT NOT NULL,width FLOAT DEFAULT(0),height FLOAT DEFAULT(0))"];
 //        collect
         [sqlTool createTableWithSql:@"CREATE TABLE IF NOT EXISTS `collect` (collect_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,value INT NOT NULL,type INT NOT NULL)"];
-        // 保存最初的数据
-//        id，name,url(网站地址)，is_delete(2:删除)
-        [sqlTool insertTable:@"website" element:@"name,url,value" value:@"\"撸女吧\",\"https://www.lunu8.com\",1"];
-        // 插入分类数据
-        NSArray *titleArr = @[@"撸女",@"撸吧",@"推图",@"亚洲",@"欧美",@"日韩"];
-        NSArray *idArr = @[@"1",@"2",@"3",@"6",@"8",@"9"];
-        for (int i=0;i<titleArr.count;i++){
-//            id,website_id,name,value,is_delete(2:删除)
-            [sqlTool insertTable:@"category" element:@"website_id,name,value" value:[NSString stringWithFormat:@"1,\"%@\",\"%@\"", titleArr[(NSUInteger) i], idArr[(NSUInteger) i]]];
-        }
+        //TODO:创建完数据库后，提示去个人中心添加站点
         [self endProgress];
+        [Tool showAlertWithTitle:@"提醒" Message:@"请在个人中心添加站点" withSureBtnClick:^{
+            [self defaultAnimationFromLeft];
+        }];
     } failure:^{
         // 创建数据库失败
         [self alertWithTitle:@"创建数据库失败"];
@@ -80,12 +90,15 @@
 
 - (void)setNav {
     UIBarButtonItem *user = [[UIBarButtonItem alloc] initWithTitle:@"用户" style:UIBarButtonItemStylePlain target:self action:@selector(userBtnClick)];
-    self.navigationItem.rightBarButtonItem = user;
+    self.navigationItem.leftBarButtonItem = user;
 }
 
 - (void)userBtnClick {
+    /*
     UserViewController *VC = [[UserViewController alloc] init];
     [self.navigationController pushViewController:VC animated:YES];
+     */
+    [self defaultAnimationFromLeft];
 }
 
 - (void)makeUI {

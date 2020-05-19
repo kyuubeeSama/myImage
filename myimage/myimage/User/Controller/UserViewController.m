@@ -11,6 +11,7 @@
 #import "Tool.h"
 #import "CollectViewController.h"
 #import "WebsiteViewController.h"
+#import "UIViewController+CWLateralSlide.h"
 
 @interface UserViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -55,18 +56,18 @@
         case 0:{
             CollectViewController *VC = [[CollectViewController alloc]init];
             VC.type = 1;
-            [self.navigationController pushViewController:VC animated:YES];
+            [self cw_pushViewController:VC];
         }
             break;
         case 1: {
             CollectViewController *VC = [[CollectViewController alloc]init];
             VC.type = 2;
-            [self.navigationController pushViewController:VC animated:YES];
+            [self cw_pushViewController:VC];
         }
             break;
         case 2:{
             WebsiteViewController *VC = [[WebsiteViewController alloc] init];
-            [self.navigationController pushViewController:VC animated:YES];
+            [self cw_pushViewController:VC];
         }
             break;
         default:{

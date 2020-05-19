@@ -16,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(NSMutableArray *)getDataWithRegularExpression:(NSString *)RegularExpression content:(NSString *)content;
 
++(void)showAlertWithTitle:(nullable NSString *)title Message:(nullable NSString *)message withSureBtnClick:(void(^ __nullable)(void))sureBtnClick;
+
 @end
 
 NS_ASSUME_NONNULL_END
