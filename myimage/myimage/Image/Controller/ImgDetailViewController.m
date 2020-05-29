@@ -105,11 +105,11 @@
                                                                 Class:[CollectModel class]];
     NSString *colImgStr;
     if (model.value == 0) {
-        colImgStr = @"no-collect";
+        colImgStr = @"star";
     } else {
-        colImgStr = @"collect";
+        colImgStr = @"star.fill";
     }
-    UIBarButtonItem *collectBtn = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:colImgStr] style:UIBarButtonItemStylePlain target:self action:@selector(collectBtnClick:)];
+    UIBarButtonItem *collectBtn = [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:colImgStr] style:UIBarButtonItemStylePlain target:self action:@selector(collectBtnClick:)];
     UIBarButtonItem *openBtn = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"browser"] style:UIBarButtonItemStylePlain target:self action:@selector(browserBtnClick:)];
     self.navigationItem.rightBarButtonItems = @[collectBtn, openBtn];
 }
@@ -126,14 +126,14 @@
         if ([sqlTool insertTable:@"collect"
                          element:@"value,type"
                            value:[NSString stringWithFormat:@"%d,1", self.articleModel.article_id]]) {
-            [button setImage:[UIImage imageNamed:@"collect"]];
+            [button setImage:[UIImage systemImageNamed:@"star.fill"]];
         } else {
             [self alertWithTitle:@"收藏失败"];
         }
     } else {
         // 取消收藏
         if ([sqlTool deleteDataFromTable:@"collect" where:[NSString stringWithFormat:@"value = %d and type = 1", self.articleModel.article_id]]) {
-            [button setImage:[UIImage imageNamed:@"no-collect"]];
+            [button setImage:[UIImage systemImageNamed:@"star"]];
         } else {
             [self alertWithTitle:@"操作失败"];
         }

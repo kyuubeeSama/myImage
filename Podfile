@@ -11,5 +11,10 @@ target 'myimage' do
   pod 'MJExtension'
   pod 'hpple'
   pod 'CWLateralSlide'
-
+  # 离屏渲染
+  pod 'AsyncDisplayKit'
+  use_frameworks!
+  # 微软暗黑模式
+  pod 'FluentDarkModeKit'
+  
 end
