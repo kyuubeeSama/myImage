@@ -30,7 +30,7 @@ fprintf(stderr,"时间：%s【FILE：%s--LINE：%d】方法名：%s\n%s\n",[str 
 #define screenH  [UIScreen mainScreen].bounds.size.height /// 屏幕高
 #define Xrang [ UIScreen mainScreen ].bounds.size.width/375 //屏幕宽比例
 #define Yrang [ UIScreen mainScreen ].bounds.size.height/667//屏幕高比例
-#define TOP_HEIGHT [[UIApplication sharedApplication] statusBarFrame].size.height+self.navigationController.navigationBar.frame.size.height
+#define TOP_HEIGHT [[UIApplication sharedApplication] windows][0].windowScene.statusBarManager.statusBarFrame.size.height+self.navigationController.navigationBar.frame.size.height
 
 // 弱引用
 #define WeakSelf(type)  __weak __typeof(type) weak##type = type;//弱引用

@@ -13,12 +13,8 @@
 -(id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self){
-        UIView *backView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, (screenW-10)/2, (screenW-10)/2+40)];
-        [self addSubview:backView];
-        backView.backgroundColor = [UIColor whiteColor];
-
         self.headImg = [[UIImageView alloc] init];
-        [backView addSubview:self.headImg];
+        [self.contentView addSubview:self.headImg];
         self.headImg.frame = CGRectMake(0, 0, (screenW-10)/2, (screenW-10)/2);
         self.headImg.contentMode = UIViewContentModeScaleAspectFill;
         self.headImg.clipsToBounds = YES;
@@ -37,12 +33,13 @@
         self.signView.titleLabel.font = [UIFont systemFontOfSize:14];
         
         self.titleLab = [[UILabel alloc] init];
-        [backView addSubview:self.titleLab];
+        [self.contentView addSubview:self.titleLab];
         self.titleLab.font = [UIFont systemFontOfSize:13];
         self.titleLab.numberOfLines = 2;
+        self.titleLab.textColor = [UIColor dm_colorWithLightColor:[UIColor blackColor] darkColor:[UIColor whiteColor]];
         [self.titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(backView.mas_left).offset(5);
-            make.right.equalTo(backView.mas_right).offset(-5);
+            make.left.equalTo(self.contentView.mas_left).offset(5);
+            make.right.equalTo(self.contentView.mas_right).offset(-5);
             make.height.mas_equalTo(40);
             make.top.equalTo(self.headImg.mas_bottom).offset(5);
         }];

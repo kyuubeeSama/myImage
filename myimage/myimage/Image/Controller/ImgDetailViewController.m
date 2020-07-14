@@ -4,7 +4,7 @@
 //
 //  Created by liuqingyuan on 2018/12/13.
 //  Copyright © 2018 liuqingyuan. All rights reserved.
-//
+//  写真详情
 
 #import "ImgDetailViewController.h"
 #import "ImgDetailTableViewCell.h"
@@ -35,7 +35,7 @@
     [self getData];
     [self setNav];
 }
-
+// 获取数据
 - (void)getData {
     [self beginProgressWithTitle:nil];
     if (self.articleModel.has_done == 1) {
@@ -56,7 +56,9 @@
             [self endProgress];
             [self.mainTable reloadData];
         } failure:^(NSError *error) {
-            NSLog(@"%@", error);
+            NSLog(@"数据获取失败%@", error);
+            [self endProgress];
+            [self alertWithTitle:@"数据获取失败"];
         }];
     } else {
         SqliteTool *sqlTool = [SqliteTool sharedInstance];
@@ -142,7 +144,8 @@
 
 - (void)browserBtnClick:(UIButton *)button {
     NSString  *urlStr = [NSString stringWithFormat:@"%@%@", self.websiteModel.url, self.articleModel.detail_url];
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlStr]];
+//    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlStr]];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlStr] options:@{} completionHandler:nil];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -169,7 +172,6 @@
                     NSLog(@"第%ld张图片出错，出错图片地址是%@%@,错误信息是%@，错误码是%@", (long) indexPath.row, self.websiteModel.url, model.image_url, error.localizedDescription,error.userInfo[@"SDWebImageErrorDownloadStatusCodeKey"]);
                     model.width = screenW;
                     model.height = screenW*3/2;
-                    // FIXME:未知图片大小设置
                     cell.topImg.frame = CGRectMake(0, 0, model.width, model.height);
                 }
             }];
@@ -190,7 +192,7 @@
         browser.btnArr = @[@"收藏"];
         browser.imageArray = @[[NSString stringWithFormat:@"%@%@", self.websiteModel.url,model.image_url]];
         [browser show];
-        browser.otherBtnBlock = ^(int index) {
+        browser.otherBtnBlock = ^(NSInteger index) {
             if (index == 0){
                 // 收藏
                 SqliteTool *sqlTool = [SqliteTool sharedInstance];

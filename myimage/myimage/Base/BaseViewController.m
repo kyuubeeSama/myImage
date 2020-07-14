@@ -20,6 +20,28 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
+    [self checkStatus];
+}
+
+-(void)checkStatus{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
+-(void)applicationWillResignActive:(NSNotification *)notification {
+    UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight];
+    UIVisualEffectView *effectView = [[UIVisualEffectView alloc] initWithEffect:effect];
+    effectView.frame = CGRectMake(0, 0, screenW, screenH);
+    effectView.tag = 1990;
+    effectView.alpha = 0.8;
+    UIWindow *window = [UIApplication sharedApplication].windows[0];
+    [window addSubview:effectView];
+}
+
+-(void)applicationDidBecomeActive:(NSNotification *)notification {
+    UIWindow *window = [UIApplication sharedApplication].windows[0];
+    UIVisualEffectView *effectView = [window viewWithTag:1990];
+    [effectView removeFromSuperview];
 }
 
 - (void)alertWithTitle:(NSString *)string {

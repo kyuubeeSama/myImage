@@ -1,28 +1,30 @@
 //
-//  ImgListViewController.m
+//  NewImgListViewController.m
 //  myimage
 //
-//  Created by liuqingyuan on 2018/12/13.
-//  Copyright © 2018 liuqingyuan. All rights reserved.
-//  TODO:替换控件为AsyncDisplayKit控件。实现界面的暗黑显示操作
+//  Created by liuqingyuan on 2020/6/9.
+//  Copyright © 2020 liuqingyuan. All rights reserved.
+//
 
-#import "ImgListViewController.h"
-#import "ImgListCollectionViewCell.h"
+#import "NewImgListViewController.h"
 #import "CategoryChooseView.h"
 #import "ArticleModel.h"
 #import "CategoryModel.h"
 #import "ImgDetailViewController.h"
+#import <AsyncDisplayKit/AsyncDisplayKit.h>
+#import "ImgListCollectionNode.h"
 
-@interface ImgListViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
+@interface NewImgListViewController ()<ASCollectionDelegate,ASCollectionDataSource,ASCollectionDelegateFlowLayout>
 
-@property(nonatomic, retain) UICollectionView *mainCollection;
+//@property(nonatomic, retain) UICollectionView *mainCollection;
+@property(nonatomic,retain)ASCollectionNode *mainCollection;
 @property(nonatomic, retain) NSMutableArray *listArr;
 @property(nonatomic, assign) int pageNum;
 @property(nonatomic, copy) NSString *categoryType;
 
 @end
 
-@implementation ImgListViewController
+@implementation NewImgListViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -45,18 +47,18 @@
                          pageNum:self.pageNum
                         category:self.categoryType
                          success:^(NSMutableArray *_Nonnull array) {
-                             if (array.count > 0) {
-                                 self.pageNum = self.pageNum + 1;
-                             } else {
-                                 [self.mainCollection.mj_footer endRefreshingWithNoMoreData];
-                             }
-                             [self.listArr addObjectsFromArray:array];
-                             [self.mainCollection reloadData];
-                             [self endProgress];
-
-                         } failure:^(NSError *_Nonnull error) {
-            NSLog(@"%@", error);
-        }];
+        if (array.count > 0) {
+            self.pageNum = self.pageNum + 1;
+        } else {
+            [self.mainCollection.view.mj_footer endRefreshingWithNoMoreData];
+        }
+        [self.listArr addObjectsFromArray:array];
+        [self.mainCollection reloadData];
+        [self endProgress];
+        
+    } failure:^(NSError *_Nonnull error) {
+        NSLog(@"%@", error);
+    }];
 }
 
 - (void)makeUI {
@@ -75,9 +77,9 @@
     }
     CategoryChooseView *chooseView = [[CategoryChooseView alloc] initWithFrame:CGRectMake(0, TOP_HEIGHT, screenW, 45)
                                                                    CategoryArr:titleArr
-                                                                     BackColor:[UIColor dm_colorWithLightColor:[UIColor whiteColor] darkColor:[UIColor blackColor]]
-                                                               hightLightColor:[UIColor dm_colorWithLightColor:[UIColor whiteColor] darkColor:[UIColor blackColor]]
-                                                                    TitleColor:[UIColor dm_colorWithLightColor:[UIColor blackColor] darkColor:[UIColor whiteColor]]
+                                                                     BackColor:[UIColor whiteColor]
+                                                               hightLightColor:[UIColor whiteColor]
+                                                                    TitleColor:[UIColor blackColor]
                                                                hightTitleColor:[UIColor redColor]
                                                                bottomLineColor:[UIColor redColor]
                                                                  CategoryStyle:equalWidth];
@@ -89,15 +91,13 @@
         [self getData];
     };
     [self.view addSubview:chooseView];
-
-    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-    self.mainCollection = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, screenW, screenH) collectionViewLayout:layout];
+    UICollectionViewLayout *layout = [[UICollectionViewLayout alloc]init];
+    self.mainCollection = [[ASCollectionNode alloc]initWithFrame:CGRectMake(0, 0, screenW, screenH) collectionViewLayout:layout];
     self.mainCollection.backgroundColor = [UIColor dm_colorWithLightColor:[UIColor whiteColor] darkColor:[UIColor blackColor]];
     self.mainCollection.delegate = self;
     self.mainCollection.dataSource = self;
-    [self.view addSubview:self.mainCollection];
-    [self.mainCollection registerClass:[ImgListCollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
-    [self.mainCollection mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.view addSubnode:self.mainCollection];
+    [self.mainCollection.view mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.view);
         make.top.equalTo(chooseView.mas_bottom);
         if (@available(iOS 11.0, *)) {
@@ -111,34 +111,30 @@
 }
 
 - (void)getMoreData {
-    self.mainCollection.mj_footer = [MJRefreshBackFooter footerWithRefreshingBlock:^{
+    self.mainCollection.view.mj_footer = [MJRefreshBackFooter footerWithRefreshingBlock:^{
         [self getData];
-        [self.mainCollection.mj_footer endRefreshing];
+        [self.mainCollection.view.mj_footer endRefreshing];
     }];
 }
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+-(NSInteger)collectionNode:(ASCollectionNode *)collectionNode numberOfItemsInSection:(NSInteger)section{
     return self.listArr.count;
 }
 
-- (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (ASCellNodeBlock)collectionNode:(ASCollectionNode *)collectionNode nodeBlockForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"contentsize = %f",collectionNode.view.contentSize.height);
     ArticleModel *model = self.listArr[(NSUInteger) indexPath.row];
-    ImgListCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
-    NSLog(@"%@,%@,%@", model.name, model.img_url, model.detail_url);
-    cell.titleLab.text = model.name;
-    [cell.headImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", self.model.url, model.img_url]] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
-    return cell;
+    return ^{
+        ImgListCollectionNode *node = [[ImgListCollectionNode alloc] init];
+        node.backgroundColor = [UIColor yellowColor];
+        node.titleNode.attributedText = [[NSAttributedString alloc]initWithString:model.name attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15]}];
+        node.topImgNode.URL = [NSURL URLWithString:model.img_url];
+        return node;
+    };
 }
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return CGSizeMake(screenW / 2 - 5, screenW / 2 + 45);
-}
-
-- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
-    return UIEdgeInsetsMake(0, 0, 0, 0);
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+-(void)collectionNode:(ASCollectionNode *)collectionNode didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     ArticleModel *model = self.listArr[(NSUInteger) indexPath.row];
     ImgDetailViewController *VC = [[ImgDetailViewController alloc] init];
     VC.articleModel = model;
@@ -147,6 +143,10 @@
         self.listArr[(NSUInteger) indexPath.row] = model;
     };
     [self.navigationController pushViewController:VC animated:YES];
+}
+
+-(ASSizeRange)collectionNode:(ASCollectionNode *)collectionNode constrainedSizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+    return ASSizeRangeMake(CGSizeMake(screenW / 2 - 5, screenW / 2 + 45));
 }
 
 /*

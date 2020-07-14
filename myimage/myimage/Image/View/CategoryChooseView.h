@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CategoryChooseView : UIView
 
-@property(nonatomic, copy) void (^chooseBlock)(int index);
+@property(nonatomic, copy) void (^chooseBlock)(NSInteger index);
 
 typedef NS_ENUM(NSInteger, CategoryType) {
     // 等宽平分屏幕

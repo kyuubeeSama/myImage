@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,copy)NSArray *array;
 @property(nonatomic,weak)id<MYPickerViewDelegate> delegate;
-@property(nonatomic,assign)int num;
+@property(nonatomic,assign)NSInteger num;
 
 -(id)initWithFrame:(CGRect)frame WithArr:(NSArray *)array;
 

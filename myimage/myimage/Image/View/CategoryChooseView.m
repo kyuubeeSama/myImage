@@ -46,7 +46,7 @@
             case equalWidth:{
                 UIView *backView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
                 [self addSubview:backView];
-                for (int i=0;i<self.titleArr.count;i++){
+                for (NSUInteger i=0;i<self.titleArr.count;i++){
                     CategoryButton *button = [CategoryButton buttonWithType:UIButtonTypeCustom];
                     [backView addSubview:button];
                     button.frame = CGRectMake(frame.size.width/categoryArr.count*i, 0, frame.size.width/categoryArr.count, frame.size.height-1);
@@ -69,7 +69,7 @@
             case freeSize:{
                 self.backScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
                 CGFloat scrollWidth = 0;
-                for (int i=0;i<categoryArr.count;i++){
+                for (NSUInteger i=0;i<categoryArr.count;i++){
                     CategoryButton *button = [CategoryButton buttonWithType:UIButtonTypeCustom];
                     [self.backScrollView addSubview:button];
                     button.backgroundColor = backColor;
@@ -103,7 +103,7 @@
 }
 
 -(void)buttonClick:(CategoryButton *)button{
-    for (int i= 0; i<self.titleArr.count; i++) {
+    for (NSUInteger i= 0; i<self.titleArr.count; i++) {
         CategoryButton *btn = [self viewWithTag:4400+i];
         [btn setTitleColor:self.btnTitleColor forState:UIControlStateNormal];
         btn.backgroundColor = self.btnBackgroundColor;

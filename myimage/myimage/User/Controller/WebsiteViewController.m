@@ -4,7 +4,7 @@
 //
 //  Created by liuqingyuan on 2020/1/6.
 //  Copyright © 2020 liuqingyuan. All rights reserved.
-//
+//  站点管理
 //
 
 #import "WebsiteViewController.h"
@@ -23,6 +23,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.listArr = @[];
+    self.view.backgroundColor = [UIColor dm_colorWithLightColor:UIColor.blackColor darkColor:UIColor.whiteColor];
     self.websiteArr = [[NSMutableArray alloc] init];
     [self setNav];
     [self makeUI];
@@ -52,6 +53,14 @@
     self.mainTable.estimatedSectionFooterHeight = 0;
     self.mainTable.estimatedSectionHeaderHeight = 0;
     [self.mainTable registerNib:[UINib nibWithNibName:@"WebSiteTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"cell"];
+    [self.mainTable mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.equalTo(self.view);
+        if (@available(iOS 11, *)){
+            make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom);
+        } else{
+            make.bottom.equalTo(self.view.mas_bottom);
+        }
+    }];
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -63,7 +72,7 @@
     if (!cell){
         cell = [[NSBundle mainBundle] loadNibNamed:@"WebSiteTableViewCell" owner:nil options:nil][0];
     }
-    cell.titleLab.text = self.listArr[indexPath.row];
+    cell.titleLab.text = self.listArr[(NSUInteger) indexPath.row];
     cell.switchBtn.on = [self.websiteArr containsObject:self.listArr[(NSUInteger) indexPath.row]] ? YES : NO;
     cell.switchValueChange = ^(BOOL value) {
         if (value){
@@ -77,7 +86,7 @@
                     // 插入分类数据
                     NSArray *titleArr = @[@"撸女",@"撸吧",@"推图",@"亚洲",@"欧美",@"日韩"];
                     NSArray *idArr = @[@"1",@"2",@"3",@"6",@"8",@"9"];
-                    for (int i=0;i<titleArr.count;i++){
+                    for (NSUInteger i=0;i<titleArr.count;i++){
 //            id,website_id,name,value,is_delete(2:删除)
                         [sqlTool insertTable:@"category" element:@"website_id,name,value" value:[NSString stringWithFormat:@"1,\"%@\",\"%@\"", titleArr[(NSUInteger) i], idArr[(NSUInteger) i]]];
                     }
@@ -89,7 +98,7 @@
                     // 插入分类数据
                     NSArray *titleArr = @[@"欲女",@"撸女",@"亚洲",@"欧美",@"日韩"];
                     NSArray *idArr = @[@"1",@"2",@"6",@"8",@"9"];
-                    for (int i=0;i<titleArr.count;i++){
+                    for (NSUInteger i=0;i<titleArr.count;i++){
 //            id,website_id,name,value,is_delete(2:删除)
                         [sqlTool insertTable:@"category" element:@"website_id,name,value" value:[NSString stringWithFormat:@"2,\"%@\",\"%@\"", titleArr[(NSUInteger) i], idArr[(NSUInteger) i]]];
                     }
@@ -100,7 +109,7 @@
                     [sqlTool insertTable:@"website" element:@"name,url,value" value:@"\"24fa\",\"https://www.24fa.cc\",3"];
                     NSArray *titleArr = @[@"美女",@"欧美"];
                     NSArray *idArr = @[@"49",@"71"];
-                    for (int i = 0; i < titleArr.count; ++i) {
+                    for (NSUInteger i = 0; i < titleArr.count; ++i) {
                         [sqlTool insertTable:@"category" element:@"website_id,name,value" value:[NSString stringWithFormat:@"3,\"%@\",\"%@\"", titleArr[(NSUInteger) i], idArr[(NSUInteger) i]]];
                     }
                     [self alertWithTitle:@"添加成功"];
@@ -113,7 +122,7 @@
         }else{
             // 删除
             SqliteTool *sqlTool = [SqliteTool sharedInstance];
-            // FIXEME:需要删除三个表中的相关数据,方案一：联表删除  方案二：递归删除
+            // FIXEME:需要删除三个表中的相关数据,联表删除
             if([sqlTool deleteDataFromTable:@"website" where:[NSString stringWithFormat:@"name = \"%@\"",self.listArr[(NSUInteger) indexPath.row]]]){
                 [self.websiteArr removeAllObjects];
                 [self alertWithTitle:@"删除成功"];

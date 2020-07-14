@@ -100,14 +100,14 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     if (self.type == 1) {
         ImgListCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"listCell" forIndexPath:indexPath];
-        ArticleCollectModel *model = self.listArr[indexPath.row];
+        ArticleCollectModel *model = self.listArr[(NSUInteger) indexPath.row];
         cell.titleLab.text = model.name;
         [cell.headImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", model.url, model.img_url]] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
 
         return cell;
     } else {
         ImgCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"imgCell" forIndexPath:indexPath];
-        ImgCollectModel *model = self.listArr[indexPath.row];
+        ImgCollectModel *model = self.listArr[(NSUInteger) indexPath.row];
         [cell.contentImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",model.url,model.image_url]] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
         return cell;
     }
@@ -115,7 +115,7 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     if (self.type == 1) {
-        ArticleCollectModel *model = self.listArr[indexPath.row];
+        ArticleCollectModel *model = self.listArr[(NSUInteger) indexPath.row];
         ImgDetailViewController *VC = [[ImgDetailViewController alloc] init];
         VC.articleModel = [[ArticleModel alloc] init];
         VC.articleModel.article_id = model.article_id;
@@ -136,11 +136,11 @@
         browser.btnArr = @[@"取消收藏"];
         browser.imageArray = @[[NSString stringWithFormat:@"%@%@", model.url, model.image_url]];
         [browser show];
-        browser.otherBtnBlock = ^(int index) {
+        browser.otherBtnBlock = ^(NSInteger index) {
             if (index == 0) {
                 SqliteTool *sqlTool = [SqliteTool sharedInstance];
                 if ([sqlTool deleteDataFromTable:@"collect" where:[NSString stringWithFormat:@"value = %d and type = 2", model.image_id]]) {
-                    [self.listArr removeObjectAtIndex:indexPath.row];
+                    [self.listArr removeObjectAtIndex:(NSUInteger) indexPath.row];
                     [self.mainCollect reloadData];
                 }
             }

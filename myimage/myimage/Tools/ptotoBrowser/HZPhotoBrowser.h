@@ -36,7 +36,7 @@
 @property (nonatomic, weak) id<HZPhotoBrowserDelegate> delegate;
 // 添加底部按钮点
 @property(nonatomic,copy)NSArray *btnArr;
-@property(nonatomic,copy)void(^otherBtnBlock)(int index);
+@property(nonatomic,copy)void(^otherBtnBlock)(NSInteger index);
 
 - (void)show;
 

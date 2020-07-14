@@ -4,7 +4,7 @@
 //
 //  Created by liuqingyuan on 2018/12/14.
 //  Copyright © 2018 liuqingyuan. All rights reserved.
-//
+//  图片详情cell
 
 #import <UIKit/UIKit.h>
 

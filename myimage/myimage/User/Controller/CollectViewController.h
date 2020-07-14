@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CollectViewController : BaseViewController
 
-@property(nonatomic,assign)int type;
+@property(nonatomic,assign)NSInteger type;
 
 @end
 

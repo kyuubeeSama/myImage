@@ -13,6 +13,7 @@
 #import "UserViewController.h"
 #import "ImgListViewController.h"
 #import "UIViewController+CWLateralSlide.h"
+#import "NewImgListViewController.h"
 @interface IndexViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property(nonatomic,retain)UITableView *mainTable;
@@ -49,8 +50,6 @@
     // 强引用leftVC，不用每次创建新的,也可以每次在这里创建leftVC，抽屉收起的时候会释放掉
     UserViewController *VC = [[UserViewController alloc] init];
     [self cw_showDefaultDrawerViewController:VC];
-    // 或者这样调用
-//    [self cw_showDrawerViewController:vc animationType:CWDrawerAnimationTypeDefault configuration:nil];
 }
 
 -(void)getData{
@@ -77,7 +76,6 @@
         [sqlTool createTableWithSql:@"CREATE TABLE IF NOT EXISTS `image` (image_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,image_url VARCHAR(200) NOT NULL,article_id INT NOT NULL,width FLOAT DEFAULT(0),height FLOAT DEFAULT(0))"];
 //        collect
         [sqlTool createTableWithSql:@"CREATE TABLE IF NOT EXISTS `collect` (collect_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,value INT NOT NULL,type INT NOT NULL)"];
-        //TODO:创建完数据库后，提示去个人中心添加站点
         [self endProgress];
         [Tool showAlertWithTitle:@"提醒" Message:@"请在个人中心添加站点" withSureBtnClick:^{
             [self defaultAnimationFromLeft];
@@ -94,21 +92,20 @@
 }
 
 - (void)userBtnClick {
-    /*
-    UserViewController *VC = [[UserViewController alloc] init];
-    [self.navigationController pushViewController:VC animated:YES];
-     */
     [self defaultAnimationFromLeft];
 }
 
 - (void)makeUI {
-    self.mainTable = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, screenW, screenH - (TOP_HEIGHT) - 45) style:UITableViewStylePlain];
+    self.mainTable =[[UITableView alloc]init];
     [self.view addSubview:self.mainTable];
     self.mainTable.delegate = self;
     self.mainTable.dataSource = self;
     self.mainTable.estimatedRowHeight = 0;
     self.mainTable.estimatedSectionFooterHeight = 0;
     self.mainTable.estimatedSectionHeaderHeight = 0;
+    [self.mainTable mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.equalTo(self.view);
+    }];
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -120,6 +117,7 @@
     if (!cell){
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     }
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     WebsiteModel *model = self.listArr[(NSUInteger) indexPath.row];
     cell.textLabel.text = model.name;
     return cell;
@@ -127,6 +125,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     ImgListViewController *VC = [[ImgListViewController alloc]init];
+//    NewImgListViewController *VC = [[NewImgListViewController alloc]init];
     WebsiteModel *model = self.listArr[(NSUInteger) indexPath.row];
     VC.model = model;
     [self.navigationController pushViewController:VC animated:YES];    

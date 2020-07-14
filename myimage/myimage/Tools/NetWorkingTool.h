@@ -19,8 +19,8 @@ typedef NS_ENUM(NSUInteger, MethodType) {
 
 @property (nonatomic, copy)void(^downloadProgress)(double progress);
 @property (nonatomic, copy)void(^downloadCompleted)(void);
-@property(nonatomic,copy)void(^imgDownloadCompleted)(int imgID);
-@property(nonatomic,copy)void(^imgDownloadFailure)(int imgID);
+@property(nonatomic,copy)void(^imgDownloadCompleted)(NSInteger imgID);
+@property(nonatomic,copy)void(^imgDownloadFailure)(NSInteger imgID);
 // 下载文件
 -(void)downloadingFileWithUrl:(NSString *)urlStr path:(NSString *)path;
 // 获取文件内容

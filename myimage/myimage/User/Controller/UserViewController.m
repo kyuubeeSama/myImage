@@ -7,8 +7,6 @@
 //
 
 #import "UserViewController.h"
-#import "UserTableHeaderView.h"
-#import "Tool.h"
 #import "CollectViewController.h"
 #import "WebsiteViewController.h"
 #import "UIViewController+CWLateralSlide.h"

@@ -10,9 +10,10 @@ target 'myimage' do
   pod 'FLAnimatedImage'
   pod 'MJExtension'
   pod 'hpple'
+  # 抽屉
   pod 'CWLateralSlide'
   # 离屏渲染
-  pod 'AsyncDisplayKit'
+  pod 'Texture'
   use_frameworks!
   # 微软暗黑模式
   pod 'FluentDarkModeKit'

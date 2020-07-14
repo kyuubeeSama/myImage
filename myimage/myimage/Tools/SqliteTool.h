@@ -25,7 +25,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 // 删除数据
 -(BOOL)deleteDataFromTable:(NSString *)tablename where:(NSString *)where;
-
+// 删除站点
+-(BOOL)deleteWebsiteWithID:(NSString *)ID;
 
 // 读取数据
 -(NSMutableArray *)selectDataFromTable:(NSString *)tableName where:(NSString *)where field:(NSString *)value Class:(Class)modelClass;

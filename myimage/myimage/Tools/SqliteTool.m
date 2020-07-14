@@ -96,7 +96,7 @@ static id sharedSingleton = nil;
             id object = [[modelClass class] new];
             unsigned int outCount;
             Ivar *ivars = class_copyIvarList(modelClass, &outCount);
-            for (int i = 0; i < outCount; i++) {
+            for (NSUInteger i = 0; i < outCount; i++) {
                 Ivar ivar = ivars[i];
                 NSString *key = [NSString stringWithUTF8String:ivar_getName(ivar)];
                 if ([[key substringToIndex:1] isEqualToString:@"_"]) {
@@ -143,7 +143,7 @@ static id sharedSingleton = nil;
             id object = [[modelClass class] new];
             unsigned int outCount;
             Ivar *ivars = class_copyIvarList(modelClass, &outCount);
-            for (int i = 0; i < outCount; i++) {
+            for (NSUInteger i = 0; i < outCount; i++) {
                 Ivar ivar = ivars[i];
                 NSString *key = [NSString stringWithUTF8String:ivar_getName(ivar)];
                 if ([[key substringToIndex:1] isEqualToString:@"_"]) {
@@ -187,7 +187,7 @@ static id sharedSingleton = nil;
         @try {
             unsigned int outCount;
             Ivar *ivars = class_copyIvarList(modelClass, &outCount);
-            for (int i = 0; i < outCount; i++) {
+            for (NSUInteger i = 0; i < outCount; i++) {
                 Ivar ivar = ivars[i];
                 NSString *key = [NSString stringWithUTF8String:ivar_getName(ivar)];
                 if ([[key substringToIndex:1] isEqualToString:@"_"]) {
@@ -232,7 +232,7 @@ static id sharedSingleton = nil;
             id object = [[modelClass class] new];
             unsigned int outCount;
             Ivar *ivars = class_copyIvarList(modelClass, &outCount);
-            for (int i = 0; i < outCount; i++) {
+            for (NSUInteger i = 0; i < outCount; i++) {
                 Ivar ivar = ivars[i];
                 NSString *key = [NSString stringWithUTF8String:ivar_getName(ivar)];
                 if ([[key substringToIndex:1] isEqualToString:@"_"]) {
@@ -334,6 +334,16 @@ static id sharedSingleton = nil;
 //        return false;
 //    }
     return YES;
+}
+
+// 删除站点
+-(BOOL)deleteWebsiteWithID:(NSString *)ID{
+    FMDatabase *db = [self openDB];
+    // 联表删除
+    NSString *sql = [NSString stringWithFormat:@"%@",ID];
+    BOOL result = [db executeUpdate:sql];
+    [db close];
+    return result;
 }
 
 @end

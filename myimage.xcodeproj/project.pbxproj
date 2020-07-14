@@ -17,7 +17,7 @@
 		144DF778A22CB02F93D70BF5 /* ArticleModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 144DF828180830E5FF98D68D /* ArticleModel.m */; };
 		144DFB7FE4F2D284FE87FCEF /* database.txt in Resources */ = {isa = PBXBuildFile; fileRef = 144DF1DAFB8DBA5398B525B7 /* database.txt */; };
 		144DFE45B68135B215C346F1 /* NetWorkingTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 144DF5A9F03D5EF1B385726A /* NetWorkingTool.m */; };
-		A5A0A96EB49E9EB12F2218E8 /* libPods-myimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 59EBDF2268D10DC6B353CCFD /* libPods-myimage.a */; };
+		83C844F7D59D103D490259D5 /* Pods_myimage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A48262DADF234A4D4DFC368 /* Pods_myimage.framework */; };
 		A904AC4C23BDE2EA00E3281E /* ImageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A904AC4B23BDE2EA00E3281E /* ImageModel.m */; };
 		A904AC5223BF094C00E3281E /* CollectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A904AC5123BF094C00E3281E /* CollectViewController.m */; };
 		A904AC5623BF0C8900E3281E /* ImgCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A904AC5423BF0C8900E3281E /* ImgCollectionViewCell.m */; };
@@ -41,6 +41,8 @@
 		A98546432296895500BAEFB1 /* HZPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = A985463C2296895500BAEFB1 /* HZPhotoBrowser.m */; };
 		A98546442296895500BAEFB1 /* HZPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A985463F2296895500BAEFB1 /* HZPhotoBrowser.bundle */; };
 		A98546452296895500BAEFB1 /* HZPhotoBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = A98546402296895500BAEFB1 /* HZPhotoBrowserView.m */; };
+		A99A8C062490D1E4004C0DB7 /* ImgListCollectionNode.m in Sources */ = {isa = PBXBuildFile; fileRef = A99A8C052490D1E4004C0DB7 /* ImgListCollectionNode.m */; };
+		A9AE5FD9248F8B0C00624ABF /* NewImgListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9AE5FD8248F8B0C00624ABF /* NewImgListViewController.m */; };
 		A9C202E021D49B79006572DD /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C202DF21D49B79006572DD /* UserViewController.m */; };
 		A9C2030721D5BCDA006572DD /* MYPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C2030621D5BCDA006572DD /* MYPickerView.m */; };
 		A9CDD3062473E8180045C370 /* NSObject+Tool.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CDD3052473E8180045C370 /* NSObject+Tool.m */; };
@@ -73,9 +75,9 @@
 		144DFD02A84B224D2F1CE3AD /* ArticleModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArticleModel.h; sourceTree = "<group>"; };
 		144DFDD034F5A0523D336201 /* ImgCollectModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImgCollectModel.m; sourceTree = "<group>"; };
 		144DFEDBBF7B985EACFDE6F9 /* CategoryChooseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CategoryChooseView.h; sourceTree = "<group>"; };
+		3A48262DADF234A4D4DFC368 /* Pods_myimage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_myimage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		40D5A980E1BDD0AF9B2B2A67 /* Pods-myimage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-myimage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-myimage/Pods-myimage.debug.xcconfig"; sourceTree = "<group>"; };
 		4CFE4A6DB1C57641DD0E0894 /* Pods-myimage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-myimage.release.xcconfig"; path = "Pods/Target Support Files/Pods-myimage/Pods-myimage.release.xcconfig"; sourceTree = "<group>"; };
-		59EBDF2268D10DC6B353CCFD /* libPods-myimage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-myimage.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A904AC4A23BDE2EA00E3281E /* ImageModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageModel.h; sourceTree = "<group>"; };
 		A904AC4B23BDE2EA00E3281E /* ImageModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageModel.m; sourceTree = "<group>"; };
 		A904AC5023BF094C00E3281E /* CollectViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CollectViewController.h; sourceTree = "<group>"; };
@@ -118,6 +120,10 @@
 		A985463F2296895500BAEFB1 /* HZPhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HZPhotoBrowser.bundle; sourceTree = "<group>"; };
 		A98546402296895500BAEFB1 /* HZPhotoBrowserView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HZPhotoBrowserView.m; sourceTree = "<group>"; };
 		A98546412296895500BAEFB1 /* HZPhotoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HZPhotoBrowser.h; sourceTree = "<group>"; };
+		A99A8C042490D1E4004C0DB7 /* ImgListCollectionNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImgListCollectionNode.h; sourceTree = "<group>"; };
+		A99A8C052490D1E4004C0DB7 /* ImgListCollectionNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImgListCollectionNode.m; sourceTree = "<group>"; };
+		A9AE5FD7248F8B0C00624ABF /* NewImgListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewImgListViewController.h; sourceTree = "<group>"; };
+		A9AE5FD8248F8B0C00624ABF /* NewImgListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NewImgListViewController.m; sourceTree = "<group>"; };
 		A9C202DE21D49B79006572DD /* UserViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserViewController.h; sourceTree = "<group>"; };
 		A9C202DF21D49B79006572DD /* UserViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserViewController.m; sourceTree = "<group>"; };
 		A9C2030521D5BCDA006572DD /* MYPickerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MYPickerView.h; sourceTree = "<group>"; };
@@ -149,7 +155,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A9F63F1721C22EF400F29893 /* libsqlite3.0.tbd in Frameworks */,
-				A5A0A96EB49E9EB12F2218E8 /* libPods-myimage.a in Frameworks */,
+				83C844F7D59D103D490259D5 /* Pods_myimage.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -359,6 +365,8 @@
 				A9F4ABA421C23EB100FE84E9 /* ImgListViewController.m */,
 				A9F4ABA621C23EBC00FE84E9 /* ImgDetailViewController.h */,
 				A9F4ABA721C23EBC00FE84E9 /* ImgDetailViewController.m */,
+				A9AE5FD7248F8B0C00624ABF /* NewImgListViewController.h */,
+				A9AE5FD8248F8B0C00624ABF /* NewImgListViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -377,6 +385,8 @@
 				A904AC5323BF0C8900E3281E /* ImgCollectionViewCell.h */,
 				A904AC5423BF0C8900E3281E /* ImgCollectionViewCell.m */,
 				A904AC5523BF0C8900E3281E /* ImgCollectionViewCell.xib */,
+				A99A8C042490D1E4004C0DB7 /* ImgListCollectionNode.h */,
+				A99A8C052490D1E4004C0DB7 /* ImgListCollectionNode.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -395,7 +405,7 @@
 			children = (
 				A9F63F1821C22EFC00F29893 /* libsqlite3.tbd */,
 				A9F63F1621C22EF400F29893 /* libsqlite3.0.tbd */,
-				59EBDF2268D10DC6B353CCFD /* libPods-myimage.a */,
+				3A48262DADF234A4D4DFC368 /* Pods_myimage.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -420,7 +430,7 @@
 				A938823D21C1F8E90085958B /* Sources */,
 				A938823E21C1F8E90085958B /* Frameworks */,
 				A938823F21C1F8E90085958B /* Resources */,
-				EAA5555F3E23093D4FEB8569 /* [CP] Copy Pods Resources */,
+				B942DDBFBEC519383F0D5C10 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -487,6 +497,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		B942DDBFBEC519383F0D5C10 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-myimage/Pods-myimage-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-myimage/Pods-myimage-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-myimage/Pods-myimage-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		C8B2763C981A2FE908BC630A /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -507,23 +534,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		EAA5555F3E23093D4FEB8569 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-myimage/Pods-myimage-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-myimage/Pods-myimage-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-myimage/Pods-myimage-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -548,6 +558,7 @@
 				A938825421C1F8EA0085958B /* main.m in Sources */,
 				A91E39002229245700A11EC6 /* Tool.m in Sources */,
 				A904AC5623BF0C8900E3281E /* ImgCollectionViewCell.m in Sources */,
+				A9AE5FD9248F8B0C00624ABF /* NewImgListViewController.m in Sources */,
 				A94296DB23BAE625003391B5 /* DataManager.m in Sources */,
 				A9F4ABC721C3AE2600FE84E9 /* ImgListCollectionViewCell.m in Sources */,
 				A9FF6CE121F9510C006F57DA /* UserTableHeaderView.m in Sources */,
@@ -555,6 +566,7 @@
 				A9F4ABC421C3AE0D00FE84E9 /* ImgDetailTableViewCell.m in Sources */,
 				A93F765D2462A0E1005E9E51 /* WebSiteTableViewCell.m in Sources */,
 				A938826821C1FD3C0085958B /* IndexViewController.m in Sources */,
+				A99A8C062490D1E4004C0DB7 /* ImgListCollectionNode.m in Sources */,
 				A98546452296895500BAEFB1 /* HZPhotoBrowserView.m in Sources */,
 				A98546432296895500BAEFB1 /* HZPhotoBrowser.m in Sources */,
 				144DF611BA19CE2B9AB5C680 /* FileTool.m in Sources */,
@@ -709,14 +721,14 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 40D5A980E1BDD0AF9B2B2A67 /* Pods-myimage.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3KW2TU676U;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/myimage/myimage/config/PrefixHeader.pch";
 				INFOPLIST_FILE = myimage/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -734,14 +746,14 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4CFE4A6DB1C57641DD0E0894 /* Pods-myimage.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3KW2TU676U;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/myimage/myimage/config/PrefixHeader.pch";
 				INFOPLIST_FILE = myimage/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
