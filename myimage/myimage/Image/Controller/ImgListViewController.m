@@ -126,7 +126,7 @@
     ImgListCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
     NSLog(@"%@,%@,%@", model.name, model.img_url, model.detail_url);
     cell.titleLab.text = model.name;
-    [cell.headImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", self.model.url, model.img_url]] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
+    [cell.headImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", self.model.url, model.img_url]] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
     return cell;
 }
 

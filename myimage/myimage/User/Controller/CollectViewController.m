@@ -102,13 +102,13 @@
         ImgListCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"listCell" forIndexPath:indexPath];
         ArticleCollectModel *model = self.listArr[(NSUInteger) indexPath.row];
         cell.titleLab.text = model.name;
-        [cell.headImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", model.url, model.img_url]] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
+        [cell.headImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", model.url, model.img_url]] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
 
         return cell;
     } else {
         ImgCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"imgCell" forIndexPath:indexPath];
         ImgCollectModel *model = self.listArr[(NSUInteger) indexPath.row];
-        [cell.contentImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",model.url,model.image_url]] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
+        [cell.contentImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",model.url,model.image_url]] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
         return cell;
     }
 }
@@ -134,7 +134,7 @@
         browser.isNeedLandscape = YES;
         browser.currentImageIndex = 0;
         browser.btnArr = @[@"取消收藏"];
-        browser.imageArray = @[[NSString stringWithFormat:@"%@%@", model.url, model.image_url]];
+        browser.imageArray = @[[NSString stringWithFormat:@"%@/%@", model.url, model.image_url]];
         [browser show];
         browser.otherBtnBlock = ^(NSInteger index) {
             if (index == 0) {

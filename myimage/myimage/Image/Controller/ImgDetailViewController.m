@@ -143,7 +143,7 @@
 }
 
 - (void)browserBtnClick:(UIButton *)button {
-    NSString  *urlStr = [NSString stringWithFormat:@"%@%@", self.websiteModel.url, self.articleModel.detail_url];
+    NSString  *urlStr = [NSString stringWithFormat:@"%@/%@", self.websiteModel.url, self.articleModel.detail_url];
 //    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlStr]];
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlStr] options:@{} completionHandler:nil];
 }
@@ -158,7 +158,7 @@
 
     if (![model.image_url isEqualToString:@"/zhu.js"]) {
         // FIXME:图片无法正常获取，在浏览器中可以，直接读取地址不行
-        [cell.topImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", self.websiteModel.url, model.image_url]]
+        [cell.topImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", self.websiteModel.url, model.image_url]]
                        placeholderImage:[UIImage imageNamed:@"placeholder2"]
                                 options:SDWebImageLowPriority progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL *_Nullable targetURL) {
 
@@ -190,7 +190,7 @@
         browser.isNeedLandscape = YES;
         browser.currentImageIndex = 0;
         browser.btnArr = @[@"收藏"];
-        browser.imageArray = @[[NSString stringWithFormat:@"%@%@", self.websiteModel.url,model.image_url]];
+        browser.imageArray = @[[NSString stringWithFormat:@"%@/%@", self.websiteModel.url,model.image_url]];
         [browser show];
         browser.otherBtnBlock = ^(NSInteger index) {
             if (index == 0){
