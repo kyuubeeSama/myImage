@@ -19,4 +19,6 @@
 
 + (NSString *)getParamValueFromUrl:(NSString *)url paramName:(NSString *)paramName;
 
++ (BOOL)MyStringIsNULL:(NSString *)string;
+
 @end

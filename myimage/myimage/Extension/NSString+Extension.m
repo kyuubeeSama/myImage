@@ -59,5 +59,21 @@
     return str;
 }
 
+/// 验证字符串为空 ,为空:YES, 不为空:NO
++ (BOOL)MyStringIsNULL:(NSString *)string {
+    if (string == nil || string == NULL || [string  isEqual:NULL]) {
+        return YES;
+    }
+    if ([string isKindOfClass:[NSNull class]]) {
+        return YES;
+    }
+    if ([[string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] length] == 0) {
+        return YES;
+    }
+    if ([string isEqualToString:@"(null)"]||[string isEqualToString:@"<null>"]||[string isEqualToString:@"null"]) {
+        return YES;
+    }
+    return NO;
+}
 
 @end

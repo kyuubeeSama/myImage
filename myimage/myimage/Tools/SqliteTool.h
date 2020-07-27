@@ -20,9 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)createDBWithName:(NSString *)name exist:(void(^)(void))exist success:(void(^)(void))success failure:(void(^)(void))failure;
 // 创建数据库表
 -(void)createTableWithSql:(NSString *)sql;
-// 插入数据
--(BOOL)insertTable:(NSString *)tableName element:(NSString *)element value:(NSString *)value;
-
+// 插入数据，附带数据是否存在查询条件
+-(BOOL)insertTable:(NSString *)tableName element:(NSString *)element value:(NSString *)value  where:(NSString * _Nullable)where;
 // 删除数据
 -(BOOL)deleteDataFromTable:(NSString *)tablename where:(NSString *)where;
 // 删除站点

@@ -75,9 +75,9 @@
     }
     CategoryChooseView *chooseView = [[CategoryChooseView alloc] initWithFrame:CGRectMake(0, TOP_HEIGHT, screenW, 45)
                                                                    CategoryArr:titleArr
-                                                                     BackColor:[UIColor dm_colorWithLightColor:[UIColor whiteColor] darkColor:[UIColor blackColor]]
-                                                               hightLightColor:[UIColor dm_colorWithLightColor:[UIColor whiteColor] darkColor:[UIColor blackColor]]
-                                                                    TitleColor:[UIColor dm_colorWithLightColor:[UIColor blackColor] darkColor:[UIColor whiteColor]]
+                                                                     BackColor:[UIColor whiteColor]
+                                                               hightLightColor:[UIColor whiteColor]
+                                                                    TitleColor:[UIColor blackColor]
                                                                hightTitleColor:[UIColor redColor]
                                                                bottomLineColor:[UIColor redColor]
                                                                  CategoryStyle:equalWidth];
@@ -92,7 +92,7 @@
 
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     self.mainCollection = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, screenW, screenH) collectionViewLayout:layout];
-    self.mainCollection.backgroundColor = [UIColor dm_colorWithLightColor:[UIColor whiteColor] darkColor:[UIColor blackColor]];
+    self.mainCollection.backgroundColor = [UIColor whiteColor];
     self.mainCollection.delegate = self;
     self.mainCollection.dataSource = self;
     [self.view addSubview:self.mainCollection];

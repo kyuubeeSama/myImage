@@ -56,7 +56,8 @@
                     model.img_url = [imgPath stringByReplacingOccurrencesOfString:websiteModel.url withString:@""];
                     if ([sqlTool insertTable:@"article"
                                      element:@"website_id,name,detail_url,img_url"
-                                       value:[NSString stringWithFormat:@"%d,\"%@\",\"%@\",\"%@\"", websiteModel.value, model.name, model.detail_url, model.img_url]]) {
+                                       value:[NSString stringWithFormat:@"%d,\"%@\",\"%@\",\"%@\"", websiteModel.value, model.name, model.detail_url, model.img_url]
+                                       where:nil]) {
                         model = (ArticleModel *) [sqlTool findDataFromTable:@"article"
                                                                       where:[NSString
                                                                           stringWithFormat:@"website_id = %d and detail_url = \"%@\"", websiteModel.value, model.detail_url]
@@ -129,7 +130,8 @@
                         model.img_url = imgPath;
                         if ([sqlTool insertTable:@"article"
                                          element:@"website_id,name,detail_url,img_url"
-                                           value:[NSString stringWithFormat:@"%d,\"%@\",\"%@\",\"%@\"", websiteModel.value, model.name, model.detail_url, model.img_url]]) {
+                                           value:[NSString stringWithFormat:@"%d,\"%@\",\"%@\",\"%@\"", websiteModel.value, model.name, model.detail_url, model.img_url]
+                                           where:nil]) {
                             ArticleModel *newModel = (ArticleModel *) [sqlTool findDataFromTable:@"article"
                                                                           where:[NSString
                                                                               stringWithFormat:@"website_id = %d and detail_url = \"%@\"", websiteModel.value, model.detail_url]

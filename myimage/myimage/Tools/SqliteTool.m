@@ -9,6 +9,7 @@
 #import "SqliteTool.h"
 #import "FMDatabaseQueue.h"
 #import "FMDatabaseAdditions.h"
+#import "NSString+Extension.h"
 
 @interface SqliteTool ()
 
@@ -73,13 +74,17 @@ static id sharedSingleton = nil;
     }
 }
 
-- (BOOL)insertTable:(NSString *)tableName
-            element:(NSString *)element
-              value:(NSString *)value {
+-(BOOL)insertTable:(NSString *)tableName element:(NSString *)element value:(NSString *)value  where:(NSString * _Nullable)where {
     FMDatabase *db = [self openDB];
-    NSString *sql = [NSString stringWithFormat:@"INSERT INTO %@ (%@) VALUES (%@)", tableName, element, value];
-    NSLog(@"insert:%@", sql);
-    return [db executeUpdate:sql];
+    if ([NSString MyStringIsNULL:where]) {
+        NSString *sql = [NSString stringWithFormat:@"INSERT INTO %@ (%@) VALUES (%@)", tableName, element, value];
+        NSLog(@"insert:%@", sql);
+        return [db executeUpdate:sql];
+    }else{
+        NSString *sql = [NSString stringWithFormat:@"INSERT INTO %@ (%@) SELECT %@ FROM %@ WHRE NOT EXISTS (%@)",tableName,element,value,tableName,where];
+        NSLog(@"insert and where not exist:%@",sql);
+        return [db executeUpdate:sql];
+    }
 }
 
 - (NSMutableArray *)selectDataFromTable:(NSString *)tableName

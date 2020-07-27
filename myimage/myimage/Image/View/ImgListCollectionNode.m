@@ -34,7 +34,7 @@
         _titleNode = [[ASTextNode alloc]init];
         [self addSubnode:_titleNode];
         _titleNode.frame = CGRectMake(0, screenW/2, screenW/2-5, 40);
-        _titleNode.tintColor = [UIColor dm_colorWithLightColor:[UIColor colorWithHexString:@"333333"] darkColor:[UIColor whiteColor]];
+        _titleNode.tintColor = [UIColor colorWithHexString:@"333333"];
     }
     return _titleNode;
 }

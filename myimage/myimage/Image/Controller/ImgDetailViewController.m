@@ -44,6 +44,7 @@
         } success:^(NSMutableArray *array) {
             self.listArr = array;
             SqliteTool *sqlTool = [SqliteTool sharedInstance];
+            // 将该页面爬取到的图片都保存到数据库
             if ([self saveImageWithArr:array]) {
                 [sqlTool updateTable:@"article"
                                where:[NSString stringWithFormat:@"article_id = %d", self.articleModel.article_id]
@@ -76,16 +77,23 @@
     for (ImageModel *model in array) {
         // 保存数据到数据库
         SqliteTool *sqlTool = [SqliteTool sharedInstance];
-        ImageModel *imgModel = (ImageModel *)[sqlTool findDataFromTable:@"image" where:[NSString stringWithFormat:@"image_url = \"%@\" and article_id = %d",model.image_url,self.articleModel.article_id] field:@"*" Class:[ImageModel class]];
-        if (imgModel.article_id != 0){
-            continue;
-        }else{
-            if (![sqlTool insertTable:@"image"
-                              element:@"image_url,article_id"
-                                value:[NSString stringWithFormat:@"\"%@\",%d", model.image_url, self.articleModel.article_id]]) {
-                return false;
-            }
+        if(![sqlTool insertTable:@"image"
+                          element:@"image_url,article_id"
+                            value:[NSString stringWithFormat:@"\"%@\",%d", model.image_url, self.articleModel.article_id]
+                           where:[NSString stringWithFormat:@"select * from image where image_url = '%@' and article_id = %d",model.image_url,self.articleModel.article_id]]){
+            return false;
         }
+//        ImageModel *imgModel = (ImageModel *)[sqlTool findDataFromTable:@"image" where:[NSString stringWithFormat:@"image_url = \"%@\" and article_id = %d",model.image_url,self.articleModel.article_id] field:@"*" Class:[ImageModel class]];
+//        if (imgModel.article_id != 0){
+//            continue;
+//        }else{
+//            if (![sqlTool insertTable:@"image"
+//                              element:@"image_url,article_id"
+//                                value:[NSString stringWithFormat:@"\"%@\",%d", model.image_url, self.articleModel.article_id]
+//                                where:nil]) {
+//                return false;
+//            }
+//        }
     }
     return YES;
 }
@@ -127,7 +135,8 @@
         // 收藏
         if ([sqlTool insertTable:@"collect"
                          element:@"value,type"
-                           value:[NSString stringWithFormat:@"%d,1", self.articleModel.article_id]]) {
+                           value:[NSString stringWithFormat:@"%d,1", self.articleModel.article_id]
+                           where:nil]) {
             [button setImage:[UIImage systemImageNamed:@"star.fill"]];
         } else {
             [self alertWithTitle:@"收藏失败"];
@@ -200,7 +209,10 @@
                 if (collect.value != 0){
                     [self alertWithTitle:@"已收藏"];
                 }else{
-                    if([sqlTool insertTable:@"collect" element:@"value,type" value:[NSString stringWithFormat:@"%d,2",model.image_id]]){
+                    if([sqlTool insertTable:@"collect"
+                                    element:@"value,type"
+                                      value:[NSString stringWithFormat:@"%d,2",model.image_id]
+                                      where:nil]){
                         [self alertWithTitle:@"收藏成功"];
                     }else{
                         [self alertWithTitle:@"收藏失败"];

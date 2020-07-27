@@ -23,7 +23,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.listArr = @[];
-    self.view.backgroundColor = [UIColor dm_colorWithLightColor:UIColor.blackColor darkColor:UIColor.whiteColor];
+    self.view.backgroundColor = [UIColor whiteColor];
     self.websiteArr = [[NSMutableArray alloc] init];
     [self setNav];
     [self makeUI];
@@ -82,35 +82,53 @@
             switch (indexPath.row){
                 case 0:{
                     //        id，name,url(网站地址)，is_delete(2:删除)
-                    [sqlTool insertTable:@"website" element:@"name,url,value" value:@"\"撸女吧\",\"https://www.lunu8.com\",1"];
+                    [sqlTool insertTable:@"website"
+                                 element:@"name,url,value"
+                                   value:@"'撸女吧','https://www.lunu8.com',1"
+                                   where:nil];
                     // 插入分类数据
                     NSArray *titleArr = @[@"撸女",@"撸吧",@"推图",@"亚洲",@"欧美",@"日韩"];
                     NSArray *idArr = @[@"1",@"2",@"3",@"6",@"8",@"9"];
                     for (NSUInteger i=0;i<titleArr.count;i++){
 //            id,website_id,name,value,is_delete(2:删除)
-                        [sqlTool insertTable:@"category" element:@"website_id,name,value" value:[NSString stringWithFormat:@"1,\"%@\",\"%@\"", titleArr[(NSUInteger) i], idArr[(NSUInteger) i]]];
+                        [sqlTool insertTable:@"category"
+                                     element:@"website_id,name,value"
+                                       value:[NSString stringWithFormat:@"1,'%@','%@'", titleArr[(NSUInteger) i], idArr[(NSUInteger) i]]
+                                       where:nil];
                     }
                     [self alertWithTitle:@"添加成功"];
                 }
                     break;
                 case 1:{
-                    [sqlTool insertTable:@"website" element:@"name,url,value" value:@"\"撸哥吧\",\"https://www.lugex.top\",2"];
+                    [sqlTool insertTable:@"website"
+                                 element:@"name,url,value"
+                                   value:@"'撸哥吧','https://www.lugex.top',2"
+                                   where:nil];
                     // 插入分类数据
                     NSArray *titleArr = @[@"欲女",@"撸女",@"亚洲",@"欧美",@"日韩"];
                     NSArray *idArr = @[@"1",@"2",@"6",@"8",@"9"];
                     for (NSUInteger i=0;i<titleArr.count;i++){
 //            id,website_id,name,value,is_delete(2:删除)
-                        [sqlTool insertTable:@"category" element:@"website_id,name,value" value:[NSString stringWithFormat:@"2,\"%@\",\"%@\"", titleArr[(NSUInteger) i], idArr[(NSUInteger) i]]];
+                        [sqlTool insertTable:@"category"
+                                     element:@"website_id,name,value"
+                                       value:[NSString stringWithFormat:@"2,'%@','%@'", titleArr[(NSUInteger) i], idArr[(NSUInteger) i]]
+                                       where:nil];
                     }
                     [self alertWithTitle:@"添加成功"];
                 }
                     break;
                 case 2:{
-                    [sqlTool insertTable:@"website" element:@"name,url,value" value:@"\"24fa\",\"https://www.24fa.cc\",3"];
+                    [sqlTool insertTable:@"website"
+                                 element:@"name,url,value"
+                                   value:@"'24fa','https://www.24fa.cc',3"
+                                   where:nil];
                     NSArray *titleArr = @[@"美女",@"欧美"];
                     NSArray *idArr = @[@"49",@"71"];
                     for (NSUInteger i = 0; i < titleArr.count; ++i) {
-                        [sqlTool insertTable:@"category" element:@"website_id,name,value" value:[NSString stringWithFormat:@"3,\"%@\",\"%@\"", titleArr[(NSUInteger) i], idArr[(NSUInteger) i]]];
+                        [sqlTool insertTable:@"category"
+                                     element:@"website_id,name,value"
+                                       value:[NSString stringWithFormat:@"3,'%@','%@'", titleArr[(NSUInteger) i], idArr[(NSUInteger) i]]
+                                       where:nil];
                     }
                     [self alertWithTitle:@"添加成功"];
                 }
@@ -123,7 +141,7 @@
             // 删除
             SqliteTool *sqlTool = [SqliteTool sharedInstance];
             // FIXEME:需要删除三个表中的相关数据,联表删除
-            if([sqlTool deleteDataFromTable:@"website" where:[NSString stringWithFormat:@"name = \"%@\"",self.listArr[(NSUInteger) indexPath.row]]]){
+            if([sqlTool deleteDataFromTable:@"website" where:[NSString stringWithFormat:@"name = '%@'",self.listArr[(NSUInteger) indexPath.row]]]){
                 [self.websiteArr removeAllObjects];
                 [self alertWithTitle:@"删除成功"];
                 [self getData];

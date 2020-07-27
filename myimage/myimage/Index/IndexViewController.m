@@ -6,8 +6,6 @@
 //  Copyright © 2018 liuqingyuan. All rights reserved.
 //
 
-//TODO:新添加的站点，在此处要更新
-
 #import "IndexViewController.h"
 #import "WebsiteModel.h"
 #import "UserViewController.h"
@@ -35,6 +33,7 @@
     self.title = @"首页";
     [self setNav];
     [self makeUI];
+    NSLog(@"%@",[FileTool getDocumentPath]);
     WeakSelf(self)
     [self cw_registerShowIntractiveWithEdgeGesture:YES transitionDirectionAutoBlock:^(CWDrawerTransitionDirection direction) {
         if (direction == CWDrawerTransitionFromLeft) { // 左侧滑出
@@ -42,11 +41,9 @@
         } else if (direction == CWDrawerTransitionFromRight) { // 右侧滑出
         }
     }];
-
 }
 
 - (void)defaultAnimationFromLeft {
-
     // 强引用leftVC，不用每次创建新的,也可以每次在这里创建leftVC，抽屉收起的时候会释放掉
     UserViewController *VC = [[UserViewController alloc] init];
     [self cw_showDefaultDrawerViewController:VC];

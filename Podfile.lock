@@ -16,7 +16,6 @@ PODS:
     - AFNetworking/NSURLSession
   - CWLateralSlide (1.6.5)
   - FLAnimatedImage (1.0.12)
-  - FluentDarkModeKit (0.5.2)
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
@@ -25,7 +24,6 @@ PODS:
   - MBProgressHUD (1.2.0)
   - MJExtension (3.2.2)
   - MJRefresh (3.4.3)
-<<<<<<< Updated upstream
   - PINCache (3.0.1-beta.6):
     - PINCache/Arc-exception-safe (= 3.0.1-beta.6)
     - PINCache/Core (= 3.0.1-beta.6)
@@ -64,17 +62,11 @@ PODS:
     - Texture/Core
   - Texture/Video (2.8.1):
     - Texture/Core
-=======
-  - SDWebImage (5.8.4):
-    - SDWebImage/Core (= 5.8.4)
-  - SDWebImage/Core (5.8.4)
->>>>>>> Stashed changes
 
 DEPENDENCIES:
   - AFNetworking
   - CWLateralSlide
   - FLAnimatedImage
-  - FluentDarkModeKit
   - FMDB
   - hpple
   - Masonry
@@ -89,7 +81,6 @@ SPEC REPOS:
     - AFNetworking
     - CWLateralSlide
     - FLAnimatedImage
-    - FluentDarkModeKit
     - FMDB
     - hpple
     - Masonry
@@ -106,25 +97,18 @@ SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
   CWLateralSlide: 8939c8dea91a24e40d0793553118cb57cd67f64b
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
-  FluentDarkModeKit: 78109bdbfb87c515543c0a52319da017c3843aae
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   hpple: 3b765f96fc2cd56ad1a49aef6f7be5cb2aa64b57
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
   MJExtension: d9b9c74cbdeb724c1e9ecbb157b318276e62e876
   MJRefresh: 53e3e3219f204425ee6d3e62e8733d3295944cd6
-<<<<<<< Updated upstream
   PINCache: d195fdba255283f7e9900a55e3cced377f431f9b
   PINOperation: 24b774353ca248fcf87d67b2d61eef42087c125a
   PINRemoteImage: d6d51c5d2adda55f1ce30c96e850b6c4ebd2856a
   SDWebImage: 112503ec94a5a2a41869503844a15e8d8f1ead5c
   Texture: 8ecf6984065a1e54f06bf97b349ecca28582acd7
 
-PODFILE CHECKSUM: 75bd419858b71de3d44c07c3fc21641a4a7b8e61
-=======
-  SDWebImage: cf6922231e95550934da2ada0f20f2becf2ceba9
+PODFILE CHECKSUM: 3c88b49adc41f8274b4439badc68f997faae7138
 
-PODFILE CHECKSUM: 3c2064fe2f171ac100656681e96027b0025cd36e
->>>>>>> Stashed changes
-
-COCOAPODS: 1.9.3
+COCOAPODS: 1.9.1

@@ -93,7 +93,7 @@
     [self.view addSubview:chooseView];
     UICollectionViewLayout *layout = [[UICollectionViewLayout alloc]init];
     self.mainCollection = [[ASCollectionNode alloc]initWithFrame:CGRectMake(0, 0, screenW, screenH) collectionViewLayout:layout];
-    self.mainCollection.backgroundColor = [UIColor dm_colorWithLightColor:[UIColor whiteColor] darkColor:[UIColor blackColor]];
+    self.mainCollection.backgroundColor = [UIColor whiteColor];
     self.mainCollection.delegate = self;
     self.mainCollection.dataSource = self;
     [self.view addSubnode:self.mainCollection];

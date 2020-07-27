@@ -36,7 +36,7 @@
         [self.contentView addSubview:self.titleLab];
         self.titleLab.font = [UIFont systemFontOfSize:13];
         self.titleLab.numberOfLines = 2;
-        self.titleLab.textColor = [UIColor dm_colorWithLightColor:[UIColor blackColor] darkColor:[UIColor whiteColor]];
+        self.titleLab.textColor = [UIColor blackColor];
         [self.titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.contentView.mas_left).offset(5);
             make.right.equalTo(self.contentView.mas_right).offset(-5);
