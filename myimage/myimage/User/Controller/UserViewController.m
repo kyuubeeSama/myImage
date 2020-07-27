@@ -77,6 +77,15 @@
     }
 }
 
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 100;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    UIView *headerView = [[UIView alloc]init];
+    return headerView;
+}
+
 /*
  #pragma mark - Navigation
  

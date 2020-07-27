@@ -4,7 +4,7 @@
 //
 //  Created by liuqingyuan on 2018/12/13.
 //  Copyright © 2018 liuqingyuan. All rights reserved.
-//  TODO:替换控件为AsyncDisplayKit控件。实现界面的暗黑显示操作
+//  TODO:替换控件为AsyncDisplayKit控件。数据数组，减少重复访问
 
 #import "ImgListViewController.h"
 #import "ImgListCollectionViewCell.h"
@@ -84,6 +84,7 @@
                                                                bottomLineColor:[UIColor redColor]
                                                                  CategoryStyle:equalWidth];
     chooseView.chooseBlock = ^(NSInteger index) {
+//        点击切换图片显示
         CategoryModel *model = categoryArr[(NSUInteger) index];
         self.categoryModel = model;
 //        self.categoryType = model.value;
@@ -92,25 +93,25 @@
         [self getData];
     };
     [self.view addSubview:chooseView];
-
-    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-    self.mainCollection = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, screenW, screenH) collectionViewLayout:layout];
-    self.mainCollection.backgroundColor = [UIColor whiteColor];
-    self.mainCollection.delegate = self;
-    self.mainCollection.dataSource = self;
-    [self.view addSubview:self.mainCollection];
-    [self.mainCollection registerClass:[ImgListCollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
-    [self.mainCollection mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(self.view);
-        make.top.equalTo(chooseView.mas_bottom);
-        if (@available(iOS 11.0, *)) {
-            make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom);
-        } else {
-            // Fallback on earlier versions
-            make.bottom.equalTo(self.view.mas_bottom);
-        }
-    }];
     [self getData];
+}
+
+-(UICollectionView *)mainCollection{
+    if (!_mainCollection) {
+        UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+        _mainCollection = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, screenW, screenH) collectionViewLayout:layout];
+        _mainCollection.backgroundColor = [UIColor whiteColor];
+        _mainCollection.delegate = self;
+        _mainCollection.dataSource = self;
+        [self.view addSubview:_mainCollection];
+        [_mainCollection registerClass:[ImgListCollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
+        [_mainCollection mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.equalTo(self.view);
+            make.top.equalTo(self.view).offset(45);
+            make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom);
+        }];
+    }
+    return _mainCollection;
 }
 
 - (void)getMoreData {

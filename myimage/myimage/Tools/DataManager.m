@@ -129,8 +129,8 @@
                         model.detail_url = detail;
                         model.img_url = imgPath;
                         if ([sqlTool insertTable:@"article"
-                                         element:@"website_id,name,detail_url,img_url"
-                                           value:[NSString stringWithFormat:@"%d,'%@','%@','%@'", websiteModel.value, model.name, model.detail_url, model.img_url]
+                                         element:@"website_id,category_id,name,detail_url,img_url"
+                                           value:[NSString stringWithFormat:@"%d,%d,'%@','%@','%@'", websiteModel.value, category.category_id,model.name, model.detail_url, model.img_url]
                                            where:nil]) {
                             ArticleModel *newModel = (ArticleModel *) [sqlTool findDataFromTable:@"article"
                                                                           where:[NSString

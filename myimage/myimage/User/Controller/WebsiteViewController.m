@@ -26,7 +26,6 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.websiteArr = [[NSMutableArray alloc] init];
     [self setNav];
-    [self makeUI];
     [self getData];
 }
 
@@ -44,23 +43,22 @@
     [self.mainTable reloadData];
 }
 
--(void)makeUI{
-    self.mainTable = [[UITableView alloc] initWithFrame:CGRectMake(0, 45, screenW, screenH - (TOP_HEIGHT) - 45) style:UITableViewStylePlain];
-    [self.view addSubview:self.mainTable];
-    self.mainTable.delegate = self;
-    self.mainTable.dataSource = self;
-    self.mainTable.estimatedRowHeight = 0;
-    self.mainTable.estimatedSectionFooterHeight = 0;
-    self.mainTable.estimatedSectionHeaderHeight = 0;
-    [self.mainTable registerNib:[UINib nibWithNibName:@"WebSiteTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"cell"];
-    [self.mainTable mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.equalTo(self.view);
-        if (@available(iOS 11, *)){
+-(UITableView *)mainTable{
+    if (!_mainTable) {
+        _mainTable = [[UITableView alloc] initWithFrame:CGRectMake(0, 45, screenW, screenH - (TOP_HEIGHT) - 45) style:UITableViewStylePlain];
+        [self.view addSubview:_mainTable];
+        _mainTable.delegate = self;
+        _mainTable.dataSource = self;
+        _mainTable.estimatedRowHeight = 0;
+        _mainTable.estimatedSectionFooterHeight = 0;
+        _mainTable.estimatedSectionHeaderHeight = 0;
+        [_mainTable registerNib:[UINib nibWithNibName:@"WebSiteTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"cell"];
+        [_mainTable mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.top.equalTo(self.view);
             make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom);
-        } else{
-            make.bottom.equalTo(self.view.mas_bottom);
-        }
-    }];
+        }];
+    }
+    return _mainTable;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -141,7 +139,15 @@
             // 删除
             SqliteTool *sqlTool = [SqliteTool sharedInstance];
             // FIXEME:需要删除三个表中的相关数据,联表删除
-            if([sqlTool deleteDataFromTable:@"website" where:[NSString stringWithFormat:@"name = '%@'",self.listArr[(NSUInteger) indexPath.row]]]){
+            if([sqlTool deleteDataFromTable:@"website"
+                                      where:[NSString stringWithFormat:@"name = '%@'",self.listArr[(NSUInteger) indexPath.row]]]
+               &&
+               [sqlTool deleteDataFromTable:@"category"
+                                      where:[NSString stringWithFormat:@"website_id = %ld",indexPath.row+1]]
+               &&
+               [sqlTool deleteDataFromTable:@"article" where:[NSString stringWithFormat:@"website_id = %ld",indexPath.row+1]]
+               &&
+               [sqlTool deleteDataFromTable:@"image" where:[NSString stringWithFormat:@"website_id = %ld",indexPath.row+1]]){
                 [self.websiteArr removeAllObjects];
                 [self alertWithTitle:@"删除成功"];
                 [self getData];
