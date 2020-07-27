@@ -12,17 +12,17 @@
 
 @implementation DataManager
 
-+ (void)getDataWithType:(WebsiteModel *)websiteModel pageNum:(int)PageNum category:(NSString *)category success:(void (^)(NSMutableArray *_Nonnull))success failure:(void (^)(NSError *_Nonnull))failure {
++ (void)getDataWithType:(WebsiteModel *)websiteModel pageNum:(int)PageNum category:(CategoryModel *)category success:(void (^)(NSMutableArray *_Nonnull))success failure:(void (^)(NSError *_Nonnull))failure {
     NSString *urlStr;
     if (websiteModel.value == 1) {
         // 撸女吧
-        urlStr = [NSString stringWithFormat:@"%@/category-%@_%d.html", websiteModel.url, category, PageNum];
+        urlStr = [NSString stringWithFormat:@"%@/category-%@_%d.html", websiteModel.url, category.value, PageNum];
     } else if (websiteModel.value == 2) {
         // 撸哥吧
-        urlStr = [NSString stringWithFormat:@"%@/category-%@_%d.html", websiteModel.url, category, PageNum];
+        urlStr = [NSString stringWithFormat:@"%@/category-%@_%d.html", websiteModel.url, category.value, PageNum];
     } else if (websiteModel.value == 3) {
 //        24fa
-        urlStr = [NSString stringWithFormat:@"%@/mc%@p%d.aspx", websiteModel.url, category, PageNum];
+        urlStr = [NSString stringWithFormat:@"%@/mc%@p%d.aspx", websiteModel.url, category.value, PageNum];
     }
     [NetWorkingTool getHtmlWithUrl:urlStr WithData:nil success:^(NSString *_Nonnull html) {
         NSLog(@"%@", html);
@@ -38,7 +38,7 @@
                 detail = [detail stringByReplacingOccurrencesOfString:@"\"" withString:@""];
                 SqliteTool *sqlTool = [SqliteTool sharedInstance];
                 ArticleModel *result = (ArticleModel *) [sqlTool findDataFromTable:@"article"
-                                                                             where:[NSString stringWithFormat:@"website_id = %d and detail_url = \"%@\"", websiteModel.value, detail]
+                                                                             where:[NSString stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, detail]
                                                                              field:@"*"
                                                                              Class:[ArticleModel class]];
                 if (result.name == nil) {
@@ -55,12 +55,12 @@
                     model.detail_url = [detail stringByReplacingOccurrencesOfString:websiteModel.url withString:@""];
                     model.img_url = [imgPath stringByReplacingOccurrencesOfString:websiteModel.url withString:@""];
                     if ([sqlTool insertTable:@"article"
-                                     element:@"website_id,name,detail_url,img_url"
-                                       value:[NSString stringWithFormat:@"%d,\"%@\",\"%@\",\"%@\"", websiteModel.value, model.name, model.detail_url, model.img_url]
+                                     element:@"website_id,category_id,name,detail_url,img_url"
+                                       value:[NSString stringWithFormat:@"%d,%d,'%@','%@','%@'", websiteModel.value,category.category_id, model.name, model.detail_url, model.img_url]
                                        where:nil]) {
                         model = (ArticleModel *) [sqlTool findDataFromTable:@"article"
                                                                       where:[NSString
-                                                                          stringWithFormat:@"website_id = %d and detail_url = \"%@\"", websiteModel.value, model.detail_url]
+                                                                          stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, model.detail_url]
                                                                       field:@"*"
                                                                       Class:[ArticleModel class]];
                     }
@@ -93,7 +93,7 @@
 
                 SqliteTool *sqlTool = [SqliteTool sharedInstance];
                 ArticleModel *result = (ArticleModel *) [sqlTool findDataFromTable:@"article"
-                                                                             where:[NSString stringWithFormat:@"website_id = %d and detail_url = \"%@\"", websiteModel.value, detail]
+                                                                             where:[NSString stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, detail]
                                                                              field:@"*"
                                                                              Class:[ArticleModel class]];
                 if (result.name == nil) {
@@ -130,11 +130,11 @@
                         model.img_url = imgPath;
                         if ([sqlTool insertTable:@"article"
                                          element:@"website_id,name,detail_url,img_url"
-                                           value:[NSString stringWithFormat:@"%d,\"%@\",\"%@\",\"%@\"", websiteModel.value, model.name, model.detail_url, model.img_url]
+                                           value:[NSString stringWithFormat:@"%d,'%@','%@','%@'", websiteModel.value, model.name, model.detail_url, model.img_url]
                                            where:nil]) {
                             ArticleModel *newModel = (ArticleModel *) [sqlTool findDataFromTable:@"article"
                                                                           where:[NSString
-                                                                              stringWithFormat:@"website_id = %d and detail_url = \"%@\"", websiteModel.value, model.detail_url]
+                                                                              stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, model.detail_url]
                                                                           field:@"*"
                                                                           Class:[ArticleModel class]];
                             [resultArr addObject:newModel];

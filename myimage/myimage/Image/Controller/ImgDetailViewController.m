@@ -78,22 +78,11 @@
         // 保存数据到数据库
         SqliteTool *sqlTool = [SqliteTool sharedInstance];
         if(![sqlTool insertTable:@"image"
-                          element:@"image_url,article_id"
-                            value:[NSString stringWithFormat:@"\"%@\",%d", model.image_url, self.articleModel.article_id]
+                          element:@"image_url,article_id,website_id"
+                            value:[NSString stringWithFormat:@"'%@',%d,%d", model.image_url, self.articleModel.article_id,self.articleModel.website_id]
                            where:[NSString stringWithFormat:@"select * from image where image_url = '%@' and article_id = %d",model.image_url,self.articleModel.article_id]]){
             return false;
         }
-//        ImageModel *imgModel = (ImageModel *)[sqlTool findDataFromTable:@"image" where:[NSString stringWithFormat:@"image_url = \"%@\" and article_id = %d",model.image_url,self.articleModel.article_id] field:@"*" Class:[ImageModel class]];
-//        if (imgModel.article_id != 0){
-//            continue;
-//        }else{
-//            if (![sqlTool insertTable:@"image"
-//                              element:@"image_url,article_id"
-//                                value:[NSString stringWithFormat:@"\"%@\",%d", model.image_url, self.articleModel.article_id]
-//                                where:nil]) {
-//                return false;
-//            }
-//        }
     }
     return YES;
 }

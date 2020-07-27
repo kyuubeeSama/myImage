@@ -8,11 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import "WebsiteModel.h"
+#import "CategoryModel.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @interface DataManager : NSObject
 
-+(void)getDataWithType:(WebsiteModel *)websiteModel pageNum:(int)PageNum category:(NSString *)category success:(void(^)(NSMutableArray *array))success failure:(void(^)(NSError *error))failure;
++(void)getDataWithType:(WebsiteModel *)websiteModel pageNum:(int)PageNum category:(CategoryModel *)category success:(void(^)(NSMutableArray *array))success failure:(void(^)(NSError *error))failure;
 
 +(void)getImageDetailWithType:(WebsiteModel *)websiteModel detailUrl:(NSString *)detailUrl progress:(void(^)(int page))progress success:(void(^)(NSMutableArray *array))success failure:(void(^)(NSError *error))failure;
 
