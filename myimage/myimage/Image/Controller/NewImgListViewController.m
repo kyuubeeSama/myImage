@@ -20,7 +20,8 @@
 @property(nonatomic,retain)ASCollectionNode *mainCollection;
 @property(nonatomic, retain) NSMutableArray *listArr;
 @property(nonatomic, assign) int pageNum;
-@property(nonatomic, copy) NSString *categoryType;
+//@property(nonatomic, copy) NSString *categoryType;
+@property(nonatomic, strong) CategoryModel *categoryModel;
 
 @end
 
@@ -45,7 +46,7 @@
     [self beginProgressWithTitle:nil];
     [DataManager getDataWithType:self.model
                          pageNum:self.pageNum
-                        category:self.categoryType
+                        category:self.categoryModel
                          success:^(NSMutableArray *_Nonnull array) {
         if (array.count > 0) {
             self.pageNum = self.pageNum + 1;
@@ -71,7 +72,8 @@
     for (NSUInteger i = 0; i < categoryArr.count; i++) {
         CategoryModel *model = categoryArr[(NSUInteger) i];
         if (i == 0) {
-            self.categoryType = model.value;
+//            self.categoryType = model.value;
+            self.categoryModel = model;
         }
         [titleArr addObject:model.name];
     }
@@ -85,7 +87,8 @@
                                                                  CategoryStyle:equalWidth];
     chooseView.chooseBlock = ^(NSInteger index) {
         CategoryModel *model = categoryArr[(NSUInteger) index];
-        self.categoryType = model.value;
+//        self.categoryType = model.value;
+        self.categoryModel = model;
         [self.listArr removeAllObjects];
         self.pageNum = 1;
         [self getData];

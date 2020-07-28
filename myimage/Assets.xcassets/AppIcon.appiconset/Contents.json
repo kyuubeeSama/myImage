@@ -1,107 +1,116 @@
 {
   "images" : [
     {
-      "size" : "20x20",
-      "idiom" : "iphone",
       "filename" : "App_calculator_64px_1075271_easyicon.net-1.png",
-      "scale" : "2x"
+      "idiom" : "iphone",
+      "scale" : "2x",
+      "size" : "20x20"
     },
     {
-      "size" : "20x20",
-      "idiom" : "iphone",
       "filename" : "App_calculator_64px_1075271_easyicon.net.png",
-      "scale" : "3x"
+      "idiom" : "iphone",
+      "scale" : "3x",
+      "size" : "20x20"
     },
     {
-      "size" : "29x29",
-      "idiom" : "iphone",
       "filename" : "App_calculator_64px_1075271_easyicon.net-2.png",
-      "scale" : "2x"
+      "idiom" : "iphone",
+      "scale" : "2x",
+      "size" : "29x29"
     },
     {
-      "size" : "29x29",
-      "idiom" : "iphone",
       "filename" : "App_calculator_96px_1075271_easyicon.net-1.png",
-      "scale" : "3x"
+      "idiom" : "iphone",
+      "scale" : "3x",
+      "size" : "29x29"
     },
     {
-      "size" : "40x40",
-      "idiom" : "iphone",
       "filename" : "App_calculator_96px_1075271_easyicon.net.png",
-      "scale" : "2x"
+      "idiom" : "iphone",
+      "scale" : "2x",
+      "size" : "40x40"
     },
     {
-      "size" : "40x40",
-      "idiom" : "iphone",
       "filename" : "App_calculator_128px_1075271_easyicon.net-2.png",
-      "scale" : "3x"
+      "idiom" : "iphone",
+      "scale" : "3x",
+      "size" : "40x40"
     },
     {
-      "size" : "60x60",
-      "idiom" : "iphone",
       "filename" : "App_calculator_128px_1075271_easyicon.net-1.png",
-      "scale" : "2x"
-    },
-    {
-      "size" : "60x60",
       "idiom" : "iphone",
+      "scale" : "2x",
+      "size" : "60x60"
+    },
+    {
       "filename" : "App_calculator_128px_1075271_easyicon.net.png",
-      "scale" : "3x"
+      "idiom" : "iphone",
+      "scale" : "3x",
+      "size" : "60x60"
     },
     {
+      "filename" : "App_calculator_128px_1075271_easyicon.net-3的副本-1.png",
       "idiom" : "ipad",
-      "size" : "20x20",
-      "scale" : "1x"
+      "scale" : "1x",
+      "size" : "20x20"
     },
     {
+      "filename" : "App_calculator_128px_1075271_easyicon.net-3的副本2-1.png",
       "idiom" : "ipad",
-      "size" : "20x20",
-      "scale" : "2x"
+      "scale" : "2x",
+      "size" : "20x20"
     },
     {
+      "filename" : "App_calculator_128px_1075271_easyicon.net-3的副本3-1.png",
       "idiom" : "ipad",
-      "size" : "29x29",
-      "scale" : "1x"
+      "scale" : "1x",
+      "size" : "29x29"
     },
     {
+      "filename" : "App_calculator_128px_1075271_easyicon.net-3的副本4-1.png",
       "idiom" : "ipad",
-      "size" : "29x29",
-      "scale" : "2x"
+      "scale" : "2x",
+      "size" : "29x29"
     },
     {
+      "filename" : "App_calculator_128px_1075271_easyicon.net-3的副本5-1.png",
       "idiom" : "ipad",
-      "size" : "40x40",
-      "scale" : "1x"
+      "scale" : "1x",
+      "size" : "40x40"
     },
     {
+      "filename" : "App_calculator_128px_1075271_easyicon.net-3的副本6-1.png",
       "idiom" : "ipad",
-      "size" : "40x40",
-      "scale" : "2x"
+      "scale" : "2x",
+      "size" : "40x40"
     },
     {
+      "filename" : "App_calculator_128px_1075271_easyicon.net-3的副本7-1.png",
       "idiom" : "ipad",
-      "size" : "76x76",
-      "scale" : "1x"
+      "scale" : "1x",
+      "size" : "76x76"
     },
     {
+      "filename" : "App_calculator_128px_1075271_easyicon.net-3的副本8-1.png",
       "idiom" : "ipad",
-      "size" : "76x76",
-      "scale" : "2x"
+      "scale" : "2x",
+      "size" : "76x76"
     },
     {
+      "filename" : "App_calculator_128px_1075271_easyicon.net-3的副本9-1.png",
       "idiom" : "ipad",
-      "size" : "83.5x83.5",
-      "scale" : "2x"
+      "scale" : "2x",
+      "size" : "83.5x83.5"
     },
     {
-      "size" : "1024x1024",
-      "idiom" : "ios-marketing",
       "filename" : "App_calculator_128px_1075271_easyicon.net-3.png",
-      "scale" : "1x"
+      "idiom" : "ios-marketing",
+      "scale" : "1x",
+      "size" : "1024x1024"
     }
   ],
   "info" : {
-    "version" : 1,
-    "author" : "xcode"
+    "author" : "xcode",
+    "version" : 1
   }
 }

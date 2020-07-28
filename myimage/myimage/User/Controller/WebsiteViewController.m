@@ -39,7 +39,7 @@
     for(WebsiteModel *model  in webArr){
         [self.websiteArr addObject:model.name];
     }
-    self.listArr = @[@"撸女吧",@"撸哥吧",@"24fa"];
+    self.listArr = @[@"撸女吧",@"撸哥吧",@"24fa",@"趣事百科"];
     [self.mainTable reloadData];
 }
 
@@ -77,63 +77,21 @@
             // 添加
             [self beginProgressWithTitle:nil];
             SqliteTool *sqlTool = [SqliteTool sharedInstance];
-            switch (indexPath.row){
-                case 0:{
-                    //        id，name,url(网站地址)，is_delete(2:删除)
-                    [sqlTool insertTable:@"website"
-                                 element:@"name,url,value"
-                                   value:@"'撸女吧','https://www.lunu8.com',1"
-                                   where:nil];
-                    // 插入分类数据
-                    NSArray *titleArr = @[@"撸女",@"撸吧",@"推图",@"亚洲",@"欧美",@"日韩"];
-                    NSArray *idArr = @[@"1",@"2",@"3",@"6",@"8",@"9"];
-                    for (NSUInteger i=0;i<titleArr.count;i++){
-//            id,website_id,name,value,is_delete(2:删除)
-                        [sqlTool insertTable:@"category"
-                                     element:@"website_id,name,value"
-                                       value:[NSString stringWithFormat:@"1,'%@','%@'", titleArr[(NSUInteger) i], idArr[(NSUInteger) i]]
-                                       where:nil];
-                    }
-                    [self alertWithTitle:@"添加成功"];
-                }
-                    break;
-                case 1:{
-                    [sqlTool insertTable:@"website"
-                                 element:@"name,url,value"
-                                   value:@"'撸哥吧','https://www.lugex.top',2"
-                                   where:nil];
-                    // 插入分类数据
-                    NSArray *titleArr = @[@"欲女",@"撸女",@"亚洲",@"欧美",@"日韩"];
-                    NSArray *idArr = @[@"1",@"2",@"6",@"8",@"9"];
-                    for (NSUInteger i=0;i<titleArr.count;i++){
-//            id,website_id,name,value,is_delete(2:删除)
-                        [sqlTool insertTable:@"category"
-                                     element:@"website_id,name,value"
-                                       value:[NSString stringWithFormat:@"2,'%@','%@'", titleArr[(NSUInteger) i], idArr[(NSUInteger) i]]
-                                       where:nil];
-                    }
-                    [self alertWithTitle:@"添加成功"];
-                }
-                    break;
-                case 2:{
-                    [sqlTool insertTable:@"website"
-                                 element:@"name,url,value"
-                                   value:@"'24fa','https://www.24fa.cc',3"
-                                   where:nil];
-                    NSArray *titleArr = @[@"美女",@"欧美"];
-                    NSArray *idArr = @[@"49",@"71"];
-                    for (NSUInteger i = 0; i < titleArr.count; ++i) {
-                        [sqlTool insertTable:@"category"
-                                     element:@"website_id,name,value"
-                                       value:[NSString stringWithFormat:@"3,'%@','%@'", titleArr[(NSUInteger) i], idArr[(NSUInteger) i]]
-                                       where:nil];
-                    }
-                    [self alertWithTitle:@"添加成功"];
-                }
-                    break;
-                default:
-                    break;
+            NSArray *valueArr = @[@"'撸女吧','https://www.lunu8.com',1",@"'撸哥吧','https://www.lugex.top',2",@"'24fa','https://www.24fa.cc',3",@"'趣事百科','https://qqr522.com',4"];
+            NSArray *allTitleArr = @[@[@"撸女",@"撸吧",@"推图",@"亚洲",@"欧美",@"日韩"],@[@"欲女",@"撸女",@"亚洲",@"欧美",@"日韩"],@[@"美女",@"欧美"], @[@"宅福利",@"宅男社",@"撸一管",@"蜜桃社"]];
+            NSArray *allIdArr = @[@[@"1",@"2",@"3",@"6",@"8",@"9"],@[@"1",@"2",@"6",@"8",@"9"],@[@"49",@"71"],@[@"zhaifuli/list_2_",@"zhainanshe/list_4_",@"luyilu/list_5_",@"MiiTao/list_12_"]];
+            [sqlTool insertTable:@"website"
+                         element:@"name,url,value"
+                           value:valueArr[indexPath.row]
+                           where:nil];
+            NSArray *titleArr = allTitleArr[indexPath.row];
+            NSArray *idArr = allIdArr[indexPath.row];
+            for (NSUInteger i=0; i<titleArr.count; i++) {
+                [sqlTool insertTable:@"category"
+                             element:@"website_id,name,value"
+                               value:[NSString stringWithFormat:@"%ld,'%@','%@'", (long)indexPath.row+1,titleArr[i], idArr[i]] where:nil];
             }
+            [self alertWithTitle:@"添加成功"];
             [self endProgress];
         }else{
             // 删除

@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign)int article_id;
 @property (nonatomic, assign)int website_id;
+@property (nonatomic, assign)int category_id;
 @property (nonatomic, copy)NSString *name;
 @property (nonatomic, copy)NSString *detail_url;
 @property (nonatomic, copy)NSString *img_url;

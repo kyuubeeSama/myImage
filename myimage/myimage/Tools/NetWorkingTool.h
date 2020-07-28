@@ -24,7 +24,7 @@ typedef NS_ENUM(NSUInteger, MethodType) {
 // 下载文件
 -(void)downloadingFileWithUrl:(NSString *)urlStr path:(NSString *)path;
 // 获取文件内容
-+(void)getHtmlWithUrl:(NSString *)urlStr WithData:(NSDictionary * _Nullable)dic success:(void(^)(NSString *html))success failure:(void(^)(NSError *error))failure;
++(void)getHtmlWithUrl:(NSString *)urlStr WithData:(nullable NSDictionary *)dic success:(void(^)(NSString *html))success failure:(nullable void(^)(NSError *error))failure;
 
 @end
 

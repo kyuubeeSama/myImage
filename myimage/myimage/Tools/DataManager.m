@@ -23,6 +23,8 @@
     } else if (websiteModel.value == 3) {
 //        24fa
         urlStr = [NSString stringWithFormat:@"%@/mc%@p%d.aspx", websiteModel.url, category.value, PageNum];
+    }else if (websiteModel.value == 4){
+        urlStr = [NSString stringWithFormat:@"%@/%@%d.html",websiteModel.url,category.value,PageNum];
     }
     [NetWorkingTool getHtmlWithUrl:urlStr WithData:nil success:^(NSString *_Nonnull html) {
         NSLog(@"%@", html);
@@ -152,6 +154,54 @@
                     }
                 }
             }
+        } else if(websiteModel.value == 4){
+            // 趣事百科
+            // 获取具体的1条
+//            <article([\s\S]+?)article>
+            NSString *articleRegex = @"<article([\\s\\S]+?)article>";
+            NSMutableArray *articleArr = [Tool getDataWithRegularExpression:articleRegex content:html];
+            for (NSString *article in articleArr) {
+                // 获取标题
+                //            title="([\s\S]+?)"
+                NSString *titleRegex = @"title=\"([\\s\\S]+?)\"";
+                NSString *titleStr = [Tool getDataWithRegularExpression:titleRegex content:article][0];
+                titleStr = [titleStr stringByReplacingOccurrencesOfString:@"title=\"" withString:@""];
+                titleStr = [titleStr stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+                            // 获取封面
+                //src="([\s\S]+?)"
+                NSString *picRegex = @"src=\"([\\s\\S]+?)\"";
+                NSString *picStr = [Tool getDataWithRegularExpression:picRegex content:article][0];
+                picStr = [picStr stringByReplacingOccurrencesOfString:@"src=\"" withString:@""];
+                picStr = [picStr stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+                // 详情
+                //            href="([\s\S]+?)"  array[1]
+                NSString *detailRegex = @"href=\"([\\s\\S]+?)\"";
+                NSString *detailStr = [Tool getDataWithRegularExpression:detailRegex content:article][1];
+                detailStr = [detailStr stringByReplacingOccurrencesOfString:@"href=\"" withString:@""];
+                detailStr = [detailStr stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+                SqliteTool *sqlTool = [SqliteTool sharedInstance];
+                ArticleModel *result = (ArticleModel *) [sqlTool findDataFromTable:@"article"
+                                                                             where:[NSString stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, detailStr]
+                                                                             field:@"*"
+                                                                             Class:[ArticleModel class]];
+                if (result.name == nil) {
+                    result.name = titleStr;
+                    result.detail_url = detailStr;
+                    result.img_url = picStr;
+                    if ([sqlTool insertTable:@"article"
+                                     element:@"website_id,category_id,name,detail_url,img_url"
+                                       value:[NSString stringWithFormat:@"%d,%d,'%@','%@','%@'", websiteModel.value,category.category_id, result.name, result.detail_url, result.img_url]
+                                       where:nil]) {
+                        result = (ArticleModel *) [sqlTool findDataFromTable:@"article"
+                                                                      where:[NSString
+                                                                          stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, result.detail_url]
+                                                                      field:@"*"
+                                                                      Class:[ArticleModel class]];
+                    }
+                }
+                [resultArr addObject:result];
+            }
+            success(resultArr);
         }
     }                      failure:^(NSError *_Nonnull error) {
         failure(error);

@@ -28,7 +28,7 @@
     NSError *error;
     NSRegularExpression *reg = [NSRegularExpression regularExpressionWithPattern:RegularExpression options:NSRegularExpressionCaseInsensitive|NSRegularExpressionDotMatchesLineSeparators error:&error];
 //    NSArray *matches = [reg matchesInString:content options:NSMatchingCompleted range:NSMakeRange(0, [content length])];
-    NSArray *matches = [reg matchesInString:content options:nil range:NSMakeRange(0, content.length)];
+    NSArray *matches = [reg matchesInString:content options:NSMatchingReportCompletion range:NSMakeRange(0, content.length)];
     NSMutableArray *resultArr = [NSMutableArray array];
     for (NSTextCheckingResult *match in matches) {
         NSRange range = [match range];

@@ -17,9 +17,11 @@
 
 @property(nonatomic, retain) UICollectionView *mainCollection;
 @property(nonatomic, retain) NSMutableArray *listArr;
-@property(nonatomic, assign) int pageNum;
+//@property(nonatomic, assign) int pageNum;
+@property(nonatomic,retain) NSMutableArray *pageArr;
 //@property(nonatomic, copy) NSString *categoryType;
 @property(nonatomic, strong) CategoryModel *categoryModel;
+@property(nonatomic,assign)int categoryIndex;
 
 @end
 
@@ -28,7 +30,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.pageNum = 1;
+//    self.pageNum = 1;
+    self.pageArr = [[NSMutableArray alloc]init];
+    self.categoryIndex = 0;
     self.listArr = [[NSMutableArray alloc] init];
     [self setNav];
     [self makeUI];
@@ -41,23 +45,27 @@
 
 - (void)getData {
     // 从数据中获取列表页
-    [self beginProgressWithTitle:nil];
+    [self beginProgressWithTitle:@"爬取中"];
     [DataManager getDataWithType:self.model
-                         pageNum:self.pageNum
+                         pageNum:[self.pageArr[self.categoryIndex] intValue]
                         category:self.categoryModel
                          success:^(NSMutableArray *_Nonnull array) {
-                             if (array.count > 0) {
-                                 self.pageNum = self.pageNum + 1;
-                             } else {
-                                 [self.mainCollection.mj_footer endRefreshingWithNoMoreData];
-                             }
-                             [self.listArr addObjectsFromArray:array];
-                             [self.mainCollection reloadData];
-                             [self endProgress];
-
-                         } failure:^(NSError *_Nonnull error) {
-            NSLog(@"%@", error);
-        }];
+        [self endProgress];
+        if (array.count > 0) {
+//            self.pageNum = self.pageNum + 1;
+            self.pageArr[self.categoryIndex] = [NSString stringWithFormat:@"%d",[self.pageArr[self.categoryIndex] intValue]+1];
+            [self.mainCollection.mj_footer endRefreshing];
+        } else {
+            [self.mainCollection.mj_footer endRefreshingWithNoMoreData];
+        }
+        [self.listArr addObjectsFromArray:array];
+        [self.mainCollection reloadData];
+        
+    } failure:^(NSError *_Nonnull error) {
+        NSLog(@"%@", error);
+        [self alertWithTitle:@"页面请求失败"];
+        [self.navigationController popViewControllerAnimated:YES];
+    }];
 }
 
 - (void)makeUI {
@@ -68,9 +76,10 @@
                                                   field:@"*"
                                                   Class:[CategoryModel class]];
     for (NSUInteger i = 0; i < categoryArr.count; i++) {
+        [self.pageArr addObject:@"1"];
         CategoryModel *model = categoryArr[(NSUInteger) i];
         if (i == 0) {
-//            self.categoryType = model.value;
+            //            self.categoryType = model.value;
             self.categoryModel = model;
         }
         [titleArr addObject:model.name];
@@ -84,12 +93,12 @@
                                                                bottomLineColor:[UIColor redColor]
                                                                  CategoryStyle:equalWidth];
     chooseView.chooseBlock = ^(NSInteger index) {
-//        点击切换图片显示
+        //        点击切换图片显示
         CategoryModel *model = categoryArr[(NSUInteger) index];
         self.categoryModel = model;
-//        self.categoryType = model.value;
+        //        self.categoryType = model.value;
         [self.listArr removeAllObjects];
-        self.pageNum = 1;
+//        self.pageNum = 1;
         [self getData];
     };
     [self.view addSubview:chooseView];
@@ -117,7 +126,6 @@
 - (void)getMoreData {
     self.mainCollection.mj_footer = [MJRefreshBackFooter footerWithRefreshingBlock:^{
         [self getData];
-        [self.mainCollection.mj_footer endRefreshing];
     }];
 }
 
@@ -130,7 +138,13 @@
     ImgListCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
     NSLog(@"%@,%@,%@", model.name, model.img_url, model.detail_url);
     cell.titleLab.text = model.name;
-    [cell.headImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", self.model.url, model.img_url]] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
+    NSString *imageStr;
+    if (model.website_id == 4) {
+        imageStr = model.img_url;
+    }else{
+        imageStr = [NSString stringWithFormat:@"%@/%@", self.model.url, model.img_url];
+    }
+     [cell.headImg sd_setImageWithURL:[NSURL URLWithString:imageStr] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
     return cell;
 }
 

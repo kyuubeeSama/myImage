@@ -27,7 +27,9 @@ typedef NS_ENUM(NSInteger, CategoryType) {
         freeSize
 };
 
--(id)initWithFrame:(CGRect)frame CategoryArr:(NSArray *)categoryArr BackColor:(UIColor *)backColor hightLightColor:(UIColor *)heightLightColor TitleColor:(UIColor *)titleColor hightTitleColor:(UIColor *)clickColor bottomLineColor:(UIColor *)bottomLineColor CategoryStyle:(CategoryType)categoryType;
+-(instancetype)initWithFrame:(CGRect)frame CategoryArr:(NSArray *)categoryArr BackColor:(UIColor *)backColor hightLightColor:(UIColor *)heightLightColor TitleColor:(UIColor *)titleColor hightTitleColor:(UIColor *)clickColor bottomLineColor:(UIColor *)bottomLineColor CategoryStyle:(CategoryType)categoryType;
+
+@property(nonatomic,assign)int index;
 
 @end
 
