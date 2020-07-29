@@ -81,7 +81,7 @@ static id sharedSingleton = nil;
         NSLog(@"insert:%@", sql);
         return [db executeUpdate:sql];
     }else{
-        NSString *sql = [NSString stringWithFormat:@"INSERT INTO %@ (%@) SELECT %@ FROM %@ WHRE NOT EXISTS (%@)",tableName,element,value,tableName,where];
+        NSString *sql = [NSString stringWithFormat:@"INSERT INTO %@ (%@) SELECT %@ WHERE NOT EXISTS (%@)",tableName,element,value,where];
         NSLog(@"insert and where not exist:%@",sql);
         return [db executeUpdate:sql];
     }

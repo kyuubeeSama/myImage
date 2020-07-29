@@ -12,7 +12,7 @@
 
 @implementation DataManager
 
-+ (void)getDataWithType:(WebsiteModel *)websiteModel pageNum:(int)PageNum category:(CategoryModel *)category success:(void (^)(NSMutableArray *_Nonnull))success failure:(void (^)(NSError *_Nonnull))failure {
+- (void)getDataWithType:(WebsiteModel *)websiteModel pageNum:(int)PageNum category:(CategoryModel *)category success:(void (^)(NSMutableArray *_Nonnull))success failure:(void (^)(NSError *_Nonnull))failure {
     NSString *urlStr;
     if (websiteModel.value == 1) {
         // 撸女吧
@@ -49,8 +49,8 @@
                     title = [title stringByReplacingOccurrencesOfString:@"title=\"" withString:@""];
                     title = [title stringByReplacingOccurrencesOfString:@"\"" withString:@""];
 
-                    NSMutableArray *imageArr = [Tool getDataWithRegularExpression:@"src=\"([\\s\\S]+?.jpg)\"" content:article];
-                    NSString *imgPath = imageArr[0];
+                    NSMutableArray *allImageArr = [Tool getDataWithRegularExpression:@"src=\"([\\s\\S]+?.jpg)\"" content:article];
+                    NSString *imgPath = allImageArr[0];
                     imgPath = [imgPath stringByReplacingOccurrencesOfString:@"src=\"" withString:@""];
                     imgPath = [imgPath stringByReplacingOccurrencesOfString:@"\"" withString:@""];
                     model.name = title;
@@ -209,7 +209,7 @@
 }
 
 
-+ (void)getImageDetailWithType:(WebsiteModel *)websiteModel detailUrl:(NSString *)detailUrl progress:(void (^)(int page))progress success:(void (^)(NSMutableArray *_Nonnull))success failure:(void (^)(NSError *_Nonnull))failure {
+- (void)getImageDetailWithType:(WebsiteModel *)websiteModel detailUrl:(NSString *)detailUrl progress:(void (^)(int page))progress success:(void (^)(NSMutableArray *_Nonnull))success failure:(void (^)(NSError *_Nonnull))failure {
     NSString *urlStr = [NSString stringWithFormat:@"%@/%@", websiteModel.url, detailUrl];
     if (websiteModel.value == 1) {
         [NetWorkingTool getHtmlWithUrl:urlStr WithData:nil success:^(NSString *_Nonnull html) {
@@ -227,6 +227,7 @@
                     imgUrl = [imgUrl stringByReplacingOccurrencesOfString:@"src=\"" withString:@""];
                     imgUrl = [imgUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""];
                     model.image_url = [imgUrl stringByReplacingOccurrencesOfString:websiteModel.url withString:@""];
+                    model.website_id = websiteModel.website_id;
                     [imgListArr addObject:model];
                     if (imgListArr.count == pageArr.count + 1) {
                         success(imgListArr);
@@ -245,6 +246,7 @@
             NSMutableArray *imgListArr = [[NSMutableArray alloc] init];
             for (int i = 0; i <= pageArr.count; i++) {
                 ImageModel *model = [[ImageModel alloc] init];
+                model.website_id = websiteModel.value;
                 NSString *relDetailUrl = [NSString stringWithFormat:@"%@?page=%d", urlStr, i + 1];
                 [NetWorkingTool getHtmlWithUrl:relDetailUrl WithData:nil success:^(NSString *html) {
                     NSMutableArray *imgAreaArr = [Tool getDataWithRegularExpression:@"article-content([\\s\\S]+?)<\\/a>" content:html];
@@ -288,6 +290,7 @@
                         imgStr = [imgStr stringByReplacingOccurrencesOfString:@"\"" withString:@""];
                         ImageModel *model = [[ImageModel alloc] init];
                         model.image_url = imgStr;
+                        model.website_id = websiteModel.value;
                         [imgListArr addObject:model];
                     }
                     success(imgListArr);
@@ -298,8 +301,61 @@
         }                      failure:^(NSError *_Nonnull error) {
             failure(error);
         }];
-
+    }else if (websiteModel.value == 4){
+        [self getImageWithUrl:urlStr withPageNum:1 success:success failure:failure];
     }
+}
+
+-(NSMutableArray *)imageArr{
+    if (!_imageArr) {
+        _imageArr = [[NSMutableArray alloc]init];
+    }
+    return _imageArr;
+}
+
+- (void)getImageWithUrl:(NSString *)url withPageNum:(int)pageNum success:(void (^)(NSMutableArray *_Nonnull))success failure:(void (^)(NSError *_Nonnull))failure{
+    NSString *urlStr = url;
+    if (pageNum != 1) {
+        urlStr = [url stringByReplacingOccurrencesOfString:@".html" withString:[NSString stringWithFormat:@"_%d.html",pageNum]];
+    }
+    __block int page = pageNum;
+    [NetWorkingTool getHtmlWithUrl:urlStr WithData:nil success:^(NSString * _Nonnull html) {
+        NSString *articleStr = [Tool getDataWithRegularExpression:@"<article([\\s\\S]+?)article>" content:html][0];
+        NSMutableArray *imgArr = [Tool getDataWithRegularExpression:@"src=\"([\\s\\S]+?)\"" content:articleStr];
+                // 获取图片块
+        //        <article([\s\S]+?)article>
+                // 获取图片
+        //        src="([\s\S]+?)"
+        for (NSString *imgPath in imgArr) {
+            NSString *imgStr = [imgPath stringByReplacingOccurrencesOfString:@"src=\"" withString:@""];
+            imgStr = [imgStr stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+            ImageModel *model = [[ImageModel alloc]init];
+            model.image_url = imgStr;
+            model.website_id = 4;
+            [self.imageArr addObject:model];
+        }
+        
+        // 最后一页没有下一页，使用递归，逐页查询，当下一页判断为空时，停止
+        //        获取下一页
+        //        next-page'>([\s\S]+?)>下一页
+        // 获取下一页地址
+        // src="([\s\S]+?)"
+//        https://qqr522.com//zhaifuli/2019/0210/6546.html   6546_2.html
+        NSMutableArray *nextPageArr = [Tool getDataWithRegularExpression:@"next-page'>([\\s\\S]+?)>下一页" content:html];
+        if (nextPageArr.count>0) {
+            page += 1;
+            NSString *nextPageStr = nextPageArr[0];
+            NSString *nextUrlStr = [Tool getDataWithRegularExpression:@"href='([\\s\\S]+?)'" content:nextPageStr][0];
+            nextUrlStr = [nextUrlStr stringByReplacingOccurrencesOfString:@"href='" withString:@""];
+            nextUrlStr = [nextUrlStr stringByReplacingOccurrencesOfString:@"'" withString:@""];
+            [self getImageWithUrl:url withPageNum:page success:success failure:failure];
+        }else{
+            //最后一页
+            success(self.imageArr);
+        }
+    } failure:^(NSError * _Nonnull error) {
+        failure(error);
+    }];
 }
 
 @end

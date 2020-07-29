@@ -39,7 +39,8 @@
 - (void)getData {
     [self beginProgressWithTitle:nil];
     if (self.articleModel.has_done == 1) {
-        [DataManager getImageDetailWithType:self.websiteModel detailUrl:self.articleModel.detail_url progress:^(int page) {
+        DataManager *dataManager = [[DataManager alloc]init];
+        [dataManager getImageDetailWithType:self.websiteModel detailUrl:self.articleModel.detail_url progress:^(int page) {
             [self beginProgressWithTitle:[NSString stringWithFormat:@"正在爬取第%d页",page]];
         } success:^(NSMutableArray *array) {
             self.listArr = array;
@@ -156,7 +157,11 @@
 
     if (![model.image_url isEqualToString:@"/zhu.js"]) {
         // FIXME:图片无法正常获取，在浏览器中可以，直接读取地址不行
-        [cell.topImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", self.websiteModel.url, model.image_url]]
+        NSString *img_url = [NSString stringWithFormat:@"%@/%@", self.websiteModel.url, model.image_url];
+        if (model.website_id == 4) {
+            img_url = model.image_url;
+        }
+        [cell.topImg sd_setImageWithURL:[NSURL URLWithString:img_url]
                        placeholderImage:[UIImage imageNamed:@"placeholder2"]
                                 options:SDWebImageLowPriority progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL *_Nullable targetURL) {
 

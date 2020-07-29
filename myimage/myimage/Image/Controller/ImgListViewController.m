@@ -46,7 +46,8 @@
 - (void)getData {
     // 从数据中获取列表页
     [self beginProgressWithTitle:@"爬取中"];
-    [DataManager getDataWithType:self.model
+    DataManager *dataManager = [[DataManager alloc]init];
+    [dataManager getDataWithType:self.model
                          pageNum:[self.pageArr[self.categoryIndex] intValue]
                         category:self.categoryModel
                          success:^(NSMutableArray *_Nonnull array) {
@@ -116,7 +117,7 @@
         [_mainCollection registerClass:[ImgListCollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
         [_mainCollection mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.equalTo(self.view);
-            make.top.equalTo(self.view).offset(45);
+            make.top.equalTo(self.view).offset(45+(TOP_HEIGHT));
             make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom);
         }];
     }

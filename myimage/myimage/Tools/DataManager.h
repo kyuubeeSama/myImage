@@ -13,10 +13,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface DataManager : NSObject
 
-+(void)getDataWithType:(WebsiteModel *)websiteModel pageNum:(int)PageNum category:(CategoryModel *)category success:(void(^)(NSMutableArray *array))success failure:(void(^)(NSError *error))failure;
+@property(nonatomic,strong)NSMutableArray *imageArr;
 
-+(void)getImageDetailWithType:(WebsiteModel *)websiteModel detailUrl:(NSString *)detailUrl progress:(void(^)(int page))progress success:(void(^)(NSMutableArray *array))success failure:(void(^)(NSError *error))failure;
+-(void)getDataWithType:(WebsiteModel *)websiteModel pageNum:(int)PageNum category:(CategoryModel *)category success:(void(^)(NSMutableArray *array))success failure:(void(^)(NSError *error))failure;
 
+-(void)getImageDetailWithType:(WebsiteModel *)websiteModel detailUrl:(NSString *)detailUrl progress:(void(^)(int page))progress success:(void(^)(NSMutableArray *array))success failure:(void(^)(NSError *error))failure;
 @end
 
 NS_ASSUME_NONNULL_END

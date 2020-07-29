@@ -44,7 +44,8 @@
 - (void)getData {
     // 从数据中获取列表页
     [self beginProgressWithTitle:nil];
-    [DataManager getDataWithType:self.model
+    DataManager *dataManager = [[DataManager alloc]init];
+    [dataManager getDataWithType:self.model
                          pageNum:self.pageNum
                         category:self.categoryModel
                          success:^(NSMutableArray *_Nonnull array) {
