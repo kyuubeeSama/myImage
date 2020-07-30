@@ -11,7 +11,7 @@
 #import "ImageModel.h"
 #import "CollectModel.h"
 
-@interface ImgDetailViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface ImgDetailViewController () <UITableViewDelegate, UITableViewDataSource,UIScrollViewDelegate>
 
 @property(nonatomic, retain) UITableView *mainTable;
 @property(nonatomic, retain) NSMutableArray *listArr;
@@ -94,7 +94,15 @@
     [self.view addSubview:self.mainTable];
     self.mainTable.delegate = self;
     self.mainTable.dataSource = self;
+    self.mainTable.estimatedRowHeight = 0;
+    self.mainTable.estimatedSectionFooterHeight = 0;
+    self.mainTable.estimatedSectionHeaderHeight = 0;
     [self.mainTable registerClass:[ImgDetailTableViewCell class] forCellReuseIdentifier:@"cell"];
+    self.mainTable.zoomScale = 2.0;
+}
+
+-(UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{
+    return self.mainTable;
 }
 
 - (void)setNav {
@@ -143,7 +151,6 @@
 
 - (void)browserBtnClick:(UIButton *)button {
     NSString  *urlStr = [NSString stringWithFormat:@"%@/%@", self.websiteModel.url, self.articleModel.detail_url];
-//    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlStr]];
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlStr] options:@{} completionHandler:nil];
 }
 
@@ -169,16 +176,18 @@
                 if (error == nil) {
                     model.width = image.size.width;
                     model.height = image.size.height;
-                    cell.topImg.frame = CGRectMake(0, 0, screenW, model.height * screenW / model.width);
-                    [self.mainTable reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+//                    cell.topImg.frame = CGRectMake(0, 0, screenW, model.height * screenW / model.width);
+                    // 获取到图片高度后更新该行
                 } else {
                     NSLog(@"第%ld张图片出错，出错图片地址是%@%@,错误信息是%@，错误码是%@", (long) indexPath.row, self.websiteModel.url, model.image_url, error.localizedDescription,error.userInfo[@"SDWebImageErrorDownloadStatusCodeKey"]);
                     model.width = screenW;
                     model.height = screenW*3/2;
-                    cell.topImg.frame = CGRectMake(0, 0, model.width, model.height);
+//                    cell.topImg.frame = CGRectMake(0, 0, model.width, model.height);
                 }
+                [self.mainTable reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
             }];
     } else {
+        // 容错错误文件
         model.width = screenW;
         model.height = 1;
     }
@@ -193,7 +202,11 @@
         browser.isNeedLandscape = YES;
         browser.currentImageIndex = 0;
         browser.btnArr = @[@"收藏"];
-        browser.imageArray = @[[NSString stringWithFormat:@"%@/%@", self.websiteModel.url,model.image_url]];
+        NSString *img_url = [NSString stringWithFormat:@"%@/%@", self.websiteModel.url, model.image_url];
+        if (model.website_id == 4) {
+            img_url = model.image_url;
+        }
+        browser.imageArray = @[img_url];
         [browser show];
         browser.otherBtnBlock = ^(NSInteger index) {
             if (index == 0){
@@ -222,7 +235,7 @@
     if (model.width > 0 && model.height > 0) {
         return model.height * screenW / model.width + 10;
     } else {
-        return screenH - (TOP_HEIGHT) - 44;
+        return screenW*3/2;
     }
 }
 /*

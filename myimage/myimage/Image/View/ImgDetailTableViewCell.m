@@ -15,13 +15,25 @@
     // Initialization code
 }
 
--(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(nullable NSString *)reuseIdentifier {
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self){
-        self.topImg = [[UIImageView alloc] init];
-        [self addSubview:self.topImg];
+//-(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(nullable NSString *)reuseIdentifier {
+//    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+//    if (self){
+//        self.topImg = [[UIImageView alloc] init];
+//        [self addSubview:self.topImg];
+//    }
+//    return self;
+//}
+
+-(UIImageView *)topImg{
+    if (!_topImg) {
+        _topImg = [[UIImageView alloc]init];
+        [self.contentView addSubview:_topImg];
+        [_topImg mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.top.equalTo(self.contentView);
+            make.bottom.equalTo(self.contentView.mas_bottom).offset(-10);
+        }];
     }
-    return self;
+    return _topImg;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
