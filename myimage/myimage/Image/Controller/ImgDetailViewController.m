@@ -11,7 +11,7 @@
 #import "ImageModel.h"
 #import "CollectModel.h"
 
-@interface ImgDetailViewController () <UITableViewDelegate, UITableViewDataSource,UIScrollViewDelegate>
+@interface ImgDetailViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property(nonatomic, retain) UITableView *mainTable;
 @property(nonatomic, retain) NSMutableArray *listArr;
@@ -99,10 +99,6 @@
     self.mainTable.estimatedSectionHeaderHeight = 0;
     [self.mainTable registerClass:[ImgDetailTableViewCell class] forCellReuseIdentifier:@"cell"];
     self.mainTable.zoomScale = 2.0;
-}
-
--(UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{
-    return self.mainTable;
 }
 
 - (void)setNav {

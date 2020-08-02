@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol MYPickerViewDelegate <NSObject>
 
 -(void)MYPickerViewCancelBtnClick;
--(void)MYPickerViewSureBtnClick:(int)row;
+-(void)MYPickerViewSureBtnClick:(NSInteger)row;
 
 @end
 

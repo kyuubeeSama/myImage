@@ -17,11 +17,10 @@
 
 @property(nonatomic, retain) UICollectionView *mainCollection;
 @property(nonatomic, retain) NSMutableArray *listArr;
-//@property(nonatomic, assign) int pageNum;
 @property(nonatomic,retain) NSMutableArray *pageArr;
-//@property(nonatomic, copy) NSString *categoryType;
 @property(nonatomic, strong) CategoryModel *categoryModel;
-@property(nonatomic,assign)int categoryIndex;
+// 当前分类
+@property(nonatomic,assign)NSInteger categoryIndex;
 
 @end
 
@@ -59,7 +58,9 @@
         } else {
             [self.mainCollection.mj_footer endRefreshingWithNoMoreData];
         }
-        [self.listArr addObjectsFromArray:array];
+        NSMutableArray *dataArr = [[NSMutableArray alloc]initWithArray:self.listArr[self.categoryIndex]];
+        [dataArr addObjectsFromArray:array];
+        self.listArr[self.categoryIndex] = dataArr;
         [self.mainCollection reloadData];
         
     } failure:^(NSError *_Nonnull error) {
@@ -78,6 +79,7 @@
                                                   Class:[CategoryModel class]];
     for (NSUInteger i = 0; i < categoryArr.count; i++) {
         [self.pageArr addObject:@"1"];
+        [self.listArr addObject:@[]];
         CategoryModel *model = categoryArr[(NSUInteger) i];
         if (i == 0) {
             //            self.categoryType = model.value;
@@ -97,10 +99,13 @@
         //        点击切换图片显示
         CategoryModel *model = categoryArr[(NSUInteger) index];
         self.categoryModel = model;
-        //        self.categoryType = model.value;
-        [self.listArr removeAllObjects];
-//        self.pageNum = 1;
-        [self getData];
+        self.categoryIndex = index;
+        NSArray *dataArr = self.listArr[self.categoryIndex];
+        if (dataArr.count>0) {
+            [self.mainCollection reloadData];
+        }else{
+            [self getData];
+        }
     };
     [self.view addSubview:chooseView];
     [self getData];
@@ -131,11 +136,13 @@
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.listArr.count;
+    NSArray *dataArr = self.listArr[self.categoryIndex];
+    return dataArr.count;
 }
 
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    ArticleModel *model = self.listArr[(NSUInteger) indexPath.row];
+    NSArray *dataArr = self.listArr[self.categoryIndex];
+    ArticleModel *model = dataArr[indexPath.row];
     ImgListCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
     NSLog(@"%@,%@,%@", model.name, model.img_url, model.detail_url);
     cell.titleLab.text = model.name;
@@ -158,7 +165,8 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    ArticleModel *model = self.listArr[(NSUInteger) indexPath.row];
+    NSArray *dataArr = self.listArr[self.categoryIndex];
+    ArticleModel *model = dataArr[(NSUInteger) indexPath.row];
     ImgDetailViewController *VC = [[ImgDetailViewController alloc] init];
     VC.articleModel = model;
     VC.websiteModel = self.model;

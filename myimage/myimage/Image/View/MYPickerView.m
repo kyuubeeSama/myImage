@@ -10,8 +10,7 @@
 
 @implementation MYPickerView
 
--(id)initWithFrame:(CGRect)frame WithArr:(nonnull NSArray *)array
-{
+-(id)initWithFrame:(CGRect)frame WithArr:(nonnull NSArray *)array {
     self = [super initWithFrame:frame];
     if (self) {
         self.array = array;
@@ -39,8 +38,7 @@
     return self;
 }
 
--(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
-{
+-(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
     return self.array.count;
 }
 
@@ -48,23 +46,19 @@
     return 1;
 }
 
--(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
-{
+-(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
     return self.array[row];
 }
 
--(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
-{
-    self.num = (int)row;
+-(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
+    self.num = row;
 }
 
--(void)cancelBtnClick:(UIButton *)button
-{
+-(void)cancelBtnClick:(UIButton *)button {
     [self.delegate MYPickerViewCancelBtnClick];
 }
 
--(void)sureBtnClick:(UIButton *)button
-{
+-(void)sureBtnClick:(UIButton *)button {
     [self.delegate MYPickerViewSureBtnClick:self.num];
 }
 
