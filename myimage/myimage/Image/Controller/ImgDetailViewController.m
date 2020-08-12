@@ -172,13 +172,11 @@
                 if (error == nil) {
                     model.width = image.size.width;
                     model.height = image.size.height;
-//                    cell.topImg.frame = CGRectMake(0, 0, screenW, model.height * screenW / model.width);
                     // 获取到图片高度后更新该行
                 } else {
                     NSLog(@"第%ld张图片出错，出错图片地址是%@%@,错误信息是%@，错误码是%@", (long) indexPath.row, self.websiteModel.url, model.image_url, error.localizedDescription,error.userInfo[@"SDWebImageErrorDownloadStatusCodeKey"]);
                     model.width = screenW;
                     model.height = screenW*3/2;
-//                    cell.topImg.frame = CGRectMake(0, 0, model.width, model.height);
                 }
                 [self.mainTable reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
             }];

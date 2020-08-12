@@ -29,7 +29,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-//    self.pageNum = 1;
     self.pageArr = [[NSMutableArray alloc]init];
     self.categoryIndex = 0;
     self.listArr = [[NSMutableArray alloc] init];
@@ -46,28 +45,32 @@
     // 从数据中获取列表页
     [self beginProgressWithTitle:@"爬取中"];
     DataManager *dataManager = [[DataManager alloc]init];
-    [dataManager getDataWithType:self.model
-                         pageNum:[self.pageArr[self.categoryIndex] intValue]
-                        category:self.categoryModel
-                         success:^(NSMutableArray *_Nonnull array) {
-        [self endProgress];
-        if (array.count > 0) {
-//            self.pageNum = self.pageNum + 1;
-            self.pageArr[self.categoryIndex] = [NSString stringWithFormat:@"%d",[self.pageArr[self.categoryIndex] intValue]+1];
-            [self.mainCollection.mj_footer endRefreshing];
-        } else {
-            [self.mainCollection.mj_footer endRefreshingWithNoMoreData];
-        }
-        NSMutableArray *dataArr = [[NSMutableArray alloc]initWithArray:self.listArr[self.categoryIndex]];
-        [dataArr addObjectsFromArray:array];
-        self.listArr[self.categoryIndex] = dataArr;
-        [self.mainCollection reloadData];
-        
-    } failure:^(NSError *_Nonnull error) {
-        NSLog(@"%@", error);
-        [self alertWithTitle:@"页面请求失败"];
-        [self.navigationController popViewControllerAnimated:YES];
-    }];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [dataManager getDataWithType:self.model
+                             pageNum:[self.pageArr[self.categoryIndex] intValue]
+                            category:self.categoryModel
+                             success:^(NSMutableArray *_Nonnull array) {
+            NSMutableArray *dataArr = [[NSMutableArray alloc]initWithArray:self.listArr[self.categoryIndex]];
+            [dataArr addObjectsFromArray:array];
+            self.listArr[self.categoryIndex] = dataArr;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self endProgress];
+                if (array.count > 0) {
+                    self.pageArr[self.categoryIndex] = [NSString stringWithFormat:@"%d",[self.pageArr[self.categoryIndex] intValue]+1];
+                    [self.mainCollection.mj_footer endRefreshing];
+                } else {
+                    [self.mainCollection.mj_footer endRefreshingWithNoMoreData];
+                }
+                [self.mainCollection reloadData];
+            });
+        } failure:^(NSError *_Nonnull error) {
+            NSLog(@"%@", error);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self alertWithTitle:@"页面请求失败"];
+                [self.navigationController popViewControllerAnimated:YES];
+            });
+        }];
+    });
 }
 
 - (void)makeUI {
@@ -82,7 +85,6 @@
         [self.listArr addObject:@[]];
         CategoryModel *model = categoryArr[(NSUInteger) i];
         if (i == 0) {
-            //            self.categoryType = model.value;
             self.categoryModel = model;
         }
         [titleArr addObject:model.name];
@@ -165,13 +167,14 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSArray *dataArr = self.listArr[self.categoryIndex];
-    ArticleModel *model = dataArr[(NSUInteger) indexPath.row];
+    NSMutableArray *dataArr = [[NSMutableArray alloc]initWithArray:self.listArr[self.categoryIndex]];
+    ArticleModel *aModel = dataArr[(NSUInteger) indexPath.row];
     ImgDetailViewController *VC = [[ImgDetailViewController alloc] init];
-    VC.articleModel = model;
+    VC.articleModel = aModel;
     VC.websiteModel = self.model;
     VC.imageSaved = ^(ArticleModel *_Nonnull model) {
-        self.listArr[(NSUInteger) indexPath.row] = model;
+        dataArr[indexPath.row] = model;
+        self.listArr[self.categoryIndex] = dataArr;
     };
     [self.navigationController pushViewController:VC animated:YES];
 }
