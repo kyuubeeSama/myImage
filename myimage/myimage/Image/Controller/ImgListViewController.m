@@ -91,7 +91,7 @@
                                                                    CategoryArr:titleArr
                                                                      BackColor:[UIColor systemBackgroundColor]
                                                                hightLightColor:[UIColor systemBackgroundColor]
-                                                                    TitleColor:[UIColor blackColor]
+                                                                    TitleColor:[UIColor dm_colorWithLightColor:[UIColor blackColor] darkColor:[UIColor whiteColor]]
                                                                hightTitleColor:[UIColor redColor]
                                                                bottomLineColor:[UIColor redColor]
                                                                  CategoryStyle:equalWidth];

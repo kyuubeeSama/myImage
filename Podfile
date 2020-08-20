@@ -13,4 +13,7 @@ target 'myimage' do
   pod 'CWLateralSlide'
   # 离屏渲染
 #  pod 'Texture'
+use_frameworks!
+pod "FluentDarkModeKit"
+
 end
