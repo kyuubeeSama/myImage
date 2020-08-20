@@ -43,7 +43,7 @@
     self.mainCollect.delegate = self;
     self.mainCollect.dataSource = self;
     [self.view addSubview:self.mainCollect];
-    self.mainCollect.backgroundColor = [UIColor whiteColor];
+    self.mainCollect.backgroundColor = [UIColor systemBackgroundColor];
     [self.mainCollect registerClass:[ImgListCollectionViewCell class] forCellWithReuseIdentifier:@"listCell"];
     [self.mainCollect registerNib:[UINib nibWithNibName:@"ImgCollectionViewCell" bundle:[NSBundle mainBundle]] forCellWithReuseIdentifier:@"imgCell"];
     [self.mainCollect mas_makeConstraints:^(MASConstraintMaker *make) {

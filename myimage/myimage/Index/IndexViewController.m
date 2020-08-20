@@ -11,7 +11,6 @@
 #import "UserViewController.h"
 #import "ImgListViewController.h"
 #import "UIViewController+CWLateralSlide.h"
-#import "NewImgListViewController.h"
 @interface IndexViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property(nonatomic,retain)UITableView *mainTable;
@@ -122,7 +121,6 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     ImgListViewController *VC = [[ImgListViewController alloc]init];
-//    NewImgListViewController *VC = [[NewImgListViewController alloc]init];
     WebsiteModel *model = self.listArr[(NSUInteger) indexPath.row];
     VC.model = model;
     [self.navigationController pushViewController:VC animated:YES];    

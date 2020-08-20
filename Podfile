@@ -9,10 +9,8 @@ target 'myimage' do
   pod 'Masonry'
   pod 'FLAnimatedImage'
   pod 'MJExtension'
-  pod 'hpple'
   # 抽屉
   pod 'CWLateralSlide'
   # 离屏渲染
-  pod 'Texture'
-  
+#  pod 'Texture'
 end

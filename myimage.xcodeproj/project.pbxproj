@@ -37,12 +37,12 @@
 		A93F765D2462A0E1005E9E51 /* WebSiteTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A93F765B2462A0E1005E9E51 /* WebSiteTableViewCell.m */; };
 		A93F765E2462A0E1005E9E51 /* WebSiteTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A93F765C2462A0E1005E9E51 /* WebSiteTableViewCell.xib */; };
 		A94296DB23BAE625003391B5 /* DataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A94296DA23BAE625003391B5 /* DataManager.m */; };
+		A97975FA24EE4BC90099C518 /* ImgListCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = A97975F924EE4BC90099C518 /* ImgListCollectionView.m */; };
+		A97975FD24EE57AB0099C518 /* ImgDetailTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = A97975FC24EE57AB0099C518 /* ImgDetailTableView.m */; };
 		A98546422296895500BAEFB1 /* HZWaitingView.m in Sources */ = {isa = PBXBuildFile; fileRef = A985463A2296895500BAEFB1 /* HZWaitingView.m */; };
 		A98546432296895500BAEFB1 /* HZPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = A985463C2296895500BAEFB1 /* HZPhotoBrowser.m */; };
 		A98546442296895500BAEFB1 /* HZPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A985463F2296895500BAEFB1 /* HZPhotoBrowser.bundle */; };
 		A98546452296895500BAEFB1 /* HZPhotoBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = A98546402296895500BAEFB1 /* HZPhotoBrowserView.m */; };
-		A99A8C062490D1E4004C0DB7 /* ImgListCollectionNode.m in Sources */ = {isa = PBXBuildFile; fileRef = A99A8C052490D1E4004C0DB7 /* ImgListCollectionNode.m */; };
-		A9AE5FD9248F8B0C00624ABF /* NewImgListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9AE5FD8248F8B0C00624ABF /* NewImgListViewController.m */; };
 		A9C202E021D49B79006572DD /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C202DF21D49B79006572DD /* UserViewController.m */; };
 		A9C2030721D5BCDA006572DD /* MYPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C2030621D5BCDA006572DD /* MYPickerView.m */; };
 		A9CDD3062473E8180045C370 /* NSObject+Tool.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CDD3052473E8180045C370 /* NSObject+Tool.m */; };
@@ -112,6 +112,10 @@
 		A93F765C2462A0E1005E9E51 /* WebSiteTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WebSiteTableViewCell.xib; sourceTree = "<group>"; };
 		A94296D923BAE625003391B5 /* DataManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DataManager.h; sourceTree = "<group>"; };
 		A94296DA23BAE625003391B5 /* DataManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DataManager.m; sourceTree = "<group>"; };
+		A97975F824EE4BC90099C518 /* ImgListCollectionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImgListCollectionView.h; sourceTree = "<group>"; };
+		A97975F924EE4BC90099C518 /* ImgListCollectionView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImgListCollectionView.m; sourceTree = "<group>"; };
+		A97975FB24EE57AB0099C518 /* ImgDetailTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImgDetailTableView.h; sourceTree = "<group>"; };
+		A97975FC24EE57AB0099C518 /* ImgDetailTableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImgDetailTableView.m; sourceTree = "<group>"; };
 		A985463A2296895500BAEFB1 /* HZWaitingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HZWaitingView.m; sourceTree = "<group>"; };
 		A985463B2296895500BAEFB1 /* HZPhotoBrowserConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HZPhotoBrowserConfig.h; sourceTree = "<group>"; };
 		A985463C2296895500BAEFB1 /* HZPhotoBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HZPhotoBrowser.m; sourceTree = "<group>"; };
@@ -122,10 +126,6 @@
 		A98546412296895500BAEFB1 /* HZPhotoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HZPhotoBrowser.h; sourceTree = "<group>"; };
 		A98CB95024CE9E4C00310FDE /* myimage.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = myimage.entitlements; sourceTree = "<group>"; };
 		A98CB95124CEB8BE00310FDE /* 更新计划 */ = {isa = PBXFileReference; lastKnownFileType = text; path = "更新计划"; sourceTree = "<group>"; };
-		A99A8C042490D1E4004C0DB7 /* ImgListCollectionNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImgListCollectionNode.h; sourceTree = "<group>"; };
-		A99A8C052490D1E4004C0DB7 /* ImgListCollectionNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImgListCollectionNode.m; sourceTree = "<group>"; };
-		A9AE5FD7248F8B0C00624ABF /* NewImgListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewImgListViewController.h; sourceTree = "<group>"; };
-		A9AE5FD8248F8B0C00624ABF /* NewImgListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NewImgListViewController.m; sourceTree = "<group>"; };
 		A9C202DE21D49B79006572DD /* UserViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserViewController.h; sourceTree = "<group>"; };
 		A9C202DF21D49B79006572DD /* UserViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserViewController.m; sourceTree = "<group>"; };
 		A9C2030521D5BCDA006572DD /* MYPickerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MYPickerView.h; sourceTree = "<group>"; };
@@ -369,8 +369,6 @@
 				A9F4ABA421C23EB100FE84E9 /* ImgListViewController.m */,
 				A9F4ABA621C23EBC00FE84E9 /* ImgDetailViewController.h */,
 				A9F4ABA721C23EBC00FE84E9 /* ImgDetailViewController.m */,
-				A9AE5FD7248F8B0C00624ABF /* NewImgListViewController.h */,
-				A9AE5FD8248F8B0C00624ABF /* NewImgListViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -389,8 +387,10 @@
 				A904AC5323BF0C8900E3281E /* ImgCollectionViewCell.h */,
 				A904AC5423BF0C8900E3281E /* ImgCollectionViewCell.m */,
 				A904AC5523BF0C8900E3281E /* ImgCollectionViewCell.xib */,
-				A99A8C042490D1E4004C0DB7 /* ImgListCollectionNode.h */,
-				A99A8C052490D1E4004C0DB7 /* ImgListCollectionNode.m */,
+				A97975F824EE4BC90099C518 /* ImgListCollectionView.h */,
+				A97975F924EE4BC90099C518 /* ImgListCollectionView.m */,
+				A97975FB24EE57AB0099C518 /* ImgDetailTableView.h */,
+				A97975FC24EE57AB0099C518 /* ImgDetailTableView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -562,15 +562,14 @@
 				A938825421C1F8EA0085958B /* main.m in Sources */,
 				A91E39002229245700A11EC6 /* Tool.m in Sources */,
 				A904AC5623BF0C8900E3281E /* ImgCollectionViewCell.m in Sources */,
-				A9AE5FD9248F8B0C00624ABF /* NewImgListViewController.m in Sources */,
 				A94296DB23BAE625003391B5 /* DataManager.m in Sources */,
 				A9F4ABC721C3AE2600FE84E9 /* ImgListCollectionViewCell.m in Sources */,
 				A9FF6CE121F9510C006F57DA /* UserTableHeaderView.m in Sources */,
+				A97975FD24EE57AB0099C518 /* ImgDetailTableView.m in Sources */,
 				A938824621C1F8E90085958B /* AppDelegate.m in Sources */,
 				A9F4ABC421C3AE0D00FE84E9 /* ImgDetailTableViewCell.m in Sources */,
 				A93F765D2462A0E1005E9E51 /* WebSiteTableViewCell.m in Sources */,
 				A938826821C1FD3C0085958B /* IndexViewController.m in Sources */,
-				A99A8C062490D1E4004C0DB7 /* ImgListCollectionNode.m in Sources */,
 				A98546452296895500BAEFB1 /* HZPhotoBrowserView.m in Sources */,
 				A98546432296895500BAEFB1 /* HZPhotoBrowser.m in Sources */,
 				144DF611BA19CE2B9AB5C680 /* FileTool.m in Sources */,
@@ -578,6 +577,7 @@
 				144DF203A82CC66B137DAAAD /* CategoryChooseView.m in Sources */,
 				144DF4FC324FB18EA55C73FB /* UIColor+Extension.m in Sources */,
 				A904AC4C23BDE2EA00E3281E /* ImageModel.m in Sources */,
+				A97975FA24EE4BC90099C518 /* ImgListCollectionView.m in Sources */,
 				144DF654369E360B57068032 /* NSString+Extension.m in Sources */,
 				A904AC5E23BF289200E3281E /* CollectModel.m in Sources */,
 				144DF4C740C0A3350F1D2BFD /* WebsiteModel.m in Sources */,
@@ -742,7 +742,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.qingyuannet.myimage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "myimage/myimage/Index/myimage-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -769,7 +769,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.qingyuannet.myimage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "myimage/myimage/Index/myimage-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

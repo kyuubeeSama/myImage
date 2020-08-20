@@ -15,15 +15,6 @@
     // Initialization code
 }
 
-//-(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(nullable NSString *)reuseIdentifier {
-//    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-//    if (self){
-//        self.topImg = [[UIImageView alloc] init];
-//        [self addSubview:self.topImg];
-//    }
-//    return self;
-//}
-
 -(UIImageView *)topImg{
     if (!_topImg) {
         _topImg = [[UIImageView alloc]init];

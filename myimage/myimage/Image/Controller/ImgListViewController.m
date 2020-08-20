@@ -7,15 +7,15 @@
 //  TODO:替换控件为AsyncDisplayKit控件。数据数组，减少重复访问
 
 #import "ImgListViewController.h"
-#import "ImgListCollectionViewCell.h"
 #import "CategoryChooseView.h"
 #import "ArticleModel.h"
 #import "CategoryModel.h"
 #import "ImgDetailViewController.h"
+#import "ImgListCollectionView.h"
 
-@interface ImgListViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
+@interface ImgListViewController ()
 
-@property(nonatomic, retain) UICollectionView *mainCollection;
+@property(nonatomic, retain) ImgListCollectionView *mainCollection;
 @property(nonatomic, retain) NSMutableArray *listArr;
 @property(nonatomic,retain) NSMutableArray *pageArr;
 @property(nonatomic, strong) CategoryModel *categoryModel;
@@ -61,12 +61,10 @@
                 } else {
                     [self.mainCollection.mj_footer endRefreshingWithNoMoreData];
                 }
-                [self.mainCollection reloadData];
+                self.mainCollection.listArr = dataArr;
             });
         } failure:^(NSError *_Nonnull error) {
-            NSLog(@"%@", error);
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self alertWithTitle:@"页面请求失败"];
                 [self.navigationController popViewControllerAnimated:YES];
             });
         }];
@@ -91,8 +89,8 @@
     }
     CategoryChooseView *chooseView = [[CategoryChooseView alloc] initWithFrame:CGRectMake(0, TOP_HEIGHT, screenW, 45)
                                                                    CategoryArr:titleArr
-                                                                     BackColor:[UIColor whiteColor]
-                                                               hightLightColor:[UIColor whiteColor]
+                                                                     BackColor:[UIColor systemBackgroundColor]
+                                                               hightLightColor:[UIColor systemBackgroundColor]
                                                                     TitleColor:[UIColor blackColor]
                                                                hightTitleColor:[UIColor redColor]
                                                                bottomLineColor:[UIColor redColor]
@@ -104,7 +102,7 @@
         self.categoryIndex = index;
         NSArray *dataArr = self.listArr[self.categoryIndex];
         if (dataArr.count>0) {
-            [self.mainCollection reloadData];
+            self.mainCollection.listArr = dataArr;
         }else{
             [self getData];
         }
@@ -113,20 +111,30 @@
     [self getData];
 }
 
--(UICollectionView *)mainCollection{
+-(ImgListCollectionView *)mainCollection{
     if (!_mainCollection) {
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-        _mainCollection = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, screenW, screenH) collectionViewLayout:layout];
-        _mainCollection.backgroundColor = [UIColor whiteColor];
-        _mainCollection.delegate = self;
-        _mainCollection.dataSource = self;
+        _mainCollection = [[ImgListCollectionView alloc] initWithFrame:CGRectMake(0, 0, screenW, screenH) collectionViewLayout:layout];
         [self.view addSubview:_mainCollection];
-        [_mainCollection registerClass:[ImgListCollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
         [_mainCollection mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.equalTo(self.view);
             make.top.equalTo(self.view).offset(45+(TOP_HEIGHT));
             make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom);
         }];
+        _mainCollection.model = self.model;
+        WeakSelf(self)
+        _mainCollection.cellDidSelect = ^(NSIndexPath * _Nonnull indexPath) {
+                NSMutableArray *dataArr = [[NSMutableArray alloc]initWithArray:weakself.listArr[weakself.categoryIndex]];
+                ArticleModel *aModel = dataArr[(NSUInteger) indexPath.row];
+                ImgDetailViewController *VC = [[ImgDetailViewController alloc] init];
+                VC.articleModel = aModel;
+                VC.websiteModel = weakself.model;
+                VC.imageSaved = ^(ArticleModel *_Nonnull model) {
+                    dataArr[indexPath.row] = model;
+                    weakself.listArr[weakself.categoryIndex] = dataArr;
+                };
+                [weakself.navigationController pushViewController:VC animated:YES];
+        };
     }
     return _mainCollection;
 }
@@ -137,47 +145,7 @@
     }];
 }
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    NSArray *dataArr = self.listArr[self.categoryIndex];
-    return dataArr.count;
-}
 
-- (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSArray *dataArr = self.listArr[self.categoryIndex];
-    ArticleModel *model = dataArr[indexPath.row];
-    ImgListCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
-    NSLog(@"%@,%@,%@", model.name, model.img_url, model.detail_url);
-    cell.titleLab.text = model.name;
-    NSString *imageStr;
-    if (model.website_id == 4) {
-        imageStr = model.img_url;
-    }else{
-        imageStr = [NSString stringWithFormat:@"%@/%@", self.model.url, model.img_url];
-    }
-     [cell.headImg sd_setImageWithURL:[NSURL URLWithString:imageStr] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
-    return cell;
-}
-
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return CGSizeMake(screenW / 2 - 5, screenW / 2 + 45);
-}
-
-- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
-    return UIEdgeInsetsMake(0, 0, 0, 0);
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSMutableArray *dataArr = [[NSMutableArray alloc]initWithArray:self.listArr[self.categoryIndex]];
-    ArticleModel *aModel = dataArr[(NSUInteger) indexPath.row];
-    ImgDetailViewController *VC = [[ImgDetailViewController alloc] init];
-    VC.articleModel = aModel;
-    VC.websiteModel = self.model;
-    VC.imageSaved = ^(ArticleModel *_Nonnull model) {
-        dataArr[indexPath.row] = model;
-        self.listArr[self.categoryIndex] = dataArr;
-    };
-    [self.navigationController pushViewController:VC animated:YES];
-}
 
 /*
  #pragma mark - Navigation

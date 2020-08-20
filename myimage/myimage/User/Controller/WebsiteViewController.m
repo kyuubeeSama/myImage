@@ -23,7 +23,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.listArr = @[];
-    self.view.backgroundColor = [UIColor whiteColor];
     self.websiteArr = [[NSMutableArray alloc] init];
     [self setNav];
     [self getData];

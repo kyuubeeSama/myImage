@@ -15,7 +15,7 @@
     if (self){
         UIView *backView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, screenW, 100)];
         [self addSubview:backView];
-        backView.backgroundColor = [UIColor whiteColor];
+        backView.backgroundColor = [UIColor systemBackgroundColor];
 
         self.contentLab = [[UILabel alloc] init];
         [backView addSubview:self.contentLab];
