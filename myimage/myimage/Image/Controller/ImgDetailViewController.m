@@ -11,6 +11,7 @@
 #import "ImageModel.h"
 #import "CollectModel.h"
 #import "ImgDetailTableView.h"
+#import "WKWebViewController.h"
 
 @interface ImgDetailViewController ()
 
@@ -128,6 +129,7 @@
             };
         }
     };
+    self.mainTable.websiteModel = self.websiteModel;
 }
 
 - (void)setNav {
@@ -144,7 +146,9 @@
     }
     UIBarButtonItem *collectBtn = [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:colImgStr] style:UIBarButtonItemStylePlain target:self action:@selector(collectBtnClick:)];
     UIBarButtonItem *openBtn = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"browser"] style:UIBarButtonItemStylePlain target:self action:@selector(browserBtnClick:)];
-    self.navigationItem.rightBarButtonItems = @[collectBtn, openBtn];
+    UIBarButtonItem *webviewBtn = [[UIBarButtonItem alloc]initWithImage:[UIImage systemImageNamed:@"paperplane"] style:UIBarButtonItemStylePlain target:self action:@selector(webViewBtnClick)];
+    self.navigationItem.rightBarButtonItems = @[collectBtn, openBtn,webviewBtn];
+    
 }
 
 - (void)collectBtnClick:(UIBarButtonItem *)button {
@@ -179,6 +183,13 @@
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlStr] options:@{} completionHandler:nil];
 }
 
+-(void)webViewBtnClick{
+    WKWebViewController *VC = [[WKWebViewController alloc]init];
+    VC.model = self.websiteModel;
+    NSString *urlStr = [NSString stringWithFormat:@"%@/%@", self.websiteModel.url, self.articleModel.detail_url];
+    VC.urlStr = urlStr;
+    [self.navigationController pushViewController:VC animated:YES];
+}
 
 /*
  #pragma mark - Navigation

@@ -19,7 +19,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     [[SDWebImageDownloader sharedDownloader]setValue:@"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8" forHTTPHeaderField:@"Accept"];
-    [[SDWebImageDownloader sharedDownloader]setValue:@"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0 Safari/605.1.15" forHTTPHeaderField:@"User-Agent"];
+    [[SDWebImageDownloader sharedDownloader]setValue:@"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.8 Safari/537.36 Edg/86.0.622.3" forHTTPHeaderField:@"User-Agent"];
     IndexViewController *VC = [[IndexViewController alloc]init];
     UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:VC];
     UIWindow *window = [UIApplication sharedApplication].delegate.window;

@@ -358,4 +358,16 @@
     }];
 }
 
+-(void)getSearchResultWithType:(WebsiteModel *)websiteModel pageNum:(int)PageNum success:(void (^)(NSMutableArray * _Nonnull))success failure:(void (^)(NSError * _Nonnull))failure{
+    if (websiteModel.value == 1) {
+        // 撸女吧
+    }else if (websiteModel.value == 2){
+        // 撸哥吧
+    }else if(websiteModel.value == 3){
+        // 24fa
+    }else if(websiteModel.value == 4){
+        // 趣事百科
+    }
+}
+
 @end

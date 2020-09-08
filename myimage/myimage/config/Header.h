@@ -20,6 +20,7 @@
 #import "SDWebImage.h"
 #import "HZPhotoBrowser.h"
 #import "FluentDarkModeKit.h"
+#import <ReactiveObjC/ReactiveObjC.h>
 
 #import "SqliteTool.h"
 #import "FileTool.h"

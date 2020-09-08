@@ -11,9 +11,10 @@ target 'myimage' do
   pod 'MJExtension'
   # 抽屉
   pod 'CWLateralSlide'
+  pod 'ReactiveObjC'
   # 离屏渲染
 #  pod 'Texture'
 use_frameworks!
-pod "FluentDarkModeKit"
+pod 'FluentDarkModeKit'
 
 end

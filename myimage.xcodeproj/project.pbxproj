@@ -36,6 +36,8 @@
 		A93F765D2462A0E1005E9E51 /* WebSiteTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A93F765B2462A0E1005E9E51 /* WebSiteTableViewCell.m */; };
 		A93F765E2462A0E1005E9E51 /* WebSiteTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A93F765C2462A0E1005E9E51 /* WebSiteTableViewCell.xib */; };
 		A94296DB23BAE625003391B5 /* DataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A94296DA23BAE625003391B5 /* DataManager.m */; };
+		A9452AEE25072428003D9CC9 /* SearchResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9452AED25072427003D9CC9 /* SearchResultViewController.m */; };
+		A96DB3722507131E00060CB4 /* WKWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A96DB3702507131E00060CB4 /* WKWebViewController.m */; };
 		A97975FA24EE4BC90099C518 /* ImgListCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = A97975F924EE4BC90099C518 /* ImgListCollectionView.m */; };
 		A97975FD24EE57AB0099C518 /* ImgDetailTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = A97975FC24EE57AB0099C518 /* ImgDetailTableView.m */; };
 		A98546422296895500BAEFB1 /* HZWaitingView.m in Sources */ = {isa = PBXBuildFile; fileRef = A985463A2296895500BAEFB1 /* HZWaitingView.m */; };
@@ -112,6 +114,10 @@
 		A93F765C2462A0E1005E9E51 /* WebSiteTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WebSiteTableViewCell.xib; sourceTree = "<group>"; };
 		A94296D923BAE625003391B5 /* DataManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DataManager.h; sourceTree = "<group>"; };
 		A94296DA23BAE625003391B5 /* DataManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DataManager.m; sourceTree = "<group>"; };
+		A9452AEC25072427003D9CC9 /* SearchResultViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchResultViewController.h; sourceTree = "<group>"; };
+		A9452AED25072427003D9CC9 /* SearchResultViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchResultViewController.m; sourceTree = "<group>"; };
+		A96DB3702507131E00060CB4 /* WKWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKWebViewController.m; sourceTree = "<group>"; };
+		A96DB3712507131E00060CB4 /* WKWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKWebViewController.h; sourceTree = "<group>"; };
 		A97975F824EE4BC90099C518 /* ImgListCollectionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImgListCollectionView.h; sourceTree = "<group>"; };
 		A97975F924EE4BC90099C518 /* ImgListCollectionView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImgListCollectionView.m; sourceTree = "<group>"; };
 		A97975FB24EE57AB0099C518 /* ImgDetailTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImgDetailTableView.h; sourceTree = "<group>"; };
@@ -255,6 +261,8 @@
 		A938825C21C1FB610085958B /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				A96DB3712507131E00060CB4 /* WKWebViewController.h */,
+				A96DB3702507131E00060CB4 /* WKWebViewController.m */,
 				A938826221C1FBFF0085958B /* BaseViewController.h */,
 				A938826321C1FBFF0085958B /* BaseViewController.m */,
 			);
@@ -369,6 +377,8 @@
 				A9F4ABA421C23EB100FE84E9 /* ImgListViewController.m */,
 				A9F4ABA621C23EBC00FE84E9 /* ImgDetailViewController.h */,
 				A9F4ABA721C23EBC00FE84E9 /* ImgDetailViewController.m */,
+				A9452AEC25072427003D9CC9 /* SearchResultViewController.h */,
+				A9452AED25072427003D9CC9 /* SearchResultViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -555,6 +565,7 @@
 				A98546422296895500BAEFB1 /* HZWaitingView.m in Sources */,
 				A904AC5223BF094C00E3281E /* CollectViewController.m in Sources */,
 				A9146E2F23C30E8D00E94193 /* WebsiteViewController.m in Sources */,
+				A9452AEE25072428003D9CC9 /* SearchResultViewController.m in Sources */,
 				A938826421C1FBFF0085958B /* BaseViewController.m in Sources */,
 				A9C202E021D49B79006572DD /* UserViewController.m in Sources */,
 				A9C2030721D5BCDA006572DD /* MYPickerView.m in Sources */,
@@ -562,6 +573,7 @@
 				A938825421C1F8EA0085958B /* main.m in Sources */,
 				A91E39002229245700A11EC6 /* Tool.m in Sources */,
 				A904AC5623BF0C8900E3281E /* ImgCollectionViewCell.m in Sources */,
+				A96DB3722507131E00060CB4 /* WKWebViewController.m in Sources */,
 				A94296DB23BAE625003391B5 /* DataManager.m in Sources */,
 				A9F4ABC721C3AE2600FE84E9 /* ImgListCollectionViewCell.m in Sources */,
 				A9FF6CE121F9510C006F57DA /* UserTableHeaderView.m in Sources */,

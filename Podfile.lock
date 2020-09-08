@@ -24,6 +24,7 @@ PODS:
   - MBProgressHUD (1.2.0)
   - MJExtension (3.2.2)
   - MJRefresh (3.5.0)
+  - ReactiveObjC (3.1.1)
   - SDWebImage (5.8.4):
     - SDWebImage/Core (= 5.8.4)
   - SDWebImage/Core (5.8.4)
@@ -38,6 +39,7 @@ DEPENDENCIES:
   - MBProgressHUD
   - MJExtension
   - MJRefresh
+  - ReactiveObjC
   - SDWebImage
 
 SPEC REPOS:
@@ -51,6 +53,7 @@ SPEC REPOS:
     - MBProgressHUD
     - MJExtension
     - MJRefresh
+    - ReactiveObjC
     - SDWebImage
 
 SPEC CHECKSUMS:
@@ -63,8 +66,9 @@ SPEC CHECKSUMS:
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
   MJExtension: d9b9c74cbdeb724c1e9ecbb157b318276e62e876
   MJRefresh: 6afc955813966afb08305477dd7a0d9ad5e79a16
+  ReactiveObjC: 011caa393aa0383245f2dcf9bf02e86b80b36040
   SDWebImage: cf6922231e95550934da2ada0f20f2becf2ceba9
 
-PODFILE CHECKSUM: 1cb106030208914a4ea739f385c7533725a04431
+PODFILE CHECKSUM: d601b0d9b06f78bf38671544ddd78440ba94a1f2
 
 COCOAPODS: 1.9.3
