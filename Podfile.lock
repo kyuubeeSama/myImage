@@ -25,9 +25,9 @@ PODS:
   - MJExtension (3.2.2)
   - MJRefresh (3.5.0)
   - ReactiveObjC (3.1.1)
-  - SDWebImage (5.8.4):
-    - SDWebImage/Core (= 5.8.4)
-  - SDWebImage/Core (5.8.4)
+  - SDWebImage (5.9.0):
+    - SDWebImage/Core (= 5.9.0)
+  - SDWebImage/Core (5.9.0)
 
 DEPENDENCIES:
   - AFNetworking
@@ -67,8 +67,8 @@ SPEC CHECKSUMS:
   MJExtension: d9b9c74cbdeb724c1e9ecbb157b318276e62e876
   MJRefresh: 6afc955813966afb08305477dd7a0d9ad5e79a16
   ReactiveObjC: 011caa393aa0383245f2dcf9bf02e86b80b36040
-  SDWebImage: cf6922231e95550934da2ada0f20f2becf2ceba9
+  SDWebImage: 62ae4a18473520c67b79e9724c31a63599cc9423
 
 PODFILE CHECKSUM: d601b0d9b06f78bf38671544ddd78440ba94a1f2
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.10.0.beta.2

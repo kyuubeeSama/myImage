@@ -61,6 +61,7 @@
     [manager GET:urlStr parameters:dic headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSString *html = [[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding];
         if ([NSString MyStringIsNULL:html]) {
+            
             NSStringEncoding gbkEncoding = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
             // 使用如下方法 将获取到的数据按照gbkEncoding的方式进行编码，结果将是正常的汉字
             html = [[NSString alloc]initWithData:responseObject encoding:gbkEncoding];

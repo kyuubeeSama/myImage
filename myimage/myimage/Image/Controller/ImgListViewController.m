@@ -12,12 +12,12 @@
 #import "CategoryModel.h"
 #import "ImgDetailViewController.h"
 #import "ImgListCollectionView.h"
+#import "SearchResultViewController.h"
+@interface ImgListViewController ()<UISearchBarDelegate>
 
-@interface ImgListViewController ()
-
-@property(nonatomic, retain) ImgListCollectionView *mainCollection;
-@property(nonatomic, retain) NSMutableArray *listArr;
-@property(nonatomic,retain) NSMutableArray *pageArr;
+@property(nonatomic, strong) ImgListCollectionView *mainCollection;
+@property(nonatomic, strong) NSMutableArray *listArr;
+@property(nonatomic,strong) NSMutableArray *pageArr;
 @property(nonatomic, strong) CategoryModel *categoryModel;
 // 当前分类
 @property(nonatomic,assign)NSInteger categoryIndex;
@@ -45,33 +45,41 @@
     // 从数据中获取列表页
     [self beginProgressWithTitle:@"爬取中"];
     DataManager *dataManager = [[DataManager alloc]init];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [dataManager getDataWithType:self.model
-                             pageNum:[self.pageArr[self.categoryIndex] intValue]
-                            category:self.categoryModel
-                             success:^(NSMutableArray *_Nonnull array) {
-            NSMutableArray *dataArr = [[NSMutableArray alloc]initWithArray:self.listArr[self.categoryIndex]];
-            [dataArr addObjectsFromArray:array];
-            self.listArr[self.categoryIndex] = dataArr;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self endProgress];
-                if (array.count > 0) {
-                    self.pageArr[self.categoryIndex] = [NSString stringWithFormat:@"%d",[self.pageArr[self.categoryIndex] intValue]+1];
-                    [self.mainCollection.mj_footer endRefreshing];
-                } else {
-                    [self.mainCollection.mj_footer endRefreshingWithNoMoreData];
-                }
-                self.mainCollection.listArr = dataArr;
-            });
-        } failure:^(NSError *_Nonnull error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.navigationController popViewControllerAnimated:YES];
-            });
-        }];
-    });
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [dataManager getDataWithType:self.model
+                                 pageNum:[self.pageArr[self.categoryIndex] intValue]
+                                category:self.categoryModel
+                                 success:^(NSMutableArray *_Nonnull array) {
+                NSMutableArray *dataArr = [[NSMutableArray alloc]initWithArray:self.listArr[self.categoryIndex]];
+                [dataArr addObjectsFromArray:array];
+                self.listArr[self.categoryIndex] = dataArr;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self endProgress];
+                    if (array.count > 0) {
+                        self.pageArr[self.categoryIndex] = [NSString stringWithFormat:@"%d",[self.pageArr[self.categoryIndex] intValue]+1];
+                        [self.mainCollection.mj_footer endRefreshing];
+                    } else {
+                        [self.mainCollection.mj_footer endRefreshingWithNoMoreData];
+                    }
+                    self.mainCollection.listArr = dataArr;
+                });
+            } failure:^(NSError *_Nonnull error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.navigationController popViewControllerAnimated:YES];
+                });
+            }];
+        });
 }
 
 - (void)makeUI {
+    // 搜索UI
+    UISearchBar *searchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(0, TOP_HEIGHT+10, screenW, 40)];
+    [self.view addSubview:searchBar];
+    searchBar.backgroundImage = [UIImage new];
+    searchBar.placeholder = @"搜索";
+    searchBar.delegate = self;
+    searchBar.searchBarStyle = UISearchBarStyleDefault;
+    // 类别UI
     NSMutableArray *titleArr = [[NSMutableArray alloc] init];
     SqliteTool *sqlTool = [SqliteTool sharedInstance];
     NSArray *categoryArr = [sqlTool selectDataFromTable:@"category"
@@ -87,7 +95,7 @@
         }
         [titleArr addObject:model.name];
     }
-    CategoryChooseView *chooseView = [[CategoryChooseView alloc] initWithFrame:CGRectMake(0, TOP_HEIGHT, screenW, 45)
+    CategoryChooseView *chooseView = [[CategoryChooseView alloc] initWithFrame:CGRectMake(0, TOP_HEIGHT+60, screenW, 45)
                                                                    CategoryArr:titleArr
                                                                      BackColor:[UIColor systemBackgroundColor]
                                                                hightLightColor:[UIColor systemBackgroundColor]
@@ -118,22 +126,22 @@
         [self.view addSubview:_mainCollection];
         [_mainCollection mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.equalTo(self.view);
-            make.top.equalTo(self.view).offset(45+(TOP_HEIGHT));
+            make.top.equalTo(self.view).offset(105+(TOP_HEIGHT));
             make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom);
         }];
         _mainCollection.model = self.model;
         WeakSelf(self)
         _mainCollection.cellDidSelect = ^(NSIndexPath * _Nonnull indexPath) {
-                NSMutableArray *dataArr = [[NSMutableArray alloc]initWithArray:weakself.listArr[weakself.categoryIndex]];
-                ArticleModel *aModel = dataArr[(NSUInteger) indexPath.row];
-                ImgDetailViewController *VC = [[ImgDetailViewController alloc] init];
-                VC.articleModel = aModel;
-                VC.websiteModel = weakself.model;
-                VC.imageSaved = ^(ArticleModel *_Nonnull model) {
-                    dataArr[indexPath.row] = model;
-                    weakself.listArr[weakself.categoryIndex] = dataArr;
-                };
-                [weakself.navigationController pushViewController:VC animated:YES];
+            NSMutableArray *dataArr = [[NSMutableArray alloc]initWithArray:weakself.listArr[weakself.categoryIndex]];
+            ArticleModel *aModel = dataArr[(NSUInteger) indexPath.row];
+            ImgDetailViewController *VC = [[ImgDetailViewController alloc] init];
+            VC.articleModel = aModel;
+            VC.websiteModel = weakself.model;
+            VC.imageSaved = ^(ArticleModel *_Nonnull model) {
+                dataArr[indexPath.row] = model;
+                weakself.listArr[weakself.categoryIndex] = dataArr;
+            };
+            [weakself.navigationController pushViewController:VC animated:YES];
         };
     }
     return _mainCollection;
@@ -145,7 +153,27 @@
     }];
 }
 
+-(void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar{
+    [searchBar setShowsCancelButton:YES animated:YES];
+}
 
+-(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
+    // 开始搜索
+    NSLog(@"搜索");
+    [searchBar endEditing:YES];
+    // 跳转到搜索结果页面
+    SearchResultViewController *VC = [[SearchResultViewController alloc]init];
+    VC.model = self.model;
+    VC.keyword = searchBar.text;
+    [self.navigationController pushViewController:VC animated:YES];
+}
+
+-(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
+    [searchBar endEditing:YES];
+    [searchBar setShowsCancelButton:NO animated:YES];
+    NSLog(@"取消");
+    searchBar.text = @"";
+}
 
 /*
  #pragma mark - Navigation

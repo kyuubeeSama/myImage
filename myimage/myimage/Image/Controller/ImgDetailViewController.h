@@ -15,8 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,copy)void(^imageSaved)(ArticleModel *model);
 
-@property(nonatomic,retain)ArticleModel *articleModel;
-@property(nonatomic,retain)WebsiteModel *websiteModel;
+@property(nonatomic,strong)ArticleModel *articleModel;
+@property(nonatomic,strong)WebsiteModel *websiteModel;
 
 @end
 

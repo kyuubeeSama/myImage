@@ -12,9 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UserTableHeaderView : UIView
 
-@property (nonatomic, retain)UILabel *contentLab;
-@property (nonatomic, retain)UILabel *imgLab;
-@property (nonatomic, retain)UILabel *downLab;
+@property (nonatomic, strong)UILabel *contentLab;
+@property (nonatomic, strong)UILabel *imgLab;
+@property (nonatomic, strong)UILabel *downLab;
 
 @end
 

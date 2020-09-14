@@ -16,7 +16,7 @@
 
 @interface CollectViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
-@property(nonatomic, retain) UICollectionView *mainCollect;
+@property(nonatomic, strong) UICollectionView *mainCollect;
 @property(nonatomic, strong) NSMutableArray *listArr;
 
 @end

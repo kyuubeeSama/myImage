@@ -12,8 +12,9 @@
 #import "ImgDetailViewController.h"
 @interface SearchResultViewController ()
 
-@property(nonatomic, retain) ImgListCollectionView *mainCollection;
-@property(nonatomic, retain) NSMutableArray *listArr;
+@property(nonatomic, strong) ImgListCollectionView *mainCollection;
+@property(nonatomic, strong) NSMutableArray *listArr;
+@property(nonatomic, assign) NSInteger pageNum;
 
 @end
 
@@ -27,7 +28,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.listArr = [[NSMutableArray alloc]init];
+    self.pageNum = 1;
     [self getData];
+    [self getMoreData];
 }
 
 - (void)setNav {
@@ -38,9 +42,28 @@
     // 从数据中获取列表页
     [self beginProgressWithTitle:@"爬取中"];
     DataManager *dataManager = [[DataManager alloc]init];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        // 获取搜索结果
-    });
+    // 获取搜索结果
+    // 搜索
+    [dataManager getSearchResultWithType:self.model
+                                 pageNum:self.pageNum
+                                 keyword:self.keyword
+                                 success:^(NSMutableArray * _Nonnull array) {
+        if (array.count>0) {
+            [self.mainCollection.mj_footer endRefreshing];
+        }else{
+            [self.mainCollection.mj_footer endRefreshingWithNoMoreData];
+        }
+        [self.listArr addObjectsFromArray:array];
+        self.mainCollection.listArr = self.listArr;
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
+}
+
+-(void)getMoreData {
+    self.mainCollection.mj_footer=[MJRefreshBackFooter footerWithRefreshingBlock:^{
+        [self getData];
+    }];
 }
 
 -(ImgListCollectionView *)mainCollection{
@@ -67,12 +90,6 @@
         };
     }
     return _mainCollection;
-}
-
-- (void)getMoreData {
-    self.mainCollection.mj_footer = [MJRefreshBackFooter footerWithRefreshingBlock:^{
-        [self getData];
-    }];
 }
 
 /*

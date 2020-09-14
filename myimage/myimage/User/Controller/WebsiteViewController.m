@@ -11,7 +11,7 @@
 #import "WebSiteTableViewCell.h"
 @interface WebsiteViewController ()<UITableViewDataSource,UITableViewDelegate>
 
-@property (nonatomic, retain)UITableView *mainTable;
+@property (nonatomic, strong)UITableView *mainTable;
 @property (nonatomic, copy)NSArray *listArr;
 @property (nonatomic, strong)NSMutableArray *websiteArr;
 
@@ -76,9 +76,22 @@
             // 添加
             [self beginProgressWithTitle:nil];
             SqliteTool *sqlTool = [SqliteTool sharedInstance];
-            NSArray *valueArr = @[@"'撸女吧','https://www.lunu8.com',1",@"'撸哥吧','https://www.lugex.top',2",@"'24fa','https://www.24fa.cc',3",@"'趣事百科','https://qqhk16.com',4"];
-            NSArray *allTitleArr = @[@[@"撸女",@"撸吧",@"推图",@"亚洲",@"欧美",@"日韩"],@[@"欲女",@"撸女",@"亚洲",@"欧美",@"日韩"],@[@"美女",@"欧美"], @[@"宅福利",@"宅男社",@"撸一管",@"蜜桃社"]];
-            NSArray *allIdArr = @[@[@"1",@"2",@"3",@"6",@"8",@"9"],@[@"1",@"2",@"6",@"8",@"9"],@[@"49",@"71"],@[@"zhaifuli/list_2_",@"zhainanshe/list_4_",@"luyilu/list_5_",@"MiiTao/list_12_"]];
+            NSArray *valueArr = @[@"'撸女吧','https://www.lunu8.com',1",
+                                  @"'撸哥吧','https://www.lugex.top',2",
+                                  @"'24fa','https://www.24fa.cc',3",
+                                  @"'趣事百科','https://qq5lk.com',4"];
+            NSArray *allTitleArr = @[
+            @[@"撸女",@"撸吧",@"推图",@"亚洲",@"欧美",@"日韩"],
+            @[@"欲女",@"撸女",@"亚洲",@"欧美",@"日韩"],
+            @[@"美女",@"欧美"],
+            @[@"宅福利",@"宅男社",@"撸一管",@"蜜桃社"]
+            ];
+            NSArray *allIdArr = @[
+            @[@"1",@"2",@"3",@"6",@"8",@"9"],
+            @[@"1",@"2",@"6",@"8",@"9"],
+            @[@"49",@"71"],
+            @[@"zhaifuli/list_2_",@"zhainanshe/list_4_",@"luyilu/list_5_",@"MiiTao/list_12_"]
+            ];
             [sqlTool insertTable:@"website"
                          element:@"name,url,value"
                            value:valueArr[indexPath.row]

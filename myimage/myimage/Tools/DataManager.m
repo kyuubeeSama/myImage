@@ -198,6 +198,11 @@
                                                                       field:@"*"
                                                                       Class:[ArticleModel class]];
                     }
+                }else{
+                    if (result.category_id == 0) {
+                        // 需要更新类型
+                        [sqlTool updateTable:@"article" where:[NSString stringWithFormat:@"website_id=%d and detail_url='%@'",websiteModel.value,detailStr] value:[NSString stringWithFormat:@"category_id=%d",category.category_id]];
+                    }
                 }
                 [resultArr addObject:result];
             }
@@ -358,16 +363,91 @@
     }];
 }
 
--(void)getSearchResultWithType:(WebsiteModel *)websiteModel pageNum:(int)PageNum success:(void (^)(NSMutableArray * _Nonnull))success failure:(void (^)(NSError * _Nonnull))failure{
+-(void)getSearchResultWithType:(WebsiteModel *)websiteModel pageNum:(NSInteger)pageNum keyword:(NSString *)keyword success:(void (^)(NSMutableArray * _Nonnull))success failure:(void (^)(NSError * _Nonnull))failure{
+    NSString *urlStr;
     if (websiteModel.value == 1) {
         // 撸女吧
     }else if (websiteModel.value == 2){
         // 撸哥吧
     }else if(websiteModel.value == 3){
         // 24fa
+//       http://www.24fa.cc/mSearch.aspx?page=1&keyword=%E6%9F%9A%E6%9C%A8&where=title
+        urlStr = [NSString stringWithFormat:@"%@/mSearch.aspx?page=%ld&keyword=%@&where=title",websiteModel.url,(long)pageNum,keyword];
+        // 链接中含有汉字，需要格式化
+        urlStr = [urlStr stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     }else if(websiteModel.value == 4){
         // 趣事百科
+//    https://so.azs2019.com/serch.php?keyword=%E8%D6%C4%BE&page=1
+        urlStr = [NSString stringWithFormat:@"https://so.azs2019.com/serch.php?keyword=%@&page=%ld",keyword,(long)pageNum];
+//        NSStringEncoding gbkEncoding = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
+//        // 使用如下方法 将获取到的数据按照gbkEncoding的方式进行编码，结果将是正常的汉字
+//        urlStr = [[NSString alloc]initWithData:[urlStr dataUsingEncoding:NSUTF8StringEncoding] encoding:gbkEncoding];
+        urlStr = [self UTFtoGBK:urlStr];
     }
+    NSLog(@"%@",urlStr);
+    [NetWorkingTool getHtmlWithUrl:urlStr WithData:nil success:^(NSString * _Nonnull html) {
+        // 获取搜索结果
+        NSLog(@"%@",html);
+        NSMutableArray *resultArr = [[NSMutableArray alloc]init];
+        if (websiteModel.value == 1) {
+            
+        }else if(websiteModel.value == 4){
+            // 趣事百科
+            NSString *articleRegex = @"<article([\\s\\S]+?)article>";
+            NSMutableArray *articleArr = [Tool getDataWithRegularExpression:articleRegex content:html];
+            for (NSString *article in articleArr) {
+                // 获取标题
+                //            title="([\s\S]+?)"
+                NSString *titleRegex = @"title=\"([\\s\\S]+?)\"";
+                NSString *titleStr = [Tool getDataWithRegularExpression:titleRegex content:article][0];
+                titleStr = [titleStr stringByReplacingOccurrencesOfString:@"title=\"" withString:@""];
+                titleStr = [titleStr stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+                            // 获取封面
+                //src="([\s\S]+?)"
+                NSString *picRegex = @"src=\"([\\s\\S]+?)\"";
+                NSString *picStr = [Tool getDataWithRegularExpression:picRegex content:article][0];
+                picStr = [picStr stringByReplacingOccurrencesOfString:@"src=\"" withString:@""];
+                picStr = [picStr stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+                // 详情
+                //            href="([\s\S]+?)"  array[1]
+                NSString *detailRegex = @"href=\"([\\s\\S]+?)\"";
+                NSString *detailStr = [Tool getDataWithRegularExpression:detailRegex content:article][1];
+                detailStr = [detailStr stringByReplacingOccurrencesOfString:@"href=\"" withString:@""];
+                detailStr = [detailStr stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+                SqliteTool *sqlTool = [SqliteTool sharedInstance];
+                ArticleModel *result = (ArticleModel *) [sqlTool findDataFromTable:@"article"
+                                                                             where:[NSString stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, detailStr]
+                                                                             field:@"*"
+                                                                             Class:[ArticleModel class]];
+                if (result.name == nil) {
+                    result.name = titleStr;
+                    result.detail_url = detailStr;
+                    result.img_url = picStr;
+                    if ([sqlTool insertTable:@"article"
+                                     element:@"website_id,category_id,name,detail_url,img_url"
+                                       value:[NSString stringWithFormat:@"%d,0,'%@','%@','%@'", websiteModel.value, result.name, result.detail_url, result.img_url]
+                                       where:nil]) {
+                        result = (ArticleModel *) [sqlTool findDataFromTable:@"article"
+                                                                      where:[NSString
+                                                                          stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, result.detail_url]
+                                                                      field:@"*"
+                                                                      Class:[ArticleModel class]];
+                    }
+                }
+                [resultArr addObject:result];
+            }
+            success(resultArr);
+        }
+    } failure:^(NSError * _Nonnull error) {
+        failure(error);
+    }];
+}
+
+-(NSString *)UTFtoGBK:(NSString *)urlStr{
+    //GBK编码
+    NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
+    NSString *encodeContent = [urlStr stringByAddingPercentEscapesUsingEncoding:enc];
+    return encodeContent;
 }
 
 @end

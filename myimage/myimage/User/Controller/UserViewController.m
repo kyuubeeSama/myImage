@@ -13,8 +13,8 @@
 
 @interface UserViewController () <UITableViewDelegate, UITableViewDataSource>
 
-@property(nonatomic, retain) UITableView *mainTable;
-@property(nonatomic, retain) NSMutableArray *listArr;
+@property(nonatomic, strong) UITableView *mainTable;
+@property(nonatomic, strong) NSMutableArray *listArr;
 
 @end
 

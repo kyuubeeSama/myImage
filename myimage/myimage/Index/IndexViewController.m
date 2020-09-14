@@ -13,7 +13,7 @@
 #import "UIViewController+CWLateralSlide.h"
 @interface IndexViewController ()<UITableViewDelegate,UITableViewDataSource>
 
-@property(nonatomic,retain)UITableView *mainTable;
+@property(nonatomic,strong)UITableView *mainTable;
 @property(nonatomic,copy)NSArray *listArr;
 
 @end

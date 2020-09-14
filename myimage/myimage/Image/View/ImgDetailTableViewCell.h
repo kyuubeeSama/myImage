@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ImgDetailTableViewCell : UITableViewCell
 
-@property (nonatomic, retain)UIImageView *topImg;
+@property (nonatomic, strong)UIImageView *topImg;
 
 @end
 

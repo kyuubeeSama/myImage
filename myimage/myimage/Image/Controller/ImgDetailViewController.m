@@ -15,8 +15,8 @@
 
 @interface ImgDetailViewController ()
 
-@property(nonatomic, retain) ImgDetailTableView *mainTable;
-@property(nonatomic, retain) NSMutableArray *listArr;
+@property(nonatomic, strong) ImgDetailTableView *mainTable;
+@property(nonatomic, strong) NSMutableArray *listArr;
 
 @end
 
