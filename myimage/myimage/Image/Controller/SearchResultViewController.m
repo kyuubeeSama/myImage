@@ -30,6 +30,7 @@
     // Do any additional setup after loading the view.
     self.listArr = [[NSMutableArray alloc]init];
     self.pageNum = 1;
+    [self.mainCollection reloadData];
     [self getData];
     [self getMoreData];
 }
@@ -44,24 +45,30 @@
     DataManager *dataManager = [[DataManager alloc]init];
     // 获取搜索结果
     // 搜索
-    [dataManager getSearchResultWithType:self.model
-                                 pageNum:self.pageNum
-                                 keyword:self.keyword
-                                 success:^(NSMutableArray * _Nonnull array) {
-        if (array.count>0) {
-            [self.mainCollection.mj_footer endRefreshing];
-        }else{
-            [self.mainCollection.mj_footer endRefreshingWithNoMoreData];
-        }
-        [self.listArr addObjectsFromArray:array];
-        self.mainCollection.listArr = self.listArr;
-    } failure:^(NSError * _Nonnull error) {
-        
-    }];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        [dataManager getSearchResultWithType:self.model
+                                     pageNum:self.pageNum
+                                     keyword:self.keyword
+                                     success:^(NSMutableArray *_Nonnull array) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self endProgress];
+                if (array.count > 0) {
+                    self.pageNum += 1;
+                    [self.mainCollection.mj_footer endRefreshing];
+                } else {
+                    [self.mainCollection.mj_footer endRefreshingWithNoMoreData];
+                }
+                [self.listArr addObjectsFromArray:array];
+                self.mainCollection.listArr = self.listArr;
+            });
+        } failure:^(NSError *_Nonnull error) {
+            
+        }];
+    });
 }
 
 -(void)getMoreData {
-    self.mainCollection.mj_footer=[MJRefreshBackFooter footerWithRefreshingBlock:^{
+    self.mainCollection.mj_footer=[MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
         [self getData];
     }];
 }
@@ -88,6 +95,9 @@
                 };
                 [weakself.navigationController pushViewController:VC animated:YES];
         };
+        [_mainCollection mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.top.bottom.equalTo(self.view);
+        }];
     }
     return _mainCollection;
 }

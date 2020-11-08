@@ -42,28 +42,36 @@
     [self beginProgressWithTitle:nil];
     if (self.articleModel.has_done == 1) {
         DataManager *dataManager = [[DataManager alloc]init];
-        [dataManager getImageDetailWithType:self.websiteModel detailUrl:self.articleModel.detail_url progress:^(int page) {
-            [self beginProgressWithTitle:[NSString stringWithFormat:@"正在爬取第%d页",page]];
-        } success:^(NSMutableArray *array) {
-            self.listArr = array;
-            SqliteTool *sqlTool = [SqliteTool sharedInstance];
-            // 将该页面爬取到的图片都保存到数据库
-            if ([self saveImageWithArr:array]) {
-                [sqlTool updateTable:@"article"
-                               where:[NSString stringWithFormat:@"article_id = %d", self.articleModel.article_id]
-                               value:@"has_done = 2"];
-                self.articleModel.has_done = 2;
-                if (self.imageSaved) {
-                    self.imageSaved(self.articleModel);
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            [dataManager getImageDetailWithType:self.websiteModel detailUrl:self.articleModel.detail_url progress:^(int page) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self beginProgressWithTitle:[NSString stringWithFormat:@"正在爬取第%d页",page]];
+                });
+            } success:^(NSMutableArray *array) {
+                self.listArr = array;
+                SqliteTool *sqlTool = [SqliteTool sharedInstance];
+                // 将该页面爬取到的图片都保存到数据库
+                if ([self saveImageWithArr:array]) {
+                    [sqlTool updateTable:@"article"
+                                   where:[NSString stringWithFormat:@"article_id = %d", self.articleModel.article_id]
+                                   value:@"has_done = 2"];
+                    self.articleModel.has_done = 2;
+                    if (self.imageSaved) {
+                        self.imageSaved(self.articleModel);
+                    }
                 }
-            }
-            [self endProgress];
-            self.mainTable.listArr = [[NSMutableArray alloc]initWithArray:array];
-        } failure:^(NSError *error) {
-            NSLog(@"数据获取失败%@", error);
-            [self endProgress];
-            [self alertWithTitle:@"数据获取失败"];
-        }];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self endProgress];
+                    self.mainTable.listArr = [[NSMutableArray alloc]initWithArray:array];
+                });
+            } failure:^(NSError *error) {
+                NSLog(@"数据获取失败%@", error);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self endProgress];
+                    [self alertWithTitle:@"数据获取失败"];
+                });
+            }];
+        });
     } else {
         SqliteTool *sqlTool = [SqliteTool sharedInstance];
         NSMutableArray *array = [sqlTool selectDataFromTable:@"image"

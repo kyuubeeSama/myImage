@@ -16,18 +16,21 @@ PODS:
     - AFNetworking/NSURLSession
   - CWLateralSlide (1.6.5)
   - FLAnimatedImage (1.0.12)
-  - FluentDarkModeKit (0.5.2)
+  - FluentDarkModeKit (1.0.1)
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
+  - hpple (0.2.0)
   - Masonry (1.1.0)
   - MBProgressHUD (1.2.0)
   - MJExtension (3.2.2)
   - MJRefresh (3.5.0)
   - ReactiveObjC (3.1.1)
-  - SDWebImage (5.9.0):
-    - SDWebImage/Core (= 5.9.0)
-  - SDWebImage/Core (5.9.0)
+  - SDWebImage (5.9.4):
+    - SDWebImage/Core (= 5.9.4)
+  - SDWebImage/Core (5.9.4)
+  - SGPagingView (1.6.9)
+  - Shimmer (1.0.2)
 
 DEPENDENCIES:
   - AFNetworking
@@ -35,12 +38,15 @@ DEPENDENCIES:
   - FLAnimatedImage
   - FluentDarkModeKit
   - FMDB
+  - hpple
   - Masonry
   - MBProgressHUD
   - MJExtension
   - MJRefresh
   - ReactiveObjC
   - SDWebImage
+  - SGPagingView
+  - Shimmer
 
 SPEC REPOS:
   https://gitee.com/mirrors/CocoaPods-Specs.git:
@@ -49,26 +55,32 @@ SPEC REPOS:
     - FLAnimatedImage
     - FluentDarkModeKit
     - FMDB
+    - hpple
     - Masonry
     - MBProgressHUD
     - MJExtension
     - MJRefresh
     - ReactiveObjC
     - SDWebImage
+    - SGPagingView
+    - Shimmer
 
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
   CWLateralSlide: 8939c8dea91a24e40d0793553118cb57cd67f64b
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
-  FluentDarkModeKit: 78109bdbfb87c515543c0a52319da017c3843aae
+  FluentDarkModeKit: 0c5f31ca81eb058f3e8b6d79b3d08afbe7c40c42
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  hpple: 3b765f96fc2cd56ad1a49aef6f7be5cb2aa64b57
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
   MJExtension: d9b9c74cbdeb724c1e9ecbb157b318276e62e876
   MJRefresh: 6afc955813966afb08305477dd7a0d9ad5e79a16
   ReactiveObjC: 011caa393aa0383245f2dcf9bf02e86b80b36040
-  SDWebImage: 62ae4a18473520c67b79e9724c31a63599cc9423
+  SDWebImage: b69257f4ab14e9b6a2ef53e910fdf914d8f757c1
+  SGPagingView: 3420f9a9ccd2c93936b61bc5a23e58f58fe48809
+  Shimmer: c5374be1c2b0c9e292fb05b339a513cf291cac86
 
-PODFILE CHECKSUM: d601b0d9b06f78bf38671544ddd78440ba94a1f2
+PODFILE CHECKSUM: d78a9918c1d77d66c8430c8e4ed04f58b3bffd24
 
 COCOAPODS: 1.10.0.beta.2

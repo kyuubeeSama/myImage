@@ -45,30 +45,30 @@
     // 从数据中获取列表页
     [self beginProgressWithTitle:@"爬取中"];
     DataManager *dataManager = [[DataManager alloc]init];
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [dataManager getDataWithType:self.model
-                                 pageNum:[self.pageArr[self.categoryIndex] intValue]
-                                category:self.categoryModel
-                                 success:^(NSMutableArray *_Nonnull array) {
-                NSMutableArray *dataArr = [[NSMutableArray alloc]initWithArray:self.listArr[self.categoryIndex]];
-                [dataArr addObjectsFromArray:array];
-                self.listArr[self.categoryIndex] = dataArr;
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self endProgress];
-                    if (array.count > 0) {
-                        self.pageArr[self.categoryIndex] = [NSString stringWithFormat:@"%d",[self.pageArr[self.categoryIndex] intValue]+1];
-                        [self.mainCollection.mj_footer endRefreshing];
-                    } else {
-                        [self.mainCollection.mj_footer endRefreshingWithNoMoreData];
-                    }
-                    self.mainCollection.listArr = dataArr;
-                });
-            } failure:^(NSError *_Nonnull error) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.navigationController popViewControllerAnimated:YES];
-                });
-            }];
-        });
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        [dataManager getDataWithType:self.model
+                             pageNum:[self.pageArr[self.categoryIndex] intValue]
+                            category:self.categoryModel
+                             success:^(NSMutableArray *_Nonnull array) {
+            NSMutableArray *dataArr = [[NSMutableArray alloc]initWithArray:self.listArr[self.categoryIndex]];
+            [dataArr addObjectsFromArray:array];
+            self.listArr[self.categoryIndex] = dataArr;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self endProgress];
+                if (array.count > 0) {
+                    self.pageArr[self.categoryIndex] = [NSString stringWithFormat:@"%d",[self.pageArr[self.categoryIndex] intValue]+1];
+                    [self.mainCollection.mj_footer endRefreshing];
+                } else {
+                    [self.mainCollection.mj_footer endRefreshingWithNoMoreData];
+                }
+                self.mainCollection.listArr = dataArr;
+            });
+        } failure:^(NSError *_Nonnull error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.navigationController popViewControllerAnimated:YES];
+            });
+        }];
+    });
 }
 
 - (void)makeUI {
@@ -116,6 +116,7 @@
         }
     };
     [self.view addSubview:chooseView];
+    [self.mainCollection reloadData];
     [self getData];
 }
 

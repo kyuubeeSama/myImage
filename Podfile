@@ -12,8 +12,12 @@ target 'myimage' do
   # 抽屉
   pod 'CWLateralSlide'
   pod 'ReactiveObjC'
+  # xpath
+  pod 'hpple'
   # 离屏渲染
 #  pod 'Texture'
+  pod 'Shimmer'
+pod 'SGPagingView'
 use_frameworks!
 pod 'FluentDarkModeKit'
 
