@@ -109,7 +109,7 @@
             browser.isFullWidthForLandScape = YES;
             browser.isNeedLandscape = YES;
             browser.currentImageIndex = 0;
-            browser.btnArr = @[@"收藏"];
+            browser.btnArr = @[@"收藏",@"下载"];
             NSString *img_url = [NSString stringWithFormat:@"%@/%@", weakself.websiteModel.url, model.image_url];
             if (model.website_id == 4) {
                 img_url = model.image_url;
@@ -133,6 +133,21 @@
                             [weakself alertWithTitle:@"收藏失败"];
                         }
                     }
+                }else if(index == 1){
+                    // TODO:保存图片到本地
+                    NSString *img_url = [NSString stringWithFormat:@"%@/%@", weakself.websiteModel.url, model.image_url];
+                    if (model.website_id == 4) {
+                        img_url = model.image_url;
+                    }
+                    NSString *fileName = [[img_url componentsSeparatedByString:@"/"] lastObject];
+                    NSString *filePath = [FileTool createFilePathWithName:[NSString stringWithFormat:@"images/%@",fileName]];
+                    [NetWorkingTool downloadingFileWithUrl:img_url savePath:filePath downloadProgress:^(NSProgress * _Nonnull progress) {
+                        
+                    } success:^{
+                        NSLog(@"下载成功");
+                    } failure:^(NSError * _Nonnull error) {
+                        NSLog(@"下载失败");
+                    }];
                 }
             };
         }

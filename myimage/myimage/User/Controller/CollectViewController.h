@@ -11,7 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CollectViewController : BaseViewController
-
+//1.相册收藏 2.图片收藏
 @property(nonatomic,assign)NSInteger type;
 
 @end

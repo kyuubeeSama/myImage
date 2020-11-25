@@ -10,6 +10,7 @@
 #import "CollectViewController.h"
 #import "WebsiteViewController.h"
 #import "UIViewController+CWLateralSlide.h"
+#import "LocalImgViewController.h"
 
 @interface UserViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -24,7 +25,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     NSString *cache = [NSString stringWithFormat:@"缓存(%@)", [Tool getMemonry]];
-    self.listArr = [[NSMutableArray alloc] initWithArray:@[@"相册收藏",@"图片收藏", @"站点管理",cache]];
+    self.listArr = [[NSMutableArray alloc] initWithArray:@[@"相册收藏",@"图片收藏", @"站点管理",@"本地图片",cache]];
     [self makeUI];
 }
 
@@ -68,10 +69,17 @@
             [self cw_pushViewController:VC];
         }
             break;
+        case 3:{
+            // 打开本地自建相册
+            //TODO:跳转到相册界面
+            LocalImgViewController *VC = [[LocalImgViewController alloc]init];
+            [self cw_pushViewController:VC];
+        }break;
         default:{
+            // 清理缓存
             [[SDImageCache sharedImageCache] clearDiskOnCompletion:nil];
             NSString *cache = [NSString stringWithFormat:@"缓存(%@)", [Tool getMemonry]];
-            self.listArr[2] = cache;
+            self.listArr[4] = cache;
         }
             break;
     }

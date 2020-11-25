@@ -17,30 +17,21 @@
     return manager;
 }
 
--(void)downloadingFileWithUrl:(NSString *)urlStr path:(NSString *)path {
++(void)downloadingFileWithUrl:(NSString *)urlStr savePath:(NSString *)savePath downloadProgress:(void (^)(NSProgress *))progress success:(void (^)(void))success failure:(void (^)(NSError *))failure{
     AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     /* 下载地址 */
     NSURL *url = [NSURL URLWithString:urlStr];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     /* 开始请求下载 */
     NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:^(NSProgress *downloadProgress) {
-        if(self.downloadProgress){
-            self.downloadProgress(downloadProgress.fractionCompleted);
-        }
+        progress(downloadProgress);
     } destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
-        return [NSURL fileURLWithPath:path];
+        return [NSURL fileURLWithPath:savePath];
     } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
-        NSInteger codeint = error.code;
-        if (codeint == (-999)) {
-            NSLog(@"链接超时");
-        } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                // 提示到前台
-                //下载完成
-                if (self.downloadCompleted) {
-                    self.downloadCompleted();
-                }
-            });
+        if (!error) {
+            success();
+        }else{
+            failure(error);
         }
     }];
     [downloadTask resume];

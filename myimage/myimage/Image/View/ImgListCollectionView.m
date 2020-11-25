@@ -37,10 +37,16 @@
     NSLog(@"%@,%@,%@", model.name, model.img_url, model.detail_url);
     cell.titleLab.text = model.name;
     NSString *imageStr;
-    if (model.website_id == 4) {
+//https://sxchinesegirlz.com/
+    if (model.website_id == 4 || model.website_id == 5) {
         imageStr = model.img_url;
+        if (model.website_id == 5) {
+            SDWebImageDownloader *downloader = [SDWebImageManager sharedManager].imageLoader;
+            [downloader setValue:@"https://sxchinesegirlz.com/" forHTTPHeaderField:@"Referer"];
+        }
     }else{
         imageStr = [NSString stringWithFormat:@"%@/%@", self.model.url, model.img_url];
+        imageStr = [imageStr stringByReplacingOccurrencesOfString:@"//" withString:@"/"];
     }
      [cell.headImg sd_setImageWithURL:[NSURL URLWithString:imageStr] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
     return cell;

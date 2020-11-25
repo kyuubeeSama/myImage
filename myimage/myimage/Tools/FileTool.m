@@ -7,6 +7,67 @@
 //
 
 #import "FileTool.h"
+#import <AssetsLibrary/AssetsLibrary.h>
+
+@implementation QYFileModel
+
+-(void)getImageAndInfoComplete:(void (^)(void))complete{
+    // 获取图片和图片信息
+    [[PHImageManager defaultManager] requestImageDataForAsset:_set options:nil resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+        NSURL *url = [info valueForKey:@"PHImageFileURLKey"];
+        self->_fileurl = [url absoluteString];
+        NSInteger sizelength = imageData.length;
+        NSString *fileSize;
+        if (sizelength > 1024 && sizelength < (1024 * 1024)) {
+            fileSize = [NSString stringWithFormat:@"%.2fK", (float) sizelength / 1024];
+        } else if (sizelength < 1024) {
+            fileSize = [NSString stringWithFormat:@"%luB", (unsigned long) sizelength];
+        } else if (sizelength > (1024 * 1024) && sizelength < (1024 * 1024 * 1024)) {
+            fileSize = [NSString stringWithFormat:@"%.2fM", (float) sizelength / (1024 * 1024)];
+        } else {
+            fileSize = [NSString stringWithFormat:@"%.2fG", (float) sizelength / (1024 * 1024 * 1024)];
+        }
+        self->_size = fileSize;
+        UIImage *image = [UIImage imageWithData:imageData];
+        //                    获取缩略图
+        self->_image = [self thumbnailWithImageWithoutScale:image size:CGSizeMake(100, image.size.height * 100 / image.size.width)];
+        if (complete) {
+            complete();
+        }
+    }];
+}
+
+// 获取指定大小的缩略图
+- (UIImage *)thumbnailWithImageWithoutScale:(UIImage *)image size:(CGSize)asize {
+    UIImage *newimage;
+    if (nil == image) {
+        newimage = nil;
+    } else {
+        CGSize oldsize = image.size;
+        CGRect rect;
+        if (asize.width / asize.height > oldsize.width / oldsize.height) {
+            rect.size.width = asize.height * oldsize.width / oldsize.height;
+            rect.size.height = asize.height;
+            rect.origin.x = (asize.width - rect.size.width) / 2;
+            rect.origin.y = 0;
+        } else {
+            rect.size.width = asize.width;
+            rect.size.height = asize.width * oldsize.height / oldsize.width;
+            rect.origin.x = 0;
+            rect.origin.y = (asize.height - rect.size.height) / 2;
+        }
+        UIGraphicsBeginImageContext(asize);
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        CGContextSetFillColorWithColor(context, [[UIColor clearColor] CGColor]);
+        UIRectFill(CGRectMake(0, 0, asize.width, asize.height));//clear background
+        [image drawInRect:rect];
+        newimage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+    }
+    return newimage;
+}
+
+@end
 
 @implementation FileTool
 
@@ -53,6 +114,11 @@
     }
 }
 
++ (NSString *)createFilePathWithName:(NSString *)name {
+    NSString *path = [[self getDocumentPath] stringByAppendingPathComponent:name];
+    return path;
+}
+
 + (BOOL)isValidPNGByImage:(UIImage *)image
 {
     NSData *imageData = UIImagePNGRepresentation(image);
@@ -81,6 +147,45 @@
     } else {
         return YES;
     }
+}
+
+-(NSMutableArray *)getLocalImage{
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+    NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSDirectoryEnumerator *dirEnum = [fileManager enumeratorAtPath:path];
+    NSString *fileName;
+    while (fileName = [dirEnum nextObject]) {
+        QYFileModel *model = [[QYFileModel alloc] init];
+        if ([fileName hasSuffix:@".png"] || [fileName hasSuffix:@".jpg"] || [fileName hasSuffix:@".jpeg"] || [fileName hasSuffix:@".bmp"] || [fileName hasSuffix:@".gif"] || [fileName hasSuffix:@".PNG"] || [fileName hasSuffix:@".JPG"] || [fileName hasSuffix:@".JPEG"] || [fileName hasSuffix:@".BMP"] || [fileName hasSuffix:@".GIF"] || [fileName isEqualToString:@"HEIC"] || [fileName isEqualToString:@"heic"]) {
+            model.filetype = @"image/png/jpg/jpeg/gif";
+        } else {
+            continue;
+        }
+        NSDictionary *fileInfo = [dirEnum fileAttributes];
+        //            NSLog(@"%@",fileInfo);
+        NSArray *pathArr = [fileName componentsSeparatedByString:@"/"];
+        model.filename = [pathArr lastObject];
+        NSArray *nameArr = [fileName componentsSeparatedByString:@"."];
+        model.name = nameArr[0];
+        NSString *time = [NSString stringWithFormat:@"%@", fileInfo[@"NSFileModificationDate"]];
+        model.time = [time substringToIndex:19];
+        NSInteger sizelength = [[NSString stringWithFormat:@"%@", fileInfo[@"NSFileSize"]] integerValue];
+        NSString *fileSize;
+        if (sizelength > 1024) {
+            fileSize = [NSString stringWithFormat:@"%.0luK", sizelength / 1024];
+        } else if (sizelength < 1024) {
+            fileSize = [NSString stringWithFormat:@"%luB", (unsigned long) sizelength];
+        } else if (sizelength > (1024 * 1024)) {
+            fileSize = [NSString stringWithFormat:@"%.0luM", sizelength / (1024 * 2014)];
+        } else {
+            fileSize = [NSString stringWithFormat:@"%.0luG", sizelength / (1024 * 1024 * 1024)];
+        }
+        model.size = fileSize;
+        model.filePath = [path stringByAppendingPathComponent:fileName];
+        [array addObject:model];
+    }
+    return array;
 }
 
 @end

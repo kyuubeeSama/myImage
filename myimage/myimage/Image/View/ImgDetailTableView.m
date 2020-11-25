@@ -41,6 +41,7 @@
     if (![model.image_url isEqualToString:@"/zhu.js"]) {
         // FIXME:图片无法正常获取，在浏览器中可以，直接读取地址不行
         NSString *img_url = [NSString stringWithFormat:@"%@/%@", self.websiteModel.url, model.image_url];
+        img_url = [img_url stringByReplacingOccurrencesOfString:@"//" withString:@"/"];
         if (model.website_id == 4) {
             img_url = model.image_url;
         }
@@ -52,13 +53,11 @@
                 if (error == nil) {
                     model.width = image.size.width;
                     model.height = image.size.height;
-                    // 获取到图片高度后更新该行
+                    [self reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
                 } else {
+                    //FIXME:图片加载失败的话，会无限重复加载
                     NSLog(@"第%ld张图片出错，出错图片地址是%@%@,错误信息是%@，错误码是%@", (long) indexPath.row, self.websiteModel.url, model.image_url, error.localizedDescription,error.userInfo[@"SDWebImageErrorDownloadStatusCodeKey"]);
-                    model.width = screenW;
-                    model.height = screenW*3/2;
                 }
-                [self reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
             }];
     } else {
         // 容错错误文件
