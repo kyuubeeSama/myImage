@@ -762,18 +762,17 @@
 				GCC_PREFIX_HEADER = "$(SRCROOT)/myimage/myimage/config/PrefixHeader.pch";
 				INFOPLIST_FILE = myimage/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.qingyuannet.myimage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "myimage/myimage/Index/myimage-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,6";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -791,17 +790,16 @@
 				GCC_PREFIX_HEADER = "$(SRCROOT)/myimage/myimage/config/PrefixHeader.pch";
 				INFOPLIST_FILE = myimage/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.qingyuannet.myimage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "myimage/myimage/Index/myimage-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,6";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

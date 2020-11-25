@@ -38,12 +38,24 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     ImgDetailTableViewCell *cell = [[ImgDetailTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     ImageModel *model = self.listArr[(NSUInteger) indexPath.row];
+    NSString *img_url;
     if (![model.image_url isEqualToString:@"/zhu.js"]) {
         // FIXME:图片无法正常获取，在浏览器中可以，直接读取地址不行
-        NSString *img_url = [NSString stringWithFormat:@"%@/%@", self.websiteModel.url, model.image_url];
-        img_url = [img_url stringByReplacingOccurrencesOfString:@"//" withString:@"/"];
-        if (model.website_id == 4) {
+        if([model.image_url containsString:@"http"] || [model.image_url containsString:@"https"]){
             img_url = model.image_url;
+        }else{
+            img_url = [NSString stringWithFormat:@"%@/%@", self.websiteModel.url, model.image_url];
+            img_url = [img_url stringByReplacingOccurrencesOfString:@"//" withString:@"/"];
+        }
+        if (model.website_id == 5) {
+            SDWebImageDownloader *downloader = [SDWebImageManager sharedManager].imageLoader;
+            [downloader setValue:@"https://sxchinesegirlz.com/" forHTTPHeaderField:@"Referer"];
+        }else if(model.website_id == 2){
+            SDWebImageDownloader *downloader = [SDWebImageManager sharedManager].imageLoader;
+            [downloader setValue:@"https://luge8.cc/" forHTTPHeaderField:@"Referer"];
+        }else if(model.website_id == 1){
+            SDWebImageDownloader *downloader = [SDWebImageManager sharedManager].imageLoader;
+            [downloader setValue:@"https://www.lunu8.com/" forHTTPHeaderField:@"Referer"];
         }
         [cell.topImg sd_setImageWithURL:[NSURL URLWithString:img_url]
                        placeholderImage:[UIImage imageNamed:@"placeholder2"]

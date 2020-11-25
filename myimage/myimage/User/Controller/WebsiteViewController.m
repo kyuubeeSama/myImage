@@ -38,7 +38,7 @@
     for(WebsiteModel *model  in webArr){
         [self.websiteArr addObject:model.name];
     }
-    self.listArr = @[@"撸女吧(图片存在问题)",@"撸哥吧(图片存在问题)",@"24fa",@"趣事百科",@"sxchinesegirlz"];
+    self.listArr = @[@"撸女吧",@"撸哥吧",@"24fa",@"趣事百科",@"sxchinesegirlz"];
     [self.mainTable reloadData];
 }
 
@@ -90,7 +90,7 @@
             @[@"nude",@"xiuren"]
             ];
             NSArray *allIdArr = @[
-            @[@"1",@"2",@"3",@"6",@"8",@"9"],
+            @[@"1",@"2",@"5",@"6",@"8",@"9"],
             @[@"1",@"2",@"6",@"8",@"9"],
             @[@"49",@"71"],
             @[@"zhaifuli/list_2_",@"zhainanshe/list_4_",@"luyilu/list_5_",@"MiiTao/list_12_"],

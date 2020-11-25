@@ -37,16 +37,21 @@
     NSLog(@"%@,%@,%@", model.name, model.img_url, model.detail_url);
     cell.titleLab.text = model.name;
     NSString *imageStr;
-//https://sxchinesegirlz.com/
-    if (model.website_id == 4 || model.website_id == 5) {
+    if([model.img_url containsString:@"http"] || [model.img_url containsString:@"https"]){
         imageStr = model.img_url;
-        if (model.website_id == 5) {
-            SDWebImageDownloader *downloader = [SDWebImageManager sharedManager].imageLoader;
-            [downloader setValue:@"https://sxchinesegirlz.com/" forHTTPHeaderField:@"Referer"];
-        }
     }else{
         imageStr = [NSString stringWithFormat:@"%@/%@", self.model.url, model.img_url];
         imageStr = [imageStr stringByReplacingOccurrencesOfString:@"//" withString:@"/"];
+    }
+    if (model.website_id == 5) {
+        SDWebImageDownloader *downloader = [SDWebImageManager sharedManager].imageLoader;
+        [downloader setValue:@"https://sxchinesegirlz.com/" forHTTPHeaderField:@"Referer"];
+    }else if(model.website_id == 2){
+        SDWebImageDownloader *downloader = [SDWebImageManager sharedManager].imageLoader;
+        [downloader setValue:@"https://luge8.cc/" forHTTPHeaderField:@"Referer"];
+    }else if(model.website_id == 1){
+        SDWebImageDownloader *downloader = [SDWebImageManager sharedManager].imageLoader;
+        [downloader setValue:@"https://www.lunu8.com/" forHTTPHeaderField:@"Referer"];
     }
      [cell.headImg sd_setImageWithURL:[NSURL URLWithString:imageStr] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
     return cell;
