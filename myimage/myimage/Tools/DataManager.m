@@ -37,16 +37,15 @@
     }else if (websiteModel.value == 5){
 //        sxchinesegirlz
         urlStr = [NSString stringWithFormat:@"%@/category/%@/page/%d/",websiteModel.url,category.value,PageNum];
+    }else if(websiteModel.value == 6){
+        //漂亮网红网
+        urlStr = [NSString stringWithFormat:@"%@/jin/caitup/%@_%d.html",websiteModel.url,category.value,PageNum];
     }
     NSLog(@"网址是%@",urlStr);
     NSData *data = [NSData dataWithContentsOfURL:[[NSURL alloc] initWithString:urlStr]];
     NSMutableArray *resultArr = [[NSMutableArray alloc] init];
     if (websiteModel.value == 4) {
-        // 2. 转码成utf8Data:先转成gb2312, 替换meta, 然后转成utf8
-        NSStringEncoding gbkEncoding = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
-        NSString *postHtmlStr = [[NSString alloc] initWithData:data encoding:gbkEncoding];
-        NSString *uft8HtmlStr = [postHtmlStr stringByReplacingOccurrencesOfString:@"<meta HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=gb2312\">" withString:@"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">"];
-        NSData *utf8HtmlData = [uft8HtmlStr dataUsingEncoding:NSUTF8StringEncoding];
+        NSData *utf8HtmlData = [self getGBKDataWithData:data];
         TFHpple *xpathDoc = [[TFHpple alloc] initWithHTMLData:utf8HtmlData];
         NSString *titleXpath = @"/html/body/section/div/div/article/header/h2/a";
         NSString *detailXpath = @"/html/body/section/div/div/article/header/h2/a/@href";
@@ -153,6 +152,46 @@
             NSString *title = titleNodeArr[i].text;
             NSString *imgPath = picNodeArr[i].text;
             NSString *detail = detailNodeArr[i].text;
+            SqliteTool *sqlTool = [SqliteTool sharedInstance];
+            ArticleModel *result = (ArticleModel *) [sqlTool findDataFromTable:@"article"
+                                                                         where:[NSString stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, detail]
+                                                                         field:@"*"
+                                                                         Class:[ArticleModel class]];
+            if (result.name == nil) {
+                model.name = title;
+                model.detail_url = [detail stringByReplacingOccurrencesOfString:websiteModel.url withString:@""];
+                model.img_url = [imgPath stringByReplacingOccurrencesOfString:websiteModel.url withString:@""];
+                if ([sqlTool insertTable:@"article"
+                                 element:@"website_id,category_id,name,detail_url,img_url"
+                                   value:[NSString stringWithFormat:@"%d,%d,'%@','%@','%@'", websiteModel.value,category.category_id, model.name, model.detail_url, model.img_url]
+                                   where:nil]) {
+                    model = (ArticleModel *) [sqlTool findDataFromTable:@"article"
+                                                                  where:[NSString
+                                                                         stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, model.detail_url]
+                                                                  field:@"*"
+                                                                  Class:[ArticleModel class]];
+                }
+            } else {
+                model = result;
+            }
+            [resultArr addObject:model];
+        }
+        success(resultArr);
+    } else if(websiteModel.value == 6){
+        NSData *utf8HtmlData = [self getGBKDataWithData:data];
+        TFHpple *doc = [[TFHpple alloc]initWithHTMLData:utf8HtmlData];
+        NSString *titleXpath = @"//*[@id=\"list\"]/ul/li/a/@title";
+        NSString *detailXpath = @"//*[@id=\"list\"]/ul/li/a/@href";
+        NSString *imgXpath = @"//*[@id=\"list\"]/ul/li/a/img/@src";
+        NSArray<TFHppleElement *> *titleNodeArr = [doc searchWithXPathQuery:titleXpath];
+        NSArray<TFHppleElement *> *detailNodeArr = [doc searchWithXPathQuery:detailXpath];
+        NSArray<TFHppleElement *> *imgNodeArr = [doc searchWithXPathQuery:imgXpath];
+        for (NSUInteger i=0; i<titleNodeArr.count; i++) {
+            ArticleModel *model = [[ArticleModel alloc]init];
+            NSString *detail = detailNodeArr[i].text;
+            NSString *title = titleNodeArr[i].text;
+            NSString *imgPath = imgNodeArr[i].text;
+//            NSLog(@"标题是%@ 封面是%@ 详情是%@",title,imgPath,detail);
             SqliteTool *sqlTool = [SqliteTool sharedInstance];
             ArticleModel *result = (ArticleModel *) [sqlTool findDataFromTable:@"article"
                                                                          where:[NSString stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, detail]
@@ -315,10 +354,8 @@
         }                      failure:^(NSError *_Nonnull error) {
             failure(error);
         }];
-    }else if (websiteModel.value == 4){
+    }else if (websiteModel.value == 4 || websiteModel.value == 5 || websiteModel.value == 6){
         [self getImageWithUrl:urlStr withWebsiteValue:websiteModel.value withPageNum:1 success:success failure:failure];
-    }else if(websiteModel.value == 5){
-        
     }
 }
 
@@ -342,11 +379,8 @@
         if (pageNum != 1) {
             urlStr = [url stringByReplacingOccurrencesOfString:@".html" withString:[NSString stringWithFormat:@"_%d.html",pageNum]];
         }
-        NSData *data = [NSData dataWithContentsOfURL:[[NSURL alloc] initWithString:urlStr]];
-        NSStringEncoding gbkEncoding = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
-        NSString *postHtmlStr = [[NSString alloc] initWithData:data encoding:gbkEncoding];
-        NSString *uft8HtmlStr = [postHtmlStr stringByReplacingOccurrencesOfString:@"<meta HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=gb2312\">" withString:@"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">"];
-        NSData *utf8HtmlData = [uft8HtmlStr dataUsingEncoding:NSUTF8StringEncoding];
+        NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlStr]];
+        NSData *utf8HtmlData = [self getGBKDataWithData:data];
         TFHpple *xpathDoc = [[TFHpple alloc] initWithHTMLData:utf8HtmlData];
         NSString *imageXPath = @"/html/body/section/div/div/article/p[position()>1]/img/@src";
         NSArray *imageNodeArr = [xpathDoc searchWithXPathQuery:imageXPath];
@@ -372,17 +406,65 @@
     }else if(value == 5){
         urlStr = [NSString stringWithFormat:@"%@/%d",urlStr,pageNum];
         NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlStr]];
+        NSLog(@"详情是%@",urlStr);
         TFHpple *xpathDoc = [[TFHpple alloc]initWithHTMLData:data];
         NSString *imgXPath = @"//*[@id=\"post-160224\"]/div[2]/div/div[2]/figure/img/@src";
         NSArray *imgNodeArr = [xpathDoc searchWithXPathQuery:imgXPath];
         for (TFHppleElement *element in imgNodeArr) {
+            NSLog(@"%@",element.text);
             ImageModel *model = [[ImageModel alloc]init];
             model.image_url = element.text;
             model.website_id = value;
             [self.imageArr addObject:model];
         }
         //TODO:判断是否有下一页
+        NSString *nextXpath = @"/html/body/div/div/article/div/div[1]/div[2]/div/div[3]/a/span/span";
+        NSArray *nextNodeArr = [xpathDoc searchWithXPathQuery:nextXpath];
+        TFHppleElement *lastElement = nextNodeArr.lastObject;
+        NSLog(@"最后一个值是%@",lastElement.text);
+        if ([lastElement.text isEqualToString:@"Next"]) {
+            //                有下一页
+            pageNum += 1;
+            [self getImageWithUrl:url withWebsiteValue:value withPageNum:pageNum success:success failure:failure];
+        }else{
+            success(self.imageArr);
+        }
+    }else if(value == 6){
+        if (pageNum != 1) {
+            urlStr = [urlStr stringByReplacingOccurrencesOfString:@".html" withString:[NSString stringWithFormat:@"_%d.html",pageNum]];
+        }
+        NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlStr]];
+        NSLog(@"详情是%@",urlStr);
+        NSData *utfHtmlData = [self getGBKDataWithData:data];
+        TFHpple *xpathDoc = [[TFHpple alloc]initWithHTMLData:utfHtmlData];
+        NSString *imgXPath = @"//*[@id=\"picg\"]/p/a/img/@src";
+        NSArray *imgNodeArr = [xpathDoc searchWithXPathQuery:imgXPath];
+        for (TFHppleElement *element in imgNodeArr) {
+            NSLog(@"%@",element.text);
+            ImageModel *model = [[ImageModel alloc]init];
+            model.image_url = element.text;
+            model.website_id = value;
+            [self.imageArr addObject:model];
+        }
+        // 获取下一页
+        NSString *htmlContent = [[NSString alloc] initWithData:utfHtmlData encoding:NSUTF8StringEncoding];
+        if ([htmlContent containsString:@"下一页"]) {
+            pageNum += 1;
+            [self getImageWithUrl:url withWebsiteValue:value withPageNum:pageNum success:success failure:failure];
+        }else{
+            success(self.imageArr);
+        }
     }
+}
+
+/// gbk网页内容转utf8
+/// @param data 数据
+-(NSData *)getGBKDataWithData:(NSData *)data{
+    NSStringEncoding gbkEncoding = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
+    NSString *postHtmlStr = [[NSString alloc] initWithData:data encoding:gbkEncoding];
+    NSString *utf8HtmlStr = [postHtmlStr stringByReplacingOccurrencesOfString:@"<meta HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=gb2312\">" withString:@"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">"];
+    NSData *utf8HtmlData = [utf8HtmlStr dataUsingEncoding:NSUTF8StringEncoding];
+    return utf8HtmlData;
 }
 
 // 搜索
@@ -496,10 +578,7 @@
     
     if (websiteModel.value == 4) {
         NSData *data = [NSData dataWithContentsOfURL:[[NSURL alloc] initWithString:urlStr]];
-        NSStringEncoding gbkEncoding = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
-        NSString *postHtmlStr = [[NSString alloc] initWithData:data encoding:gbkEncoding];
-        NSString *uft8HtmlStr = [postHtmlStr stringByReplacingOccurrencesOfString:@"<meta HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=gb2312\">" withString:@"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">"];
-        NSData *utf8HtmlData = [uft8HtmlStr dataUsingEncoding:NSUTF8StringEncoding];
+        NSData *utf8HtmlData = [self getGBKDataWithData:data];
         TFHpple *xpathDoc = [[TFHpple alloc] initWithHTMLData:utf8HtmlData];
         NSString *titleXpath = @"/html/body/section/div/div/article/header/h2/a/@title";
         NSString *detailXpath = @"/html/body/section/div/div/article/header/h2/a/@href";
@@ -595,6 +674,9 @@
     }
 }
 
+
+/// 网页地址utf格式转gbk格式
+/// @param urlStr 网页地址
 -(NSString *)UTFtoGBK:(NSString *)urlStr{
     //GBK编码
     NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);

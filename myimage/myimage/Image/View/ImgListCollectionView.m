@@ -48,10 +48,13 @@
         [downloader setValue:@"https://sxchinesegirlz.com/" forHTTPHeaderField:@"Referer"];
     }else if(model.website_id == 2){
         SDWebImageDownloader *downloader = [SDWebImageManager sharedManager].imageLoader;
-        [downloader setValue:@"https://luge8.cc/" forHTTPHeaderField:@"Referer"];
+        [downloader setValue:@"https://www.luge8.cc/" forHTTPHeaderField:@"Referer"];
     }else if(model.website_id == 1){
         SDWebImageDownloader *downloader = [SDWebImageManager sharedManager].imageLoader;
         [downloader setValue:@"https://www.lunu8.com/" forHTTPHeaderField:@"Referer"];
+    }else if(model.website_id == 6){
+        SDWebImageDownloader *downloader = [SDWebImageManager sharedManager].imageLoader;
+        [downloader setValue:@"http://www.plwht.com/" forHTTPHeaderField:@"Referer"];
     }
      [cell.headImg sd_setImageWithURL:[NSURL URLWithString:imageStr] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
     return cell;

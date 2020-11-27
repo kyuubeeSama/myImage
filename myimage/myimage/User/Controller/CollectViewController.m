@@ -102,13 +102,25 @@
         ImgListCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"listCell" forIndexPath:indexPath];
         ArticleCollectModel *model = self.listArr[(NSUInteger) indexPath.row];
         cell.titleLab.text = model.name;
-        [cell.headImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", model.url, model.img_url]] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
+        NSString *img_url;
+        if([model.img_url containsString:@"http"] || [model.img_url containsString:@"https"]){
+            img_url = model.img_url;
+        }else{
+            img_url = [NSString stringWithFormat:@"%@/%@", model.url, model.img_url];
+        }
+        [cell.headImg sd_setImageWithURL:[NSURL URLWithString:img_url] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
 
         return cell;
     } else {
         ImgCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"imgCell" forIndexPath:indexPath];
         ImgCollectModel *model = self.listArr[(NSUInteger) indexPath.row];
-        [cell.contentImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",model.url,model.image_url]] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
+        NSString *img_url;
+        if([model.image_url containsString:@"http"] || [model.image_url containsString:@"https"]){
+            img_url = model.image_url;
+        }else{
+            img_url = [NSString stringWithFormat:@"%@/%@", model.url, model.image_url];
+        }
+        [cell.contentImg sd_setImageWithURL:[NSURL URLWithString:img_url] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
         return cell;
     }
 }
