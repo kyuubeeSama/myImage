@@ -408,7 +408,7 @@
         NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlStr]];
         NSLog(@"详情是%@",urlStr);
         TFHpple *xpathDoc = [[TFHpple alloc]initWithHTMLData:data];
-        NSString *imgXPath = @"//*[@id=\"post-160224\"]/div[2]/div/div[2]/figure/img/@src";
+        NSString *imgXPath = @"/html/body/div/div/article/div/div[1]/div[2]/div/div[2]/figure/img/@src";
         NSArray *imgNodeArr = [xpathDoc searchWithXPathQuery:imgXPath];
         for (TFHppleElement *element in imgNodeArr) {
             NSLog(@"%@",element.text);

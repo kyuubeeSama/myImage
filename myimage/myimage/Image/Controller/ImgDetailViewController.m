@@ -110,7 +110,13 @@
             browser.isNeedLandscape = YES;
             browser.currentImageIndex = 0;
             browser.btnArr = @[@"收藏",@"下载"];
-            NSString *img_url = [NSString stringWithFormat:@"%@/%@", weakself.websiteModel.url, model.image_url];
+            NSString *img_url;
+            if([model.image_url containsString:@"http"] || [model.image_url containsString:@"https"]){
+                img_url = model.image_url;
+            }else{
+                img_url = [NSString stringWithFormat:@"%@/%@", self.websiteModel.url, model.image_url];
+                img_url = [img_url stringByReplacingOccurrencesOfString:@"//" withString:@"/"];
+            }
             if (model.website_id == 4) {
                 img_url = model.image_url;
             }
