@@ -12,6 +12,7 @@
 #import "CollectModel.h"
 #import "ImgDetailTableView.h"
 #import "WKWebViewController.h"
+#import "NSDate+Category.h"
 
 @interface ImgDetailViewController ()
 
@@ -102,7 +103,7 @@
     self.mainTable = [[ImgDetailTableView alloc] initWithFrame:CGRectMake(0, 0, screenW, screenH) style:UITableViewStylePlain];
     [self.view addSubview:self.mainTable];
     WeakSelf(self)
-    self.mainTable.cellItemDidselected = ^(NSIndexPath * _Nonnull indexPath) {
+    self.mainTable.cellItemDidselected = ^(NSIndexPath * _Nonnull indexPath, UIImage * _Nonnull image) {
         ImageModel *model = weakself.listArr[(NSUInteger) indexPath.row];
         if (model.width > 0 && model.height > 0) {
             HZPhotoBrowser *browser = [[HZPhotoBrowser alloc] init];
@@ -141,19 +142,16 @@
                     }
                 }else if(index == 1){
                     // TODO:保存图片到本地
-                    NSString *img_url = [NSString stringWithFormat:@"%@/%@", weakself.websiteModel.url, model.image_url];
-                    if (model.website_id == 4) {
-                        img_url = model.image_url;
-                    }
-                    NSString *fileName = [[img_url componentsSeparatedByString:@"/"] lastObject];
+//                    创佳文件名
+                    NSString *fileName = [NSString stringWithFormat:@"%d_%@.jpg",weakself.websiteModel.value,[NSDate nowTimestamp]];
                     NSString *filePath = [FileTool createFilePathWithName:[NSString stringWithFormat:@"images/%@",fileName]];
-                    [NetWorkingTool downloadingFileWithUrl:img_url savePath:filePath downloadProgress:^(NSProgress * _Nonnull progress) {
-                        
-                    } success:^{
-                        NSLog(@"下载成功");
-                    } failure:^(NSError * _Nonnull error) {
-                        NSLog(@"下载失败");
-                    }];
+                    [FileTool createDocumentWithname:@"images"];
+                    //MARK:保存前需要先创建文件夹
+                    if ([UIImageJPEGRepresentation(image, 1) writeToFile:filePath atomically:YES]) {
+                        NSLog(@"保存成功");
+                    }else{
+                        NSLog(@"保存失败");
+                    }
                 }
             };
         }

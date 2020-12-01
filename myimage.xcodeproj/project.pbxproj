@@ -24,6 +24,7 @@
 		A904AC5B23BF21A500E3281E /* ArticleCollectModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A904AC5A23BF21A500E3281E /* ArticleCollectModel.m */; };
 		A904AC5E23BF289200E3281E /* CollectModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A904AC5D23BF289200E3281E /* CollectModel.m */; };
 		A9146E2F23C30E8D00E94193 /* WebsiteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9146E2E23C30E8D00E94193 /* WebsiteViewController.m */; };
+		A91ADD4025761B49004CAD69 /* NSDate+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = A91ADD3F25761B49004CAD69 /* NSDate+Category.m */; };
 		A91E39002229245700A11EC6 /* Tool.m in Sources */ = {isa = PBXBuildFile; fileRef = A91E38FF2229245700A11EC6 /* Tool.m */; };
 		A938824621C1F8E90085958B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A938824521C1F8E90085958B /* AppDelegate.m */; };
 		A938824921C1F8E90085958B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A938824821C1F8E90085958B /* ViewController.m */; };
@@ -94,6 +95,8 @@
 		A904AC5D23BF289200E3281E /* CollectModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CollectModel.m; sourceTree = "<group>"; };
 		A9146E2D23C30E8D00E94193 /* WebsiteViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WebsiteViewController.h; sourceTree = "<group>"; };
 		A9146E2E23C30E8D00E94193 /* WebsiteViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WebsiteViewController.m; sourceTree = "<group>"; };
+		A91ADD3E25761B48004CAD69 /* NSDate+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Category.h"; sourceTree = "<group>"; };
+		A91ADD3F25761B49004CAD69 /* NSDate+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Category.m"; sourceTree = "<group>"; };
 		A91E38FE2229245700A11EC6 /* Tool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Tool.h; sourceTree = "<group>"; };
 		A91E38FF2229245700A11EC6 /* Tool.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tool.m; sourceTree = "<group>"; };
 		A938824121C1F8E90085958B /* myimage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = myimage.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -315,6 +318,8 @@
 		A938826521C1FC320085958B /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				A91ADD3E25761B48004CAD69 /* NSDate+Category.h */,
+				A91ADD3F25761B49004CAD69 /* NSDate+Category.m */,
 				A9CDD3042473E8180045C370 /* NSObject+Tool.h */,
 				A9CDD3052473E8180045C370 /* NSObject+Tool.m */,
 				144DFAAA608128E7EC6CE62E /* UIColor+Extension.h */,
@@ -604,6 +609,7 @@
 				144DF4C740C0A3350F1D2BFD /* WebsiteModel.m in Sources */,
 				144DF4CB25D2BF02A003CC55 /* CategoryModel.m in Sources */,
 				144DF778A22CB02F93D70BF5 /* ArticleModel.m in Sources */,
+				A91ADD4025761B49004CAD69 /* NSDate+Category.m in Sources */,
 				144DF75AD32A3DAAFA34F25D /* ImgCollectModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -17,6 +17,13 @@
     [self reloadData];
 }
 
+-(NSMutableArray *)imgArr{
+    if (!_imgArr) {
+        _imgArr = [[NSMutableArray alloc]init];
+    }
+    return _imgArr;
+}
+
 -(instancetype)initWithFrame:(CGRect)frame style:(UITableViewStyle)style {
     self = [super initWithFrame:frame style:style];
     if (self){
@@ -63,6 +70,7 @@
 
             }                 completed:^(UIImage *_Nullable image, NSError *_Nullable error, SDImageCacheType cacheType, NSURL *_Nullable imageURL) {
                 if (error == nil) {
+                    [self.imgArr addObject:image];
                     model.width = image.size.width;
                     model.height = image.size.height;
                     [self reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
@@ -81,7 +89,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if(self.cellItemDidselected){
-        self.cellItemDidselected(indexPath);
+        self.cellItemDidselected(indexPath,self.imgArr[indexPath.row]);
     }
 }
 

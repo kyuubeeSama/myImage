@@ -13,10 +13,11 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ImgDetailTableView : UITableView<UITableViewDelegate,UITableViewDataSource>
 
 @property(nonatomic, copy) void(^collectBtnBlock)(NSIndexPath *indexPath);
-@property(nonatomic, copy) void (^cellItemDidselected)(NSIndexPath *indexPath);
+@property(nonatomic, copy) void (^cellItemDidselected)(NSIndexPath *indexPath,UIImage *image);
 
 @property(nonatomic, strong)NSMutableArray *listArr;
 @property(nonatomic, strong)WebsiteModel *websiteModel;
+@property(nonatomic,strong)NSMutableArray<UIImage *> *imgArr;
 
 @end
 
