@@ -34,27 +34,20 @@
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     ArticleModel *model = self.listArr[indexPath.row];
     ImgListCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
+    //TODO:如果该图片已经在本地加载，添加标识。如果该图片已收藏，添加标识
     NSLog(@"%@,%@,%@", model.name, model.img_url, model.detail_url);
     cell.titleLab.text = model.name;
     NSString *imageStr;
+    // 判断图片是否需要拼接
     if([model.img_url containsString:@"http"] || [model.img_url containsString:@"https"]){
         imageStr = model.img_url;
     }else{
         imageStr = [NSString stringWithFormat:@"%@/%@", self.model.url, model.img_url];
         imageStr = [imageStr stringByReplacingOccurrencesOfString:@"//" withString:@"/"];
     }
-    if (model.website_id == 5) {
+    if (model.website_id != 4) {
         SDWebImageDownloader *downloader = [SDWebImageManager sharedManager].imageLoader;
-        [downloader setValue:@"https://sxchinesegirlz.com/" forHTTPHeaderField:@"Referer"];
-    }else if(model.website_id == 2){
-        SDWebImageDownloader *downloader = [SDWebImageManager sharedManager].imageLoader;
-        [downloader setValue:@"https://www.luge8.cc/" forHTTPHeaderField:@"Referer"];
-    }else if(model.website_id == 1){
-        SDWebImageDownloader *downloader = [SDWebImageManager sharedManager].imageLoader;
-        [downloader setValue:@"https://www.lunu8.com/" forHTTPHeaderField:@"Referer"];
-    }else if(model.website_id == 6){
-        SDWebImageDownloader *downloader = [SDWebImageManager sharedManager].imageLoader;
-        [downloader setValue:@"http://www.plwht.com/" forHTTPHeaderField:@"Referer"];
+        [downloader setValue:[NSString stringWithFormat:@"%@/",self.model.url] forHTTPHeaderField:@"Referer"];
     }
      [cell.headImg sd_setImageWithURL:[NSURL URLWithString:imageStr] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
     return cell;

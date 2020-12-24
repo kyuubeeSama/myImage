@@ -416,10 +416,14 @@
 {
     HZPhotoBrowserView *view = _scrollView.subviews[index];
     if (view.beginLoadingImage) return;
-    if ([self highQualityImageURLForIndex:index]) {
-        [view setImageWithURL:[self highQualityImageURLForIndex:index] placeholderImage:[self placeholderImageForIndex:index]];
-    } else {
-        view.imageview.image = [self placeholderImageForIndex:index];
+    if (self.imageType == 1) {
+        [view setImageWithURL:[NSURL fileURLWithPath:_imageArray[index]] placeholderImage:[self placeholderImageForIndex:index]];
+    }else{
+        if ([self highQualityImageURLForIndex:index]) {
+            [view setImageWithURL:[self highQualityImageURLForIndex:index] placeholderImage:[self placeholderImageForIndex:index]];
+        } else {
+            view.imageview.image = [self placeholderImageForIndex:index];
+        }
     }
     view.beginLoadingImage = YES;
 }
@@ -563,7 +567,8 @@
 - (void)hideAnimation{
     self.userInteractionEnabled = NO;
     CGRect targetTemp;
-    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+//    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    UIWindow *window = [UIApplication sharedApplication].windows[0];
 
     UIView *sourceView = [self getSourceView];
     if (!sourceView) {
@@ -749,7 +754,8 @@
     _contentView = [[UIView alloc] init];
     _contentView.backgroundColor = HZPhotoBrowserBackgrounColor;
     
-    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+//    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    UIWindow *window = [UIApplication sharedApplication].windows[0];
     _contentView.center = window.center;
     _contentView.bounds = window.bounds;
     

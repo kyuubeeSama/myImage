@@ -45,7 +45,9 @@
 }
 
 - (void)alertWithTitle:(NSString *)string {
-    MBProgressHUD *alert = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    //TODO:解决alert显示图层的问题.当打开看大图时，无法在最上层显示
+        UIWindow *windows = [UIApplication sharedApplication].windows[0];
+    MBProgressHUD *alert = [MBProgressHUD showHUDAddedTo:windows animated:YES];
     alert.label.text = string;
     [alert hideAnimated:YES afterDelay:1];
 }

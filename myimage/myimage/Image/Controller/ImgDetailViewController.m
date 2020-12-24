@@ -44,11 +44,11 @@
     if (self.articleModel.has_done == 1) {
         DataManager *dataManager = [[DataManager alloc]init];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-            [dataManager getImageDetailWithType:self.websiteModel detailUrl:self.articleModel.detail_url progress:^(int page) {
+            [dataManager getImageDetailWithType:self.websiteModel detailUrl:self.articleModel.detail_url progress:^(NSUInteger page) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self beginProgressWithTitle:[NSString stringWithFormat:@"正在爬取第%d页",page]];
                 });
-            } success:^(NSMutableArray *array) {
+            } success:^(NSMutableArray * _Nonnull array) {
                 self.listArr = array;
                 SqliteTool *sqlTool = [SqliteTool sharedInstance];
                 // 将该页面爬取到的图片都保存到数据库
@@ -65,13 +65,14 @@
                     [self endProgress];
                     self.mainTable.listArr = [[NSMutableArray alloc]initWithArray:array];
                 });
-            } failure:^(NSError *error) {
+            } failure:^(NSError * _Nonnull error) {
                 NSLog(@"数据获取失败%@", error);
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self endProgress];
                     [self alertWithTitle:@"数据获取失败"];
                 });
             }];
+            
         });
     } else {
         SqliteTool *sqlTool = [SqliteTool sharedInstance];
@@ -142,7 +143,7 @@
                     }
                 }else if(index == 1){
                     // TODO:保存图片到本地
-//                    创佳文件名
+                    //                    创佳文件名
                     NSString *fileName = [NSString stringWithFormat:@"%d_%@.jpg",weakself.websiteModel.value,[NSDate nowTimestamp]];
                     NSString *filePath = [FileTool createFilePathWithName:[NSString stringWithFormat:@"images/%@",fileName]];
                     [FileTool createDocumentWithname:@"images"];

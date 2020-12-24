@@ -89,10 +89,10 @@ static id sharedSingleton = nil;
 
 - (NSMutableArray *)selectDataFromTable:(NSString *)tableName
                                   where:(NSString *)where
-                                  field:(NSString *)value
+                                  field:(NSString *)field
                                   Class:(Class)modelClass {
     FMDatabase *db = [self openDB];
-    NSString *sql = [NSString stringWithFormat:@"SELECT %@ FROM %@ WHERE %@", value, tableName, where];
+    NSString *sql = [NSString stringWithFormat:@"SELECT %@ FROM %@ WHERE %@", field, tableName, where];
     NSLog(@"查询语句%@", sql);
     FMResultSet *result = [db executeQuery:sql];
     NSMutableArray *array = [[NSMutableArray alloc] initWithArray:@[]];
@@ -134,12 +134,12 @@ static id sharedSingleton = nil;
 
 - (NSMutableArray *)selectDataFromTable:(NSString *)tableName
                                   where:(NSString *)where
-                                  field:(NSString *)value
+                                  field:(NSString *)field
                                   Class:(Class)modelClass
-                                  limit:(int)limit
-                               pageSize:(int)pageSize{
+                                  limit:(NSInteger)limit
+                               pageSize:(NSInteger)pageSize{
     FMDatabase *db = [self openDB];
-    NSString *sql = [NSString stringWithFormat:@"SELECT %@ FROM %@ WHERE %@ limit %d,%d", value, tableName, where,limit,pageSize];
+    NSString *sql = [NSString stringWithFormat:@"SELECT %@ FROM %@ WHERE %@ limit %ld,%ld", field, tableName, where,(long)limit,(long)pageSize];
     NSLog(@"查询语句%@", sql);
     FMResultSet *result = [db executeQuery:sql];
     NSMutableArray *array = [[NSMutableArray alloc] initWithArray:@[]];
@@ -181,10 +181,10 @@ static id sharedSingleton = nil;
 
 -(Class)findDataFromTable:(NSString *)tableName
                     where:(NSString *)where
-                    field:(NSString *)value
+                    field:(NSString *)field
                     Class:(Class)modelClass {
     FMDatabase *db = [self openDB];
-    NSString *sql = [NSString stringWithFormat:@"SELECT %@ FROM %@ WHERE %@", value, tableName, where];
+    NSString *sql = [NSString stringWithFormat:@"SELECT %@ FROM %@ WHERE %@", field, tableName, where];
     NSLog(@"查询语句%@", sql);
     FMResultSet *result = [db executeQuery:sql];
     id object = [[modelClass class] new];
@@ -225,10 +225,10 @@ static id sharedSingleton = nil;
                                   join:(NSString *)join
                                     on:(NSString *)on
                                  where:(NSString *)where
-                                 field:(NSString *)value
+                                 field:(NSString *)field
                                  class:(Class)modelClass{
     FMDatabase *db = [self openDB];
-    NSString *sql = [NSString stringWithFormat:@"SELECT %@ FROM %@ %@ ON %@ WHERE %@", value, tableName, join, on, where];
+    NSString *sql = [NSString stringWithFormat:@"SELECT %@ FROM %@ %@ ON %@ WHERE %@", field, tableName, join, on, where];
     NSLog(@"查询语句%@", sql);
     FMResultSet *result = [db executeQuery:sql];
     NSMutableArray *array = [[NSMutableArray alloc] initWithArray:@[]];
@@ -303,11 +303,11 @@ static id sharedSingleton = nil;
     return result;
 }
 
-- (int)getCountWithTable:(NSString *)table WithWhere:(NSString *)where {
+- (NSInteger)getCountWithTable:(NSString *)table WithWhere:(NSString *)where {
     FMDatabase *db = [self openDB];
     NSString *sql = [NSString stringWithFormat:@"select count(*) from %@ where %@", table, where];
     NSLog(@"%@", sql);
-    int count = [db intForQuery:sql];
+    NSInteger count = [db intForQuery:sql];
     [db close];
     return count;
 }

@@ -77,7 +77,7 @@
             [self beginProgressWithTitle:nil];
             SqliteTool *sqlTool = [SqliteTool sharedInstance];
             NSArray *valueArr = @[@"'撸女吧','https://www.lunu8.com',1",
-                                  @"'撸哥吧','https://www.lugex.top',2",
+                                  @"'撸哥吧','https://www.luge8.cc',2",
                                   @"'24fa','https://www.24fa.cc',3",
                                   @"'趣事百科','https://qq5lk.com',4",
                                   @"'sxchinesegirlz','https://sxchinesegirlz.com',5",

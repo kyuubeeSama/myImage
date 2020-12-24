@@ -16,7 +16,7 @@
 @interface ImgListViewController ()<UISearchBarDelegate>
 
 @property(nonatomic, strong) ImgListCollectionView *mainCollection;
-@property(nonatomic, strong) NSMutableArray *listArr;
+@property(nonatomic, strong) NSMutableArray<NSArray *> *listArr;
 @property(nonatomic,strong) NSMutableArray *pageArr;
 @property(nonatomic, strong) CategoryModel *categoryModel;
 // 当前分类
@@ -41,8 +41,22 @@
     self.navigationItem.title = self.model.name;
 }
 
-- (void)getData {
-    // 从数据中获取列表页
+-(void)getData{
+    SqliteTool *sqliteTool = [SqliteTool sharedInstance];
+    NSArray *array = [sqliteTool selectDataFromTable:@"article"
+                                               where:[NSString stringWithFormat:@"website_id= %d and category_id = %d",self.model.website_id,self.categoryModel.category_id]
+                                               field:@"*" Class:[ArticleModel class]
+                                               limit:self.listArr[self.categoryIndex].count pageSize:[self.pageArr[self.categoryIndex] integerValue]];
+    self.listArr[self.categoryIndex] = array;
+    // 该分类在当前数据库中无数据
+    if ([self.listArr[self.categoryIndex] count]) {
+        [self getListData];
+    }
+}
+
+- (void)getListData {
+//    TODO:进入页面首先从数据库读取一组50个的数据，如果数据库为空，再从服务器获取新数据。下拉刷新会重新从服务器获取新数据。
+    // 从网络获取数据
     [self beginProgressWithTitle:@"爬取中"];
     DataManager *dataManager = [[DataManager alloc]init];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
@@ -112,12 +126,12 @@
         if (dataArr.count>0) {
             self.mainCollection.listArr = dataArr;
         }else{
-            [self getData];
+            [self getListData];
         }
     };
     [self.view addSubview:chooseView];
     [self.mainCollection reloadData];
-    [self getData];
+    [self getListData];
 }
 
 -(ImgListCollectionView *)mainCollection{
@@ -150,7 +164,7 @@
 
 - (void)getMoreData {
     self.mainCollection.mj_footer = [MJRefreshBackFooter footerWithRefreshingBlock:^{
-        [self getData];
+        [self getListData];
     }];
 }
 

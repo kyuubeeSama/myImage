@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 // 获取写真列表
 -(void)getDataWithType:(WebsiteModel *)websiteModel pageNum:(int)PageNum category:(CategoryModel *)category success:(void(^)(NSMutableArray *array))success failure:(void(^)(NSError *error))failure;
 // 获取图片列表
--(void)getImageDetailWithType:(WebsiteModel *)websiteModel detailUrl:(NSString *)detailUrl progress:(void(^)(int page))progress success:(void(^)(NSMutableArray *array))success failure:(void(^)(NSError *error))failure;
+-(void)getImageDetailWithType:(WebsiteModel *)websiteModel detailUrl:(NSString *)detailUrl progress:(void(^)(NSUInteger page))progress success:(void(^)(NSMutableArray *array))success failure:(void(^)(NSError *error))failure;
 // 获取搜索结果
 -(void)getSearchResultWithType:(WebsiteModel *)websiteModel pageNum:(NSInteger)pageNum keyword:(NSString *)keyword success:(void(^)(NSMutableArray *array))success failure:(void(^)(NSError *error))failure;
 

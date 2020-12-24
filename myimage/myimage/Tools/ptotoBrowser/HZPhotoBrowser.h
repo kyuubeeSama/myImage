@@ -37,6 +37,8 @@
 // 添加底部按钮点
 @property(nonatomic,copy)NSArray *btnArr;
 @property(nonatomic,copy)void(^otherBtnBlock)(NSInteger index);
+// 2.网络图片 1.本地图片
+@property(nonatomic,assign)NSInteger imageType;
 
 - (void)show;
 

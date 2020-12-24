@@ -28,12 +28,31 @@ NS_ASSUME_NONNULL_BEGIN
 -(BOOL)deleteWebsiteWithID:(NSString *)ID;
 
 // 读取数据
--(NSMutableArray *)selectDataFromTable:(NSString *)tableName where:(NSString *)where field:(NSString *)value Class:(Class)modelClass;
--(NSMutableArray *)selectDataFromTable:(NSString *)tableName where:(NSString *)where field:(NSString *)value Class:(Class)modelClass limit:(int)limit pageSize:(int)pageSize;
--(Class)findDataFromTable:(NSString *)tableName where:(NSString *)where field:(NSString *)value Class:(Class)modelClass;
-// 联表查询
-//  只能返回单一model类型
--(NSMutableArray *)selectDataFromTable:(NSString *)tableName join:(NSString *)join on:(NSString *)on where:(NSString *)where field:(NSString *)value class:(Class)modelClass;
+
+/// 查询数据(全查询)
+/// @param tableName 表名
+/// @param where 查询条件
+/// @param field 查询字段
+/// @param modelClass 返回对象
+-(NSMutableArray *)selectDataFromTable:(NSString *)tableName where:(NSString *)where field:(NSString *)field Class:(Class)modelClass;
+
+/// 查询数据（带页码）
+/// @param tableName 表名
+/// @param where 查询条件
+/// @param field 查询字段
+/// @param modelClass 返回对象
+/// @param limit 起始位置
+/// @param pageSize 单页个数
+-(NSMutableArray *)selectDataFromTable:(NSString *)tableName where:(NSString *)where field:(NSString *)field Class:(Class)modelClass limit:(NSInteger)limit pageSize:(NSInteger)pageSize;
+
+/// 单数据查询
+/// @param tableName 表名
+/// @param where 查询条件
+/// @param field 查询字段
+/// @param modelClass 返回对象
+-(Class)findDataFromTable:(NSString *)tableName where:(NSString *)where field:(NSString *)field Class:(Class)modelClass;
+
+-(NSMutableArray *)selectDataFromTable:(NSString *)tableName join:(NSString *)join on:(NSString *)on where:(NSString *)where field:(NSString *)field class:(Class)modelClass;
 
 // 更新数据
 -(BOOL)updateTable:(NSString *)tablename where:(NSString *)where value:(NSString *)value;

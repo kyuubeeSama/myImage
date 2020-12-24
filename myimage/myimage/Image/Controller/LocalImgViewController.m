@@ -70,6 +70,7 @@
     browser.isFullWidthForLandScape = YES;
     browser.isNeedLandscape = YES;
     browser.currentImageIndex = 0;
+    browser.imageType = 1;
     browser.imageArray = @[model.filePath];
     [browser show];
 }

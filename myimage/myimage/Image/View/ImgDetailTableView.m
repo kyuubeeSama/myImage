@@ -54,15 +54,9 @@
             img_url = [NSString stringWithFormat:@"%@/%@", self.websiteModel.url, model.image_url];
             img_url = [img_url stringByReplacingOccurrencesOfString:@"//" withString:@"/"];
         }
-        if (model.website_id == 5) {
+        if (model.website_id != 4) {
             SDWebImageDownloader *downloader = [SDWebImageManager sharedManager].imageLoader;
-            [downloader setValue:@"https://sxchinesegirlz.com/" forHTTPHeaderField:@"Referer"];
-        }else if(model.website_id == 2){
-            SDWebImageDownloader *downloader = [SDWebImageManager sharedManager].imageLoader;
-            [downloader setValue:@"https://www.luge8.cc/" forHTTPHeaderField:@"Referer"];
-        }else if(model.website_id == 1){
-            SDWebImageDownloader *downloader = [SDWebImageManager sharedManager].imageLoader;
-            [downloader setValue:@"https://www.lunu8.com/" forHTTPHeaderField:@"Referer"];
+            [downloader setValue:[NSString stringWithFormat:@"%@/",self.websiteModel.url] forHTTPHeaderField:@"Referer"];
         }
         [cell.topImg sd_setImageWithURL:[NSURL URLWithString:img_url]
                        placeholderImage:[UIImage imageNamed:@"placeholder2"]
@@ -75,7 +69,6 @@
                     model.height = image.size.height;
                     [self reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
                 } else {
-                    //FIXME:图片加载失败的话，会无限重复加载
                     NSLog(@"第%ld张图片出错，出错图片地址是%@%@,错误信息是%@，错误码是%@", (long) indexPath.row, self.websiteModel.url, model.image_url, error.localizedDescription,error.userInfo[@"SDWebImageErrorDownloadStatusCodeKey"]);
                 }
             }];

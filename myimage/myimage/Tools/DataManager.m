@@ -11,6 +11,15 @@
 #import "ImageModel.h"
 #import "TFHpple.h"
 
+typedef enum : NSUInteger {
+    lunv = 1,
+    luge = 2,
+    twofourfa = 3,
+    qushibaike = 4,
+    sxchinesegirlz = 5,
+    piaoliangwanghong = 6,
+} websiteType;
+
 @implementation DataManager
 
 
@@ -21,257 +30,128 @@
 /// @param success 成功返回
 /// @param failure 失败返回
 - (void)getDataWithType:(WebsiteModel *)websiteModel pageNum:(int)PageNum category:(CategoryModel *)category success:(void (^)(NSMutableArray *_Nonnull))success failure:(void (^)(NSError *_Nonnull))failure {
+//    拼接域名
     NSString *urlStr;
-    if (websiteModel.value == 1) {
-        // 撸女吧
+    NSString *titleXpath = @"";//标题
+    NSString *detailXpath = @"";//详情
+    NSString *picXpath = @"";//封面
+    if (websiteModel.value == lunv || websiteModel.value == luge) {
+        // 撸女吧 & 撸哥吧
         urlStr = [NSString stringWithFormat:@"%@/category-%@_%d.html", websiteModel.url, category.value, PageNum];
-    } else if (websiteModel.value == 2) {
-        // 撸哥吧
-        urlStr = [NSString stringWithFormat:@"%@/category-%@_%d.html", websiteModel.url, category.value, PageNum];
-    } else if (websiteModel.value == 3) {
+        titleXpath = @"//*[@id=\"container\"]/main/article/div/a/@title";
+        detailXpath = @"//*[@id=\"container\"]/main/article/div/a/@href";
+        picXpath = @"//*[@id=\"container\"]/main/article/div/a/img/@src";
+    } else if (websiteModel.value == twofourfa) {
         //        24fa
         urlStr = [NSString stringWithFormat:@"%@/mc%@p%d.aspx", websiteModel.url, category.value, PageNum];
-    }else if (websiteModel.value == 4){
+        titleXpath = @"/html/body/ul[3]/li/a";
+        detailXpath = @"/html/body/ul[3]/li/a/@href";
+    }else if (websiteModel.value == qushibaike){
         // 趣事百科
         urlStr = [NSString stringWithFormat:@"%@/%@%d.html",websiteModel.url,category.value,PageNum];
-    }else if (websiteModel.value == 5){
+        titleXpath = @"/html/body/section/div/div/article/header/h2/a";
+        detailXpath = @"/html/body/section/div/div/article/header/h2/a/@href";
+        picXpath = @"/html/body/section/div/div/article/p[2]/a/span/span/img/@src";
+    }else if (websiteModel.value == sxchinesegirlz){
 //        sxchinesegirlz
         urlStr = [NSString stringWithFormat:@"%@/category/%@/page/%d/",websiteModel.url,category.value,PageNum];
-    }else if(websiteModel.value == 6){
+        titleXpath = @"//*[@id=\"content_box\"]/div/div/article/a/@title";
+        detailXpath = @"//*[@id=\"content_box\"]/div/div/article/a/@href";
+        picXpath = @"//*[@id=\"content_box\"]/div/div/article/a/div[1]/img/@src";
+    }else if(websiteModel.value == piaoliangwanghong){
         //漂亮网红网
         urlStr = [NSString stringWithFormat:@"%@/jin/caitup/%@_%d.html",websiteModel.url,category.value,PageNum];
+        titleXpath = @"//*[@id=\"list\"]/ul/li/a/@title";
+        detailXpath = @"//*[@id=\"list\"]/ul/li/a/@href";
+        picXpath = @"//*[@id=\"list\"]/ul/li/a/img/@src";
     }
     NSLog(@"网址是%@",urlStr);
-    NSData *data = [NSData dataWithContentsOfURL:[[NSURL alloc] initWithString:urlStr]];
+    // 获取数据
+    NSError *error = nil;
+    NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlStr] options:NSDataReadingUncached error:&error];
+    if (error) {
+        // 网页加载错误
+        NSLog(@"错误信息是%@",error.localizedDescription);
+        failure(error);
+    }
     NSMutableArray *resultArr = [[NSMutableArray alloc] init];
-    if (websiteModel.value == 4) {
-        NSData *utf8HtmlData = [self getGBKDataWithData:data];
-        TFHpple *xpathDoc = [[TFHpple alloc] initWithHTMLData:utf8HtmlData];
-        NSString *titleXpath = @"/html/body/section/div/div/article/header/h2/a";
-        NSString *detailXpath = @"/html/body/section/div/div/article/header/h2/a/@href";
-        NSString *picXpath = @"/html/body/section/div/div/article/p[2]/a/span/span/img/@src";
-        NSArray<TFHppleElement *> *titleNodeArr = [xpathDoc searchWithXPathQuery:titleXpath];
-        NSArray<TFHppleElement *> *detailNodeArr = [xpathDoc searchWithXPathQuery:detailXpath];
-        NSArray<TFHppleElement *> *picNodeArr = [xpathDoc searchWithXPathQuery:picXpath];
-        for (int i = 0; i < titleNodeArr.count; ++i) {
-            NSString *title = titleNodeArr[i].text;
-            NSString *picPath = picNodeArr[i].text;
-            NSString *detail = detailNodeArr[i].text;
-            NSLog(@"标提是%@,详情是%@,图片地址是%@",title,detail,picPath);
-            // 存数据库
-            SqliteTool *sqlTool = [SqliteTool sharedInstance];
-            ArticleModel *result = (ArticleModel *) [sqlTool findDataFromTable:@"article"
-                                                                         where:[NSString stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, detail]
-                                                                         field:@"*"
-                                                                         Class:[ArticleModel class]];
-            if (result.name == nil) {
-                result.name = title;
-                result.detail_url = detail;
-                result.img_url = picPath;
-                if ([sqlTool insertTable:@"article"
-                                 element:@"website_id,category_id,name,detail_url,img_url"
-                                   value:[NSString stringWithFormat:@"%d,%d,'%@','%@','%@'", websiteModel.value,category.category_id, result.name, result.detail_url, result.img_url]
-                                   where:nil]) {
-                    result = (ArticleModel *) [sqlTool findDataFromTable:@"article"
-                                                                   where:[NSString
-                                                                          stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, result.detail_url]
-                                                                   field:@"*"
-                                                                   Class:[ArticleModel class]];
-                }
-            }else{
-                if (result.category_id == 0) {
-                    // 需要更新类型
-                    [sqlTool updateTable:@"article"
-                                   where:[NSString stringWithFormat:@"website_id=%d and detail_url='%@'",websiteModel.value,detail]
-                                   value:[NSString stringWithFormat:@"category_id=%d",category.category_id]];
-                }
-            }
-            [resultArr addObject:result];
+    if (websiteModel.value == qushibaike || websiteModel.value == piaoliangwanghong) {
+        // 需要将GBK转换为可识别类型
+        data = [self getGBKDataWithData:data];
+    }
+    TFHpple *xpathDoc = [[TFHpple alloc] initWithHTMLData:data];
+    NSArray<TFHppleElement *> *titleNodeArr = [xpathDoc searchWithXPathQuery:titleXpath];
+    NSArray<TFHppleElement *> *detailNodeArr = [xpathDoc searchWithXPathQuery:detailXpath];
+    NSArray<TFHppleElement *> *picNodeArr = [xpathDoc searchWithXPathQuery:picXpath];
+    // 循环获取内容
+    for (NSUInteger i = 0; i < titleNodeArr.count; ++i) {
+        NSString *title = titleNodeArr[i].text;
+        NSString *picPath = @"";
+        if (websiteModel.value != twofourfa) {
+            picPath = picNodeArr[i].text;
         }
-        success(resultArr);
-    } else if(websiteModel.value == 3){
-//        24fa
-        TFHpple *doc = [[TFHpple alloc] initWithHTMLData:data];
-        NSString *titleXpath = @"/html/body/ul[3]/li/a";
-        NSString *detailXpath = @"/html/body/ul[3]/li/a/@href";
-        NSArray<TFHppleElement *> *titleNodeArr = [doc searchWithXPathQuery:titleXpath];
-        NSArray<TFHppleElement *> *detailNodeArr = [doc searchWithXPathQuery:detailXpath];
-        for (int i = 0; i < titleNodeArr.count; ++i) {
-            NSString *title = titleNodeArr[i].text;
-            NSString *detail = detailNodeArr[i].text;
-            NSLog(@"封面是%@,详情是%@",title,detail);
-            ArticleModel *model = [[ArticleModel alloc] init];
-            SqliteTool *sqlTool = [SqliteTool sharedInstance];
-            ArticleModel *result = (ArticleModel *) [sqlTool findDataFromTable:@"article"
-                                                                         where:[NSString stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, detail]
-                                                                         field:@"*"
-                                                                         Class:[ArticleModel class]];
-            if (result.name == nil) {
+        NSString *detail = detailNodeArr[i].text;
+        NSLog(@"标提是%@,详情是%@,图片地址是%@",title,detail,picPath);
+        // 存数据库
+        SqliteTool *sqlTool = [SqliteTool sharedInstance];
+        ArticleModel *result = (ArticleModel *) [sqlTool findDataFromTable:@"article"
+                                                                     where:[NSString stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, detail]
+                                                                     field:@"*"
+                                                                     Class:[ArticleModel class]];
+        if (result.name == nil) {
+            if (websiteModel.value == twofourfa) {
+                // 24fa的图片字段无法获取，需要在详情中获取第一张图
                 NSString *detailUrl = [NSString stringWithFormat:@"%@/%@", websiteModel.url, detail];
                 NSData *detailData = [NSData dataWithContentsOfURL:[[NSURL alloc] initWithString:detailUrl]];
                 TFHpple *detailDoc = [[TFHpple alloc] initWithHTMLData:detailData];
                 NSString *picXpath = @"//*[@id=\"content\"]/div/img[1]/@src";
                 NSArray<TFHppleElement *> *picNodeArr = [detailDoc searchWithXPathQuery:picXpath];
-                model.name = title;
-                model.detail_url = detail;
-                model.img_url = picNodeArr[0].text;
-                if ([sqlTool insertTable:@"article"
-                                 element:@"website_id,category_id,name,detail_url,img_url"
-                                   value:[NSString stringWithFormat:@"%d,%d,\"%@\",'%@','%@'", websiteModel.value, category.category_id, model.name, model.detail_url, model.img_url]
-                                   where:nil]) {
-                    ArticleModel *newModel = (ArticleModel *) [sqlTool findDataFromTable:@"article"
-                                                                                   where:[NSString
-                                                                                           stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, model.detail_url]
-                                                                                   field:@"*"
-                                                                                   Class:[ArticleModel class]];
-                    [resultArr addObject:newModel];
-                }
-            }else {
-                if (result.category_id == 0) {
-                    // 需要更新类型
-                    [sqlTool updateTable:@"article" where:[NSString stringWithFormat:@"website_id=%d and detail_url='%@'",websiteModel.value,detail] value:[NSString stringWithFormat:@"category_id=%d",category.category_id]];
-                }
-                model = result;
-                [resultArr addObject:model];
-                if (resultArr.count == titleNodeArr.count){
-                    success(resultArr);
-                }
+                picPath = picNodeArr[0].text;
+            }
+            result.name = title;
+            result.detail_url = detail;
+            result.img_url = picPath;
+            if ([sqlTool insertTable:@"article"
+                             element:@"website_id,category_id,name,detail_url,img_url"
+                               value:[NSString stringWithFormat:@"%d,%d,'%@','%@','%@'", websiteModel.value,category.category_id, result.name, result.detail_url, result.img_url]
+                               where:nil]) {
+                result = (ArticleModel *) [sqlTool findDataFromTable:@"article"
+                                                               where:[NSString
+                                                                      stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, result.detail_url]
+                                                               field:@"*"
+                                                               Class:[ArticleModel class]];
+            }
+        }else{
+            if (result.category_id == 0) {
+                // 需要更新类型
+                [sqlTool updateTable:@"article"
+                               where:[NSString stringWithFormat:@"website_id=%d and detail_url='%@'",websiteModel.value,detail]
+                               value:[NSString stringWithFormat:@"category_id=%d",category.category_id]];
             }
         }
-        success(resultArr);
-    } else if(websiteModel.value == 5){
-        TFHpple *xpathDoc = [[TFHpple alloc]initWithHTMLData:data];
-        NSString *titleXpath = @"//*[@id=\"content_box\"]/div/div/article/a/@title";
-        NSString *detailXpath = @"//*[@id=\"content_box\"]/div/div/article/a/@href";
-        NSString *picXpath = @"//*[@id=\"content_box\"]/div/div/article/a/div[1]/img/@src";
-        NSArray<TFHppleElement *> *titleNodeArr = [xpathDoc searchWithXPathQuery:titleXpath];
-        NSArray<TFHppleElement *> *detailNodeArr = [xpathDoc searchWithXPathQuery:detailXpath];
-        NSArray<TFHppleElement *> *picNodeArr = [xpathDoc searchWithXPathQuery:picXpath];
-        for (NSUInteger i=0; i<titleNodeArr.count; i++) {
-            ArticleModel *model = [[ArticleModel alloc] init];
-            NSString *title = titleNodeArr[i].text;
-            NSString *imgPath = picNodeArr[i].text;
-            NSString *detail = detailNodeArr[i].text;
-            SqliteTool *sqlTool = [SqliteTool sharedInstance];
-            ArticleModel *result = (ArticleModel *) [sqlTool findDataFromTable:@"article"
-                                                                         where:[NSString stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, detail]
-                                                                         field:@"*"
-                                                                         Class:[ArticleModel class]];
-            if (result.name == nil) {
-                model.name = title;
-                model.detail_url = [detail stringByReplacingOccurrencesOfString:websiteModel.url withString:@""];
-                model.img_url = [imgPath stringByReplacingOccurrencesOfString:websiteModel.url withString:@""];
-                if ([sqlTool insertTable:@"article"
-                                 element:@"website_id,category_id,name,detail_url,img_url"
-                                   value:[NSString stringWithFormat:@"%d,%d,'%@','%@','%@'", websiteModel.value,category.category_id, model.name, model.detail_url, model.img_url]
-                                   where:nil]) {
-                    model = (ArticleModel *) [sqlTool findDataFromTable:@"article"
-                                                                  where:[NSString
-                                                                         stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, model.detail_url]
-                                                                  field:@"*"
-                                                                  Class:[ArticleModel class]];
-                }
-            } else {
-                model = result;
-            }
-            [resultArr addObject:model];
-        }
-        success(resultArr);
-    } else if(websiteModel.value == 6){
-        NSData *utf8HtmlData = [self getGBKDataWithData:data];
-        TFHpple *doc = [[TFHpple alloc]initWithHTMLData:utf8HtmlData];
-        NSString *titleXpath = @"//*[@id=\"list\"]/ul/li/a/@title";
-        NSString *detailXpath = @"//*[@id=\"list\"]/ul/li/a/@href";
-        NSString *imgXpath = @"//*[@id=\"list\"]/ul/li/a/img/@src";
-        NSArray<TFHppleElement *> *titleNodeArr = [doc searchWithXPathQuery:titleXpath];
-        NSArray<TFHppleElement *> *detailNodeArr = [doc searchWithXPathQuery:detailXpath];
-        NSArray<TFHppleElement *> *imgNodeArr = [doc searchWithXPathQuery:imgXpath];
-        for (NSUInteger i=0; i<titleNodeArr.count; i++) {
-            ArticleModel *model = [[ArticleModel alloc]init];
-            NSString *detail = detailNodeArr[i].text;
-            NSString *title = titleNodeArr[i].text;
-            NSString *imgPath = imgNodeArr[i].text;
-//            NSLog(@"标题是%@ 封面是%@ 详情是%@",title,imgPath,detail);
-            SqliteTool *sqlTool = [SqliteTool sharedInstance];
-            ArticleModel *result = (ArticleModel *) [sqlTool findDataFromTable:@"article"
-                                                                         where:[NSString stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, detail]
-                                                                         field:@"*"
-                                                                         Class:[ArticleModel class]];
-            if (result.name == nil) {
-                model.name = title;
-                model.detail_url = [detail stringByReplacingOccurrencesOfString:websiteModel.url withString:@""];
-                model.img_url = [imgPath stringByReplacingOccurrencesOfString:websiteModel.url withString:@""];
-                if ([sqlTool insertTable:@"article"
-                                 element:@"website_id,category_id,name,detail_url,img_url"
-                                   value:[NSString stringWithFormat:@"%d,%d,'%@','%@','%@'", websiteModel.value,category.category_id, model.name, model.detail_url, model.img_url]
-                                   where:nil]) {
-                    model = (ArticleModel *) [sqlTool findDataFromTable:@"article"
-                                                                  where:[NSString
-                                                                         stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, model.detail_url]
-                                                                  field:@"*"
-                                                                  Class:[ArticleModel class]];
-                }
-            } else {
-                model = result;
-            }
-            [resultArr addObject:model];
-        }
-        success(resultArr);
-    } else{
-        // lunv和luge
-            TFHpple *doc = [[TFHpple alloc]initWithHTMLData:data];
-            NSString *titleXpath = @"//*[@id=\"container\"]/main/article/div/a/@title";
-            NSString *detailXpath = @"//*[@id=\"container\"]/main/article/div/a/@href";
-            NSString *imgXpath = @"//*[@id=\"container\"]/main/article/div/a/img/@src";
-            NSArray<TFHppleElement *> *titleNodeArr = [doc searchWithXPathQuery:titleXpath];
-            NSArray<TFHppleElement *> *detailNodeArr = [doc searchWithXPathQuery:detailXpath];
-            NSArray<TFHppleElement *> *imgNodeArr = [doc searchWithXPathQuery:imgXpath];
-            for (NSUInteger i=0; i<titleNodeArr.count; i++) {
-                ArticleModel *model = [[ArticleModel alloc] init];
-                NSString *detail = detailNodeArr[i].text;
-                NSString *title = titleNodeArr[i].text;
-                NSString *imgPath = imgNodeArr[i].text;
-                SqliteTool *sqlTool = [SqliteTool sharedInstance];
-                ArticleModel *result = (ArticleModel *) [sqlTool findDataFromTable:@"article"
-                                                                             where:[NSString stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, detail]
-                                                                             field:@"*"
-                                                                             Class:[ArticleModel class]];
-                if (result.name == nil) {
-                    model.name = title;
-                    model.detail_url = [detail stringByReplacingOccurrencesOfString:websiteModel.url withString:@""];
-                    model.img_url = [imgPath stringByReplacingOccurrencesOfString:websiteModel.url withString:@""];
-                    if ([sqlTool insertTable:@"article"
-                                     element:@"website_id,category_id,name,detail_url,img_url"
-                                       value:[NSString stringWithFormat:@"%d,%d,'%@','%@','%@'", websiteModel.value,category.category_id, model.name, model.detail_url, model.img_url]
-                                       where:nil]) {
-                        model = (ArticleModel *) [sqlTool findDataFromTable:@"article"
-                                                                      where:[NSString
-                                                                             stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, model.detail_url]
-                                                                      field:@"*"
-                                                                      Class:[ArticleModel class]];
-                    }
-                } else {
-                    model = result;
-                }
-                [resultArr addObject:model];
-            }
-        success(resultArr);
+        [resultArr addObject:result];
     }
+    success(resultArr);
 }
 
-- (void)getImageDetailWithType:(WebsiteModel *)websiteModel detailUrl:(NSString *)detailUrl progress:(void (^)(int page))progress success:(void (^)(NSMutableArray *_Nonnull))success failure:(void (^)(NSError *_Nonnull))failure {
+/// 获取写真详情图片列表
+/// @param websiteModel websiteModel
+/// @param detailUrl 详情地址
+/// @param progress 加载进度
+/// @param success 成功返回
+/// @param failure 失败返回
+-(void)getImageDetailWithType:(WebsiteModel *)websiteModel detailUrl:(NSString *)detailUrl progress:(void (^)(NSUInteger))progress success:(void (^)(NSMutableArray * _Nonnull))success failure:(void (^)(NSError * _Nonnull))failure{
     NSString *urlStr = detailUrl;
     if (![detailUrl containsString:@"http"] || ![detailUrl containsString:@"https"]) {
         urlStr = [NSString stringWithFormat:@"%@/%@", websiteModel.url, detailUrl];
     }
-    if (websiteModel.value == 1) {
+    if (websiteModel.value == lunv || websiteModel.value == luge) {
         [NetWorkingTool getHtmlWithUrl:urlStr WithData:nil success:^(NSString *_Nonnull html) {
-            // 获取页码
             NSMutableArray *pageArr = [Tool getDataWithRegularExpression:@"<li><a href=\"([\\s\\S]+?)\">" content:html];
             NSMutableArray *imgListArr = [[NSMutableArray alloc] init];
-            for (int i = 0; i <= pageArr.count; i++) {
+            for (NSUInteger i = 0; i <= pageArr.count; i++) {
                 ImageModel *model = [[ImageModel alloc] init];
-                NSString *relDetailUrl = [NSString stringWithFormat:@"%@?page=%d", urlStr, i + 1];
+                NSString *relDetailUrl = [NSString stringWithFormat:@"%@?page=%lu", urlStr, i + 1];
                 [NetWorkingTool getHtmlWithUrl:relDetailUrl WithData:nil success:^(NSString *html) {
                     progress(i + 1);
                     NSMutableArray *imgAreaArr = [Tool getDataWithRegularExpression:@"article-content([\\s\\S]+?)<\\/a>" content:html];
@@ -280,7 +160,7 @@
                     imgUrl = [imgUrl stringByReplacingOccurrencesOfString:@"src=\"" withString:@""];
                     imgUrl = [imgUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""];
                     model.image_url = [imgUrl stringByReplacingOccurrencesOfString:websiteModel.url withString:@""];
-                    model.website_id = websiteModel.website_id;
+                    model.website_id = websiteModel.value;
                     [imgListArr addObject:model];
                     if (imgListArr.count == pageArr.count + 1) {
                         success(imgListArr);
@@ -292,35 +172,7 @@
         }                      failure:^(NSError *_Nonnull error) {
             failure(error);
         }];
-    } else if (websiteModel.value == 2) {
-        [NetWorkingTool getHtmlWithUrl:urlStr WithData:nil success:^(NSString *_Nonnull html) {
-            // 获取页码
-            NSMutableArray *pageArr = [Tool getDataWithRegularExpression:@"<li><a href=\"([\\s\\S]+?)\">" content:html];
-            NSMutableArray *imgListArr = [[NSMutableArray alloc] init];
-            for (int i = 0; i <= pageArr.count; i++) {
-                ImageModel *model = [[ImageModel alloc] init];
-                model.website_id = websiteModel.value;
-                NSString *relDetailUrl = [NSString stringWithFormat:@"%@?page=%d", urlStr, i + 1];
-                [NetWorkingTool getHtmlWithUrl:relDetailUrl WithData:nil success:^(NSString *html) {
-                    NSMutableArray *imgAreaArr = [Tool getDataWithRegularExpression:@"article-content([\\s\\S]+?)<\\/a>" content:html];
-                    NSMutableArray *imgArr = [Tool getDataWithRegularExpression:@"src=\"([\\s\\S]+?)\"" content:imgAreaArr[0]];
-                    NSString *imgUrl = imgArr[0];
-                    imgUrl = [imgUrl stringByReplacingOccurrencesOfString:@"src=\"" withString:@""];
-                    imgUrl = [imgUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                    model.image_url = [imgUrl stringByReplacingOccurrencesOfString:websiteModel.url withString:@""];
-                    NSLog(@"图片地址是%@", model.image_url);
-                    [imgListArr addObject:model];
-                    if (imgListArr.count == pageArr.count + 1) {
-                        success(imgListArr);
-                    }
-                }                      failure:^(NSError *error) {
-                    failure(error);
-                }];
-            }
-        }                      failure:^(NSError *_Nonnull error) {
-            failure(error);
-        }];
-    }else if(websiteModel.value == 3){
+    }else if(websiteModel.value == twofourfa){
         [NetWorkingTool getHtmlWithUrl:urlStr WithData:nil success:^(NSString *_Nonnull html) {
             // 获取页码
             // 获取页码  pager">([\s\S]+?)\/table> 之后加  <a([\s\S]+?)<\/a>
@@ -329,8 +181,8 @@
             NSMutableArray *pageContentArr = [Tool getDataWithRegularExpression:@"pager\">([\\s\\S]+?)\\/table>" content:html];
             NSMutableArray *pageArr = [Tool getDataWithRegularExpression:@"<a([\\s\\S]+?)<\\/a>" content:pageContentArr[0]];
             NSMutableArray *imgListArr = [[NSMutableArray alloc] init];
-            for (int i = 0; i <= pageArr.count; i++) {
-                NSString *relDetailUrl = [urlStr stringByReplacingOccurrencesOfString:@".aspx" withString:[NSString stringWithFormat:@"p%d.aspx",i+1]];
+            for (NSUInteger i = 0; i <= pageArr.count; i++) {
+                NSString *relDetailUrl = [urlStr stringByReplacingOccurrencesOfString:@".aspx" withString:[NSString stringWithFormat:@"p%lu.aspx",i+1]];
                 [NetWorkingTool getHtmlWithUrl:relDetailUrl WithData:nil success:^(NSString *html) {
                     progress(i + 1);
                     NSString *contentRegex = @"content\">([\\s\\S]+?)<\\/article>";
@@ -354,7 +206,7 @@
         }                      failure:^(NSError *_Nonnull error) {
             failure(error);
         }];
-    }else if (websiteModel.value == 4 || websiteModel.value == 5 || websiteModel.value == 6){
+    }else if (websiteModel.value == qushibaike || websiteModel.value == sxchinesegirlz || websiteModel.value == piaoliangwanghong){
         [self getImageWithUrl:urlStr withWebsiteValue:websiteModel.value withPageNum:1 success:success failure:failure];
     }
 }
@@ -366,92 +218,66 @@
     return _imageArr;
 }
 
-
 /// 递归获取每页详情
 /// @param url 详情地址
-/// @param value 站点id
+/// @param websiteType 站点类型
 /// @param pageNum 页码
 /// @param success 成功block
 /// @param failure 失败block
--(void)getImageWithUrl:(NSString *)url withWebsiteValue:(int)value withPageNum:(int)pageNum success:(void (^)(NSMutableArray *_Nonnull))success failure:(void (^)(NSError *_Nonnull))failure{
+-(void)getImageWithUrl:(NSString *)url withWebsiteValue:(websiteType)websiteType withPageNum:(NSInteger)pageNum success:(void (^)(NSMutableArray *_Nonnull))success failure:(void (^)(NSError *_Nonnull))failure{
     NSString *urlStr = url;
-    if (value == 4) {
+    NSString *imageXPath = @"";
+    NSString *nextXpath = @"";
+    if (websiteType == qushibaike || websiteType == piaoliangwanghong) {
         if (pageNum != 1) {
-            urlStr = [url stringByReplacingOccurrencesOfString:@".html" withString:[NSString stringWithFormat:@"_%d.html",pageNum]];
+            urlStr = [urlStr stringByReplacingOccurrencesOfString:@".html" withString:[NSString stringWithFormat:@"_%ld.html",(long)pageNum]];
         }
-        NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlStr]];
-        NSData *utf8HtmlData = [self getGBKDataWithData:data];
-        TFHpple *xpathDoc = [[TFHpple alloc] initWithHTMLData:utf8HtmlData];
-        NSString *imageXPath = @"/html/body/section/div/div/article/p[position()>1]/img/@src";
-        NSArray *imageNodeArr = [xpathDoc searchWithXPathQuery:imageXPath];
-        for( TFHppleElement *element in imageNodeArr){
-            NSLog(@"%@",element.text);
-            ImageModel *model = [[ImageModel alloc]init];
-            model.image_url = element.text;
-            model.website_id = value;
-            [self.imageArr addObject:model];
+        if (websiteType == qushibaike) {
+            imageXPath = @"/html/body/section/div/div/article/p[position()>1]/img/@src";
+            nextXpath = @"//*[@class=\"next-page\"]";
+        }else{
+            imageXPath = @"//*[@id=\"picg\"]/p/a/img/@src";
         }
-        // 获取下一页信息
-        NSString *nextXpath = @"//*[@class=\"next-page\"]";
+    }else if(websiteType == sxchinesegirlz){
+        urlStr = [NSString stringWithFormat:@"%@/%ld",urlStr,(long)pageNum];
+        imageXPath = @"/html/body/div/div/article/div/div[1]/div[2]/div/div[2]/figure/img/@src";
+        nextXpath = @"/html/body/div/div/article/div/div[1]/div[2]/div/div[3]/a/span/span";
+    }
+    NSError *error = nil;
+    NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlStr] options:NSDataReadingUncached error:&error];
+    if (error) {
+        // 网页加载错误
+        NSLog(@"错误信息是%@",error.localizedDescription);
+        failure(error);
+    }
+    if (websiteType == qushibaike || websiteType == piaoliangwanghong) {
+        data = [self getGBKDataWithData:data];
+    }
+    TFHpple *xpathDoc = [[TFHpple alloc]initWithHTMLData:data];
+    NSArray *imgNodeArr = [xpathDoc searchWithXPathQuery:imageXPath];
+    for (TFHppleElement *element in imgNodeArr) {
+        NSLog(@"%@",element.text);
+        ImageModel *model = [[ImageModel alloc]init];
+        model.image_url = element.text;
+        model.website_id = (int)websiteType;
+        [self.imageArr addObject:model];
+    }
+    if (websiteType == piaoliangwanghong) {
+        NSString *htmlContent = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        if ([htmlContent containsString:@"下一页"]) {
+            pageNum += 1;
+            [self getImageWithUrl:url withWebsiteValue:websiteType withPageNum:pageNum success:success failure:failure];
+        }else{
+            success(self.imageArr);
+        }
+    }else{
         NSArray *nextNodeArr = [xpathDoc searchWithXPathQuery:nextXpath];
-    //    NSLog(@"%d",nextNodeArr.count);
         if (nextNodeArr.count>0){
             // 有下一页
             pageNum += 1;
-            [self getImageWithUrl:url withWebsiteValue:value withPageNum:pageNum success:success failure:failure];
+            [self getImageWithUrl:url withWebsiteValue:websiteType withPageNum:pageNum success:success failure:failure];
         }else{
             // 没有下一页
-            success(self.imageArr);
-        }
-    }else if(value == 5){
-        urlStr = [NSString stringWithFormat:@"%@/%d",urlStr,pageNum];
-        NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlStr]];
-        NSLog(@"详情是%@",urlStr);
-        TFHpple *xpathDoc = [[TFHpple alloc]initWithHTMLData:data];
-        NSString *imgXPath = @"/html/body/div/div/article/div/div[1]/div[2]/div/div[2]/figure/img/@src";
-        NSArray *imgNodeArr = [xpathDoc searchWithXPathQuery:imgXPath];
-        for (TFHppleElement *element in imgNodeArr) {
-            NSLog(@"%@",element.text);
-            ImageModel *model = [[ImageModel alloc]init];
-            model.image_url = element.text;
-            model.website_id = value;
-            [self.imageArr addObject:model];
-        }
-        //TODO:判断是否有下一页
-        NSString *nextXpath = @"/html/body/div/div/article/div/div[1]/div[2]/div/div[3]/a/span/span";
-        NSArray *nextNodeArr = [xpathDoc searchWithXPathQuery:nextXpath];
-        TFHppleElement *lastElement = nextNodeArr.lastObject;
-        NSLog(@"最后一个值是%@",lastElement.text);
-        if ([lastElement.text isEqualToString:@"Next"]) {
-            //                有下一页
-            pageNum += 1;
-            [self getImageWithUrl:url withWebsiteValue:value withPageNum:pageNum success:success failure:failure];
-        }else{
-            success(self.imageArr);
-        }
-    }else if(value == 6){
-        if (pageNum != 1) {
-            urlStr = [urlStr stringByReplacingOccurrencesOfString:@".html" withString:[NSString stringWithFormat:@"_%d.html",pageNum]];
-        }
-        NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlStr]];
-        NSLog(@"详情是%@",urlStr);
-        NSData *utfHtmlData = [self getGBKDataWithData:data];
-        TFHpple *xpathDoc = [[TFHpple alloc]initWithHTMLData:utfHtmlData];
-        NSString *imgXPath = @"//*[@id=\"picg\"]/p/a/img/@src";
-        NSArray *imgNodeArr = [xpathDoc searchWithXPathQuery:imgXPath];
-        for (TFHppleElement *element in imgNodeArr) {
-            NSLog(@"%@",element.text);
-            ImageModel *model = [[ImageModel alloc]init];
-            model.image_url = element.text;
-            model.website_id = value;
-            [self.imageArr addObject:model];
-        }
-        // 获取下一页
-        NSString *htmlContent = [[NSString alloc] initWithData:utfHtmlData encoding:NSUTF8StringEncoding];
-        if ([htmlContent containsString:@"下一页"]) {
-            pageNum += 1;
-            [self getImageWithUrl:url withWebsiteValue:value withPageNum:pageNum success:success failure:failure];
-        }else{
             success(self.imageArr);
         }
     }
@@ -467,15 +293,20 @@
     return utf8HtmlData;
 }
 
-// 搜索
+/// 站点搜索
+/// @param websiteModel websiteModel
+/// @param pageNum 页码
+/// @param keyword 搜索关键字
+/// @param success 成功返回
+/// @param failure 失败返回
 -(void)getSearchResultWithType:(WebsiteModel *)websiteModel pageNum:(NSInteger)pageNum keyword:(NSString *)keyword success:(void (^)(NSMutableArray * _Nonnull))success failure:(void (^)(NSError * _Nonnull))failure{
     NSString *urlStr;
     NSMutableArray *resultArr = [[NSMutableArray alloc]init];
-    if (websiteModel.value == 1) {
+    if (websiteModel.value == lunv) {
         // 撸女吧
-    }else if (websiteModel.value == 2){
+    }else if (websiteModel.value == luge){
         // 撸哥吧
-    }else if(websiteModel.value == 3){
+    }else if(websiteModel.value == twofourfa){
         // 24fa
         //       http://www.24fa.cc/mSearch.aspx?page=1&keyword=%E6%9F%9A%E6%9C%A8&where=title
         urlStr = [NSString stringWithFormat:@"%@/mSearch.aspx?page=%ld&keyword=%@&where=title",websiteModel.url,(long)pageNum,keyword];
@@ -492,12 +323,12 @@
             // 获取具体的内容  li>([\s\S]+?)<\/li>
             NSString *articleRegex = @"li>([\\s\\S]+?)<\\/li>";
             NSMutableArray *articleArr = [Tool getDataWithRegularExpression:articleRegex content:content];
-            for (int i = 0; i < articleArr.count; i++) {
-                NSString *article = articleArr[(NSUInteger) i];
+            for (NSUInteger i = 0; i < articleArr.count; i++) {
+                NSString *article = articleArr[i];
                 // 标题： \/i>([\s\S]+?)<  加 title="([\s\S]+?)"  加">([\s\S]+?)</a>
                 // 详情地址：href="([\s\S]+?)"
                 // 封面:   首先拼接地址，今日详情，获取详情图片区域  content">([\s\S]+?)<\/article>,获取图片src="([\s\S]+?)"取第一张[0]
-                NSLog(@"当前执行到第%d次循环", i);
+                NSLog(@"当前执行到第%lu次循环", (unsigned long)i);
                 ArticleModel *model = [[ArticleModel alloc] init];
                 NSMutableArray *detailArr = [Tool getDataWithRegularExpression:@"href=\"([\\s\\S]+?)\"" content:article];
                 NSString *detail = detailArr[0];
@@ -569,14 +400,11 @@
         } failure:^(NSError * _Nonnull error) {
             
         }];
-    }else if(websiteModel.value == 4){
+    }else if(websiteModel.value == qushibaike){
         // 趣事百科
         //    https://so.azs2019.com/serch.php?keyword=%E8%D6%C4%BE&page=1
         urlStr = [NSString stringWithFormat:@"https://so.azs2019.com/serch.php?keyword=%@&page=%ld",keyword,(long)pageNum];
         urlStr = [self UTFtoGBK:urlStr];
-    }
-    
-    if (websiteModel.value == 4) {
         NSData *data = [NSData dataWithContentsOfURL:[[NSURL alloc] initWithString:urlStr]];
         NSData *utf8HtmlData = [self getGBKDataWithData:data];
         TFHpple *xpathDoc = [[TFHpple alloc] initWithHTMLData:utf8HtmlData];
@@ -586,7 +414,7 @@
         NSArray<TFHppleElement *> *titleNodeArr = [xpathDoc searchWithXPathQuery:titleXpath];
         NSArray<TFHppleElement *> *detailNodeArr = [xpathDoc searchWithXPathQuery:detailXpath];
         NSArray<TFHppleElement *> *imgNodeArr = [xpathDoc searchWithXPathQuery:imgXpath];
-        for (int i = 0; i < titleNodeArr.count; ++i) {
+        for (NSUInteger i = 0; i < titleNodeArr.count; ++i) {
             NSString *title = titleNodeArr[i].text;
             NSString *detail = detailNodeArr[i].text;
             NSString *imgPath = imgNodeArr[i].text;
@@ -613,64 +441,6 @@
             [resultArr addObject:result];
         }
         success(resultArr);
-    }else{
-        NSLog(@"%@",urlStr);
-        [NetWorkingTool getHtmlWithUrl:urlStr WithData:nil success:^(NSString * _Nonnull html) {
-            // 获取搜索结果
-            NSLog(@"%@",html);
-            NSMutableArray *resultArr = [[NSMutableArray alloc]init];
-            if (websiteModel.value == 1) {
-                
-            }else if(websiteModel.value == 4){
-                // 趣事百科
-                NSString *articleRegex = @"<article([\\s\\S]+?)article>";
-                NSMutableArray *articleArr = [Tool getDataWithRegularExpression:articleRegex content:html];
-                for (NSString *article in articleArr) {
-                    // 获取标题
-                    //            title="([\s\S]+?)"
-                    NSString *titleRegex = @"title=\"([\\s\\S]+?)\"";
-                    NSString *titleStr = [Tool getDataWithRegularExpression:titleRegex content:article][0];
-                    titleStr = [titleStr stringByReplacingOccurrencesOfString:@"title=\"" withString:@""];
-                    titleStr = [titleStr stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                    // 获取封面
-                    //src="([\s\S]+?)"
-                    NSString *picRegex = @"src=\"([\\s\\S]+?)\"";
-                    NSString *picStr = [Tool getDataWithRegularExpression:picRegex content:article][0];
-                    picStr = [picStr stringByReplacingOccurrencesOfString:@"src=\"" withString:@""];
-                    picStr = [picStr stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                    // 详情
-                    //            href="([\s\S]+?)"  array[1]
-                    NSString *detailRegex = @"href=\"([\\s\\S]+?)\"";
-                    NSString *detailStr = [Tool getDataWithRegularExpression:detailRegex content:article][1];
-                    detailStr = [detailStr stringByReplacingOccurrencesOfString:@"href=\"" withString:@""];
-                    detailStr = [detailStr stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                    SqliteTool *sqlTool = [SqliteTool sharedInstance];
-                    ArticleModel *result = (ArticleModel *) [sqlTool findDataFromTable:@"article"
-                                                                                 where:[NSString stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, detailStr]
-                                                                                 field:@"*"
-                                                                                 Class:[ArticleModel class]];
-                    if (result.name == nil) {
-                        result.name = titleStr;
-                        result.detail_url = detailStr;
-                        result.img_url = picStr;
-                        if ([sqlTool insertTable:@"article"
-                                         element:@"website_id,category_id,name,detail_url,img_url"
-                                           value:[NSString stringWithFormat:@"%d,0,'%@','%@','%@'", websiteModel.value, result.name, result.detail_url, result.img_url]
-                                           where:nil]) {
-                            result = (ArticleModel *) [sqlTool findDataFromTable:@"article"
-                                                                           where:[NSString
-                                                                                  stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, result.detail_url]
-                                                                           field:@"*"
-                                                                           Class:[ArticleModel class]];
-                        }
-                    }
-                    [resultArr addObject:result];
-                }
-                success(resultArr);
-            }
-        } failure:^(NSError * _Nonnull error) {
-            failure(error);
-        }];
     }
 }
 
