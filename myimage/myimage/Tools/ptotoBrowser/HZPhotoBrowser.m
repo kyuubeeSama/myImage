@@ -84,16 +84,12 @@
         CGFloat x = HZPhotoBrowserImageViewMargin + idx * (HZPhotoBrowserImageViewMargin * 2 + w);
         obj.frame = CGRectMake(x, y, w, h);
     }];
-    
     _scrollView.contentSize = CGSizeMake(_scrollView.subviews.count * _scrollView.frame.size.width, _scrollView.frame.size.height);
     _scrollView.contentOffset = CGPointMake(self.currentImageIndex * _scrollView.frame.size.width, 0);
-    
-    
     if (!_hasShowedFistView) {
         [self showFirstImage];
     }
     _indexLabel.frame = CGRectMake((self.bounds.size.width - 80)*0.5, kStatusBar_Height, 80, 30);
-    
     _saveButton.frame = CGRectMake(30, self.bounds.size.height - 70, 55, 30);
     _tipLabel.frame = CGRectMake((self.bounds.size.width - 150)*0.5, (self.bounds.size.height - 40)*0.5, 150, 40);
 }
@@ -329,19 +325,6 @@
                     [self showTip:HZPhotoBrowserSaveImageSuccessText];
                 }
             }];
-            /*
-             ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
-            NSDictionary *metadata = @{@"UTI":(__bridge NSString *)kUTTypeImage};
-            [library writeImageDataToSavedPhotosAlbum:imageData metadata:metadata completionBlock:^(NSURL *assetURL, NSError *error) {
-                if (error) {
-                    // "保存图片失败"
-                    [self showTip:HZPhotoBrowserSaveImageFailText];
-                }else{
-                    //保存图片成功"
-                    [self showTip:HZPhotoBrowserSaveImageSuccessText];
-                }
-            }] ;
-             */
         } else {
             UIImageWriteToSavedPhotosAlbum(currentView.imageview.image, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
         }
@@ -352,18 +335,14 @@
 }
 
 - (PHAssetCollection *)getCurrentPhotoCollectionWithTitle:(NSString *)collectionName {
-    
     // 1. 创建搜索集合
     PHFetchResult *result = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
-    
     // 2. 遍历搜索集合并取出对应的相册
     for (PHAssetCollection *assetCollection in result) {
-        
         if ([assetCollection.localizedTitle containsString:collectionName]) {
             return assetCollection;
         }
     }
-    
     return nil;
 }
 
@@ -377,21 +356,23 @@
 }
 
 - (void)showTip:(NSString *)tipStr{
-    if (_tipLabel) {
-        [_tipLabel removeFromSuperview];
-        _tipLabel = nil;
-    }
-    UILabel *label = [[UILabel alloc] init];
-    _tipLabel = label;
-    label.textColor = [UIColor whiteColor];
-    label.backgroundColor = [UIColor colorWithRed:0.1f green:0.1f blue:0.1f alpha:0.90f];
-    label.layer.cornerRadius = 5;
-    label.clipsToBounds = YES;
-    label.textAlignment = NSTextAlignmentCenter;
-    label.font = [UIFont boldSystemFontOfSize:20];
-    label.text = tipStr;
-    [self addSubview:label];
-    [label performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.0];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self->_tipLabel) {
+            [self->_tipLabel removeFromSuperview];
+            self->_tipLabel = nil;
+        }
+        UILabel *label = [[UILabel alloc] init];
+        self->_tipLabel = label;
+        label.textColor = [UIColor whiteColor];
+        label.backgroundColor = [UIColor colorWithRed:0.1f green:0.1f blue:0.1f alpha:0.90f];
+        label.layer.cornerRadius = 5;
+        label.clipsToBounds = YES;
+        label.textAlignment = NSTextAlignmentCenter;
+        label.font = [UIFont boldSystemFontOfSize:20];
+        label.text = tipStr;
+        [self addSubview:label];
+        [label performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.0];
+    });
 }
 
 - (void)setupScrollView

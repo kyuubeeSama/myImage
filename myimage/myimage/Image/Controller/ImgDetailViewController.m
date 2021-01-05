@@ -46,7 +46,7 @@
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
             [dataManager getImageDetailWithType:self.websiteModel detailUrl:self.articleModel.detail_url progress:^(NSUInteger page) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self beginProgressWithTitle:[NSString stringWithFormat:@"正在爬取第%d页",page]];
+                    [self beginProgressWithTitle:[NSString stringWithFormat:@"正在爬取第%lu页",(unsigned long)page]];
                 });
             } success:^(NSMutableArray * _Nonnull array) {
                 self.listArr = array;
@@ -124,6 +124,7 @@
             }
             browser.imageArray = @[img_url];
             [browser show];
+            WeakSelf(browser)
             browser.otherBtnBlock = ^(NSInteger index) {
                 if (index == 0){
                     // 收藏
@@ -136,9 +137,9 @@
                                         element:@"value,type"
                                           value:[NSString stringWithFormat:@"%d,2",model.image_id]
                                           where:nil]){
-                            [weakself alertWithTitle:@"收藏成功"];
+                            [weakbrowser showTip:@"收藏成功"];
                         }else{
-                            [weakself alertWithTitle:@"收藏失败"];
+                            [weakbrowser showTip:@"收藏失败"];
                         }
                     }
                 }else if(index == 1){
@@ -149,9 +150,9 @@
                     [FileTool createDocumentWithname:@"images"];
                     //MARK:保存前需要先创建文件夹
                     if ([UIImageJPEGRepresentation(image, 1) writeToFile:filePath atomically:YES]) {
-                        NSLog(@"保存成功");
+                        [weakbrowser showTip:@"本地保存成功"];
                     }else{
-                        NSLog(@"保存失败");
+                        [weakbrowser showTip:@"本地保存失败"];
                     }
                 }
             };

@@ -26,10 +26,10 @@ PODS:
   - MJExtension (3.2.2)
   - MJRefresh (3.5.0)
   - ReactiveObjC (3.1.1)
-  - SDWebImage (5.10.0):
-    - SDWebImage/Core (= 5.10.0)
-  - SDWebImage/Core (5.10.0)
-  - SGPagingView (1.6.9)
+  - SDWebImage (5.10.2):
+    - SDWebImage/Core (= 5.10.2)
+  - SDWebImage/Core (5.10.2)
+  - SGPagingView (1.7.0)
   - Shimmer (1.0.2)
 
 DEPENDENCIES:
@@ -77,8 +77,8 @@ SPEC CHECKSUMS:
   MJExtension: d9b9c74cbdeb724c1e9ecbb157b318276e62e876
   MJRefresh: 6afc955813966afb08305477dd7a0d9ad5e79a16
   ReactiveObjC: 011caa393aa0383245f2dcf9bf02e86b80b36040
-  SDWebImage: 9169792e9eec3e45bba2a0c02f74bf8bd922d1ee
-  SGPagingView: 3420f9a9ccd2c93936b61bc5a23e58f58fe48809
+  SDWebImage: b969dcfc02c40a5da71eac0b03b8f1a0c794a86f
+  SGPagingView: 17624ec46e3306ef3d3d0357e071c9d6e44f0527
   Shimmer: c5374be1c2b0c9e292fb05b339a513cf291cac86
 
 PODFILE CHECKSUM: d78a9918c1d77d66c8430c8e4ed04f58b3bffd24

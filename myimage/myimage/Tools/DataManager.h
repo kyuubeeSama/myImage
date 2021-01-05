@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,strong)NSMutableArray *imageArr;
 // 获取写真列表
--(void)getDataWithType:(WebsiteModel *)websiteModel pageNum:(int)PageNum category:(CategoryModel *)category success:(void(^)(NSMutableArray *array))success failure:(void(^)(NSError *error))failure;
+-(void)getDataWithType:(WebsiteModel *)websiteModel pageNum:(NSInteger)PageNum category:(CategoryModel *)category success:(void(^)(NSMutableArray *array))success failure:(void(^)(NSError *error))failure;
 // 获取图片列表
 -(void)getImageDetailWithType:(WebsiteModel *)websiteModel detailUrl:(NSString *)detailUrl progress:(void(^)(NSUInteger page))progress success:(void(^)(NSMutableArray *array))success failure:(void(^)(NSError *error))failure;
 // 获取搜索结果

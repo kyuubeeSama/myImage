@@ -18,6 +18,7 @@
 @property(nonatomic, strong) ImgListCollectionView *mainCollection;
 @property(nonatomic, strong) NSMutableArray<NSArray *> *listArr;
 @property(nonatomic,strong) NSMutableArray *pageArr;
+@property(nonatomic,strong)NSMutableArray *boolArr;
 @property(nonatomic, strong) CategoryModel *categoryModel;
 // 当前分类
 @property(nonatomic,assign)NSInteger categoryIndex;
@@ -32,36 +33,50 @@
     self.pageArr = [[NSMutableArray alloc]init];
     self.categoryIndex = 0;
     self.listArr = [[NSMutableArray alloc] init];
+    self.boolArr = [[NSMutableArray alloc]init];
     [self setNav];
     [self makeUI];
     [self getMoreData];
+    [self refreshData];
 }
 
 - (void)setNav {
     self.navigationItem.title = self.model.name;
 }
-
+// 获取数据
 -(void)getData{
-    SqliteTool *sqliteTool = [SqliteTool sharedInstance];
-    NSArray *array = [sqliteTool selectDataFromTable:@"article"
-                                               where:[NSString stringWithFormat:@"website_id= %d and category_id = %d",self.model.website_id,self.categoryModel.category_id]
-                                               field:@"*" Class:[ArticleModel class]
-                                               limit:self.listArr[self.categoryIndex].count pageSize:[self.pageArr[self.categoryIndex] integerValue]];
-    self.listArr[self.categoryIndex] = array;
-    // 该分类在当前数据库中无数据
-    if ([self.listArr[self.categoryIndex] count]) {
+    if ([self.boolArr[self.categoryIndex] boolValue]) {
         [self getListData];
+    }else{
+        //    从本地数据库获取已经缓存的数据
+        SqliteTool *sqliteTool = [SqliteTool sharedInstance];
+        // 直接查询所有
+        NSArray *array = [sqliteTool selectDataFromTable:@"article"
+                                                   where:[NSString stringWithFormat:@"website_id = %d and category_id = %d",self.model.value,self.categoryModel.category_id]
+                                                   field:@"*"
+                                                   Class:[ArticleModel class]];
+        if ([array count]) {
+            NSMutableArray *oldArr = [[NSMutableArray alloc]initWithArray:self.listArr[self.categoryIndex]];
+            [oldArr addObjectsFromArray:array];
+            self.listArr[self.categoryIndex] = oldArr;
+            self.pageArr[self.categoryIndex] = @([self.pageArr[self.categoryIndex] intValue]+1);
+            self.mainCollection.listArr = self.listArr[self.categoryIndex];
+            [self.mainCollection reloadData];
+        }else{
+            // 本地没有数据，从网络获取。
+            [self getListData];
+            self.boolArr[self.categoryIndex] = @(YES);
+        }
     }
 }
 
 - (void)getListData {
-//    TODO:进入页面首先从数据库读取一组50个的数据，如果数据库为空，再从服务器获取新数据。下拉刷新会重新从服务器获取新数据。
     // 从网络获取数据
     [self beginProgressWithTitle:@"爬取中"];
     DataManager *dataManager = [[DataManager alloc]init];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         [dataManager getDataWithType:self.model
-                             pageNum:[self.pageArr[self.categoryIndex] intValue]
+                             pageNum:[self.pageArr[self.categoryIndex] integerValue]
                             category:self.categoryModel
                              success:^(NSMutableArray *_Nonnull array) {
             NSMutableArray *dataArr = [[NSMutableArray alloc]initWithArray:self.listArr[self.categoryIndex]];
@@ -70,7 +85,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self endProgress];
                 if (array.count > 0) {
-                    self.pageArr[self.categoryIndex] = [NSString stringWithFormat:@"%d",[self.pageArr[self.categoryIndex] intValue]+1];
+                    self.pageArr[self.categoryIndex] = @([self.pageArr[self.categoryIndex] integerValue]+1);
                     [self.mainCollection.mj_footer endRefreshing];
                 } else {
                     [self.mainCollection.mj_footer endRefreshingWithNoMoreData];
@@ -101,8 +116,9 @@
                                                   field:@"*"
                                                   Class:[CategoryModel class]];
     for (NSUInteger i = 0; i < categoryArr.count; i++) {
-        [self.pageArr addObject:@"1"];
+        [self.pageArr addObject:@(1)];
         [self.listArr addObject:@[]];
+        [self.boolArr addObject:@(NO)];
         CategoryModel *model = categoryArr[(NSUInteger) i];
         if (i == 0) {
             self.categoryModel = model;
@@ -126,12 +142,11 @@
         if (dataArr.count>0) {
             self.mainCollection.listArr = dataArr;
         }else{
-            [self getListData];
+            [self getData];
         }
     };
     [self.view addSubview:chooseView];
-    [self.mainCollection reloadData];
-    [self getListData];
+    chooseView.index = 0;
 }
 
 -(ImgListCollectionView *)mainCollection{
@@ -164,6 +179,17 @@
 
 - (void)getMoreData {
     self.mainCollection.mj_footer = [MJRefreshBackFooter footerWithRefreshingBlock:^{
+        if ([self.boolArr[self.categoryIndex] boolValue]) {
+            [self getListData];
+        }
+    }];
+}
+
+-(void)refreshData{
+    self.mainCollection.mj_header = [MJRefreshHeader headerWithRefreshingBlock:^{
+        self.boolArr[self.categoryIndex] = @(YES);
+        self.pageArr[self.categoryIndex] = @(1);
+        self.listArr[self.categoryIndex] = @[];
         [self getListData];
     }];
 }

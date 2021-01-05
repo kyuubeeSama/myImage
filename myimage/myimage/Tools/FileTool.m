@@ -188,4 +188,10 @@
     return array;
 }
 
+// 删除本地文件
++(BOOL)deleteLocalFileWithPath:(NSString *)path{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    return [fileManager removeItemAtPath:path error:nil];
+}
+
 @end

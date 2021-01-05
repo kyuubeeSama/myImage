@@ -138,7 +138,6 @@
         VC.articleModel.has_done = model.has_done;
         VC.articleModel.is_delete = model.is_delete;
         [self.navigationController pushViewController:VC animated:YES];
-
     } else {
         ImgCollectModel *model = self.listArr[(NSUInteger) indexPath.row];
         HZPhotoBrowser *browser = [[HZPhotoBrowser alloc] init];
@@ -148,11 +147,13 @@
         browser.btnArr = @[@"取消收藏"];
         browser.imageArray = @[[NSString stringWithFormat:@"%@/%@", model.url, model.image_url]];
         [browser show];
+        WeakSelf(browser)
         browser.otherBtnBlock = ^(NSInteger index) {
             if (index == 0) {
                 SqliteTool *sqlTool = [SqliteTool sharedInstance];
                 if ([sqlTool deleteDataFromTable:@"collect" where:[NSString stringWithFormat:@"value = %d and type = 2", model.image_id]]) {
                     [self.listArr removeObjectAtIndex:(NSUInteger) indexPath.row];
+                    [weakbrowser showTip:@"取消收藏成功"];
                     [self.mainCollect reloadData];
                 }
             }

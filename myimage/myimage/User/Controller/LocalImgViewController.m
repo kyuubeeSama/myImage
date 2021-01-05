@@ -9,10 +9,14 @@
 #import "LocalImgViewController.h"
 #import "ImgCollectionViewCell.h"
 #import "ImgCollectModel.h"
+#import "EditBottomView.h"
 @interface LocalImgViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 
 @property(nonatomic,strong)UICollectionView *collectionView;
 @property(nonatomic,strong)NSMutableArray *listArr;
+@property(nonatomic, assign) BOOL is_edit;
+@property(nonatomic,strong)EditBottomView *bottomView;
+@property(nonatomic,strong)NSMutableArray *chooseArr;
 
 @end
 
@@ -22,20 +26,65 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.listArr = [[NSMutableArray alloc]init];
+    self.chooseArr = [[NSMutableArray alloc]init];
+    self.is_edit = NO;
+    [self setNav];
     [self getData];
 }
 
 //collectionview 图片列表，点击打开展示
 //带编辑功能，可以多图删除
 
+-(void)setNav{
+    // TODO:编辑按钮，选中开始编辑。状态分为编辑=>完成
+//    编辑状态下，collection图片右上加选中框，选中图片，图片位置做内敛
+//    底部横幅，左侧添加全选按钮，右侧添加删除按钮
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(editBtnClick:)];
+    self.navigationItem.rightBarButtonItem = rightItem;
+}
+
+-(void)editBtnClick:(UIBarButtonItem *)buttonItem{
+    self.is_edit = !self.is_edit;
+    if (self.is_edit){
+        buttonItem.title = @"完成";
+        self.bottomView.hidden = NO;
+    } else{
+        buttonItem.title = @"编辑";
+        self.bottomView.hidden = YES;
+    }
+}
+
 -(void)getData{
     self.listArr = [[[FileTool alloc]init]getLocalImage];
     [self.collectionView reloadData];
 }
 
+-(EditBottomView *)bottomView{
+    if (!_bottomView) {
+        _bottomView = [[EditBottomView alloc]init];
+        [self.view addSubview:_bottomView];
+        _bottomView.hidden = YES;
+        [_bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.equalTo(self.view);
+            make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom);
+            make.height.mas_equalTo(40);
+        }];
+        _bottomView.allBlock = ^{
+          // 全选
+        };
+        _bottomView.deleteBlock = ^{
+          //删除选中的图片
+            
+        };
+    }
+    return _bottomView;
+}
+
 -(UICollectionView *)collectionView{
     if (!_collectionView) {
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
+        layout.minimumLineSpacing = 10;
+        layout.minimumInteritemSpacing = 10;
         _collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, screenW, screenH) collectionViewLayout:layout];
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
@@ -43,12 +92,8 @@
         [_collectionView registerNib:[UINib nibWithNibName:@"ImgCollectionViewCell" bundle:[NSBundle mainBundle]] forCellWithReuseIdentifier:@"imgCell"];
         [self.view addSubview:_collectionView];
         [_collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.view.mas_left);
-            make.right.equalTo(self.view.mas_right);
-            make.top.equalTo(self.view.mas_top);
-            make.bottom.equalTo(self.view.mas_bottom);
+            make.left.right.top.bottom.equalTo(self.view);
         }];
-        
     }
     return _collectionView;
 }
@@ -71,12 +116,26 @@
     browser.isNeedLandscape = YES;
     browser.currentImageIndex = 0;
     browser.imageType = 1;
+    browser.btnArr = @[@"删除"];
     browser.imageArray = @[model.filePath];
     [browser show];
+    WeakSelf(browser)
+    browser.otherBtnBlock = ^(NSInteger index) {
+        // TODO:删除后关闭browser
+        if (index == 0) {
+            // 删除本地图片
+            if ([FileTool deleteLocalFileWithPath:model.filePath]) {
+                [weakbrowser showTip:@"删除文件成功"];
+                [self getData];
+            }else{
+                [weakbrowser showTip:@"删除失败"];
+            }
+        }
+    };
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return CGSizeMake(screenW / 3, screenW / 3 * 48 / 32);
+    return CGSizeMake(screenW / 3-10, screenW / 3 * 48 / 32);
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {

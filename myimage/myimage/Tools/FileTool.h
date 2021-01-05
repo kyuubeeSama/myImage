@@ -39,6 +39,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)createFilePathWithName:(NSString *)name;
 
 -(NSMutableArray *)getLocalImage;
+// 删除本地文件
++(BOOL)deleteLocalFileWithPath:(NSString *)path;
 @end
 
 NS_ASSUME_NONNULL_END

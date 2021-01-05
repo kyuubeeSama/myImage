@@ -29,7 +29,7 @@ typedef enum : NSUInteger {
 /// @param category 类型
 /// @param success 成功返回
 /// @param failure 失败返回
-- (void)getDataWithType:(WebsiteModel *)websiteModel pageNum:(int)PageNum category:(CategoryModel *)category success:(void (^)(NSMutableArray *_Nonnull))success failure:(void (^)(NSError *_Nonnull))failure {
+- (void)getDataWithType:(WebsiteModel *)websiteModel pageNum:(NSInteger)PageNum category:(CategoryModel *)category success:(void (^)(NSMutableArray *_Nonnull))success failure:(void (^)(NSError *_Nonnull))failure {
 //    拼接域名
     NSString *urlStr;
     NSString *titleXpath = @"";//标题
@@ -37,30 +37,30 @@ typedef enum : NSUInteger {
     NSString *picXpath = @"";//封面
     if (websiteModel.value == lunv || websiteModel.value == luge) {
         // 撸女吧 & 撸哥吧
-        urlStr = [NSString stringWithFormat:@"%@/category-%@_%d.html", websiteModel.url, category.value, PageNum];
+        urlStr = [NSString stringWithFormat:@"%@/category-%@_%ld.html", websiteModel.url, category.value, (long)PageNum];
         titleXpath = @"//*[@id=\"container\"]/main/article/div/a/@title";
         detailXpath = @"//*[@id=\"container\"]/main/article/div/a/@href";
         picXpath = @"//*[@id=\"container\"]/main/article/div/a/img/@src";
     } else if (websiteModel.value == twofourfa) {
         //        24fa
-        urlStr = [NSString stringWithFormat:@"%@/mc%@p%d.aspx", websiteModel.url, category.value, PageNum];
+        urlStr = [NSString stringWithFormat:@"%@/mc%@p%ld.aspx", websiteModel.url, category.value, (long)PageNum];
         titleXpath = @"/html/body/ul[3]/li/a";
         detailXpath = @"/html/body/ul[3]/li/a/@href";
     }else if (websiteModel.value == qushibaike){
         // 趣事百科
-        urlStr = [NSString stringWithFormat:@"%@/%@%d.html",websiteModel.url,category.value,PageNum];
+        urlStr = [NSString stringWithFormat:@"%@/%@%ld.html",websiteModel.url,category.value,(long)PageNum];
         titleXpath = @"/html/body/section/div/div/article/header/h2/a";
         detailXpath = @"/html/body/section/div/div/article/header/h2/a/@href";
         picXpath = @"/html/body/section/div/div/article/p[2]/a/span/span/img/@src";
     }else if (websiteModel.value == sxchinesegirlz){
 //        sxchinesegirlz
-        urlStr = [NSString stringWithFormat:@"%@/category/%@/page/%d/",websiteModel.url,category.value,PageNum];
+        urlStr = [NSString stringWithFormat:@"%@/category/%@/page/%ld/",websiteModel.url,category.value,(long)PageNum];
         titleXpath = @"//*[@id=\"content_box\"]/div/div/article/a/@title";
         detailXpath = @"//*[@id=\"content_box\"]/div/div/article/a/@href";
         picXpath = @"//*[@id=\"content_box\"]/div/div/article/a/div[1]/img/@src";
     }else if(websiteModel.value == piaoliangwanghong){
         //漂亮网红网
-        urlStr = [NSString stringWithFormat:@"%@/jin/caitup/%@_%d.html",websiteModel.url,category.value,PageNum];
+        urlStr = [NSString stringWithFormat:@"%@/jin/caitup/%@_%ld.html",websiteModel.url,category.value,(long)PageNum];
         titleXpath = @"//*[@id=\"list\"]/ul/li/a/@title";
         detailXpath = @"//*[@id=\"list\"]/ul/li/a/@href";
         picXpath = @"//*[@id=\"list\"]/ul/li/a/img/@src";

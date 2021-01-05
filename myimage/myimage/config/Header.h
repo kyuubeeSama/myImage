@@ -30,5 +30,6 @@
 
 #import "UIColor+Extension.h"
 #import "NSString+Extension.h"
+#import "UIButton+SSEdgeInsets.h"
 
 #endif /* Header_h */

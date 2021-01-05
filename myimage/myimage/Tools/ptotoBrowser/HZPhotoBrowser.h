@@ -39,6 +39,8 @@
 @property(nonatomic,copy)void(^otherBtnBlock)(NSInteger index);
 // 2.网络图片 1.本地图片
 @property(nonatomic,assign)NSInteger imageType;
+// 显示警告
+- (void)showTip:(NSString *)tipStr;
 
 - (void)show;
 

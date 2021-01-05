@@ -46,6 +46,8 @@
 		A98546432296895500BAEFB1 /* HZPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = A985463C2296895500BAEFB1 /* HZPhotoBrowser.m */; };
 		A98546442296895500BAEFB1 /* HZPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A985463F2296895500BAEFB1 /* HZPhotoBrowser.bundle */; };
 		A98546452296895500BAEFB1 /* HZPhotoBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = A98546402296895500BAEFB1 /* HZPhotoBrowserView.m */; };
+		A98A2EB9259AC93D0074755C /* EditBottomView.m in Sources */ = {isa = PBXBuildFile; fileRef = A98A2EB8259AC93D0074755C /* EditBottomView.m */; };
+		A98A2EBD259ACB350074755C /* UIButton+SSEdgeInsets.m in Sources */ = {isa = PBXBuildFile; fileRef = A98A2EBC259ACB350074755C /* UIButton+SSEdgeInsets.m */; };
 		A9C202E021D49B79006572DD /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C202DF21D49B79006572DD /* UserViewController.m */; };
 		A9C2030721D5BCDA006572DD /* MYPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C2030621D5BCDA006572DD /* MYPickerView.m */; };
 		A9CDD3062473E8180045C370 /* NSObject+Tool.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CDD3052473E8180045C370 /* NSObject+Tool.m */; };
@@ -138,8 +140,11 @@
 		A985463F2296895500BAEFB1 /* HZPhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HZPhotoBrowser.bundle; sourceTree = "<group>"; };
 		A98546402296895500BAEFB1 /* HZPhotoBrowserView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HZPhotoBrowserView.m; sourceTree = "<group>"; };
 		A98546412296895500BAEFB1 /* HZPhotoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HZPhotoBrowser.h; sourceTree = "<group>"; };
+		A98A2EB7259AC93D0074755C /* EditBottomView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EditBottomView.h; sourceTree = "<group>"; };
+		A98A2EB8259AC93D0074755C /* EditBottomView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EditBottomView.m; sourceTree = "<group>"; };
+		A98A2EBB259ACB350074755C /* UIButton+SSEdgeInsets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+SSEdgeInsets.h"; sourceTree = "<group>"; };
+		A98A2EBC259ACB350074755C /* UIButton+SSEdgeInsets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+SSEdgeInsets.m"; sourceTree = "<group>"; };
 		A98CB95024CE9E4C00310FDE /* myimage.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = myimage.entitlements; sourceTree = "<group>"; };
-		A98CB95124CEB8BE00310FDE /* 更新计划 */ = {isa = PBXFileReference; lastKnownFileType = text; path = "更新计划"; sourceTree = "<group>"; };
 		A9C202DE21D49B79006572DD /* UserViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserViewController.h; sourceTree = "<group>"; };
 		A9C202DF21D49B79006572DD /* UserViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserViewController.m; sourceTree = "<group>"; };
 		A9C2030521D5BCDA006572DD /* MYPickerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MYPickerView.h; sourceTree = "<group>"; };
@@ -227,7 +232,6 @@
 		A938824321C1F8E90085958B /* myimage */ = {
 			isa = PBXGroup;
 			children = (
-				A98CB95124CEB8BE00310FDE /* 更新计划 */,
 				A98CB95024CE9E4C00310FDE /* myimage.entitlements */,
 				A938825B21C1FB350085958B /* myimage */,
 				A938825A21C1FB270085958B /* images */,
@@ -326,6 +330,8 @@
 				144DFAA406F165FFB62890FC /* UIColor+Extension.m */,
 				144DF63BA3708B9FFAF9A33D /* NSString+Extension.h */,
 				144DF4D570E747DF15FF70E1 /* NSString+Extension.m */,
+				A98A2EBB259ACB350074755C /* UIButton+SSEdgeInsets.h */,
+				A98A2EBC259ACB350074755C /* UIButton+SSEdgeInsets.m */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -364,6 +370,8 @@
 				A904AC5123BF094C00E3281E /* CollectViewController.m */,
 				A9146E2D23C30E8D00E94193 /* WebsiteViewController.h */,
 				A9146E2E23C30E8D00E94193 /* WebsiteViewController.m */,
+				A95C17F32564F79C00AB3E0F /* LocalImgViewController.h */,
+				A95C17F42564F79C00AB3E0F /* LocalImgViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -376,6 +384,8 @@
 				A93F765A2462A0E1005E9E51 /* WebSiteTableViewCell.h */,
 				A93F765B2462A0E1005E9E51 /* WebSiteTableViewCell.m */,
 				A93F765C2462A0E1005E9E51 /* WebSiteTableViewCell.xib */,
+				A98A2EB7259AC93D0074755C /* EditBottomView.h */,
+				A98A2EB8259AC93D0074755C /* EditBottomView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -389,8 +399,6 @@
 				A9F4ABA721C23EBC00FE84E9 /* ImgDetailViewController.m */,
 				A9452AEC25072427003D9CC9 /* SearchResultViewController.h */,
 				A9452AED25072427003D9CC9 /* SearchResultViewController.m */,
-				A95C17F32564F79C00AB3E0F /* LocalImgViewController.h */,
-				A95C17F42564F79C00AB3E0F /* LocalImgViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -591,6 +599,7 @@
 				A9F4ABC721C3AE2600FE84E9 /* ImgListCollectionViewCell.m in Sources */,
 				A9FF6CE121F9510C006F57DA /* UserTableHeaderView.m in Sources */,
 				A97975FD24EE57AB0099C518 /* ImgDetailTableView.m in Sources */,
+				A98A2EBD259ACB350074755C /* UIButton+SSEdgeInsets.m in Sources */,
 				A938824621C1F8E90085958B /* AppDelegate.m in Sources */,
 				A9F4ABC421C3AE0D00FE84E9 /* ImgDetailTableViewCell.m in Sources */,
 				A93F765D2462A0E1005E9E51 /* WebSiteTableViewCell.m in Sources */,
@@ -611,6 +620,7 @@
 				144DF778A22CB02F93D70BF5 /* ArticleModel.m in Sources */,
 				A91ADD4025761B49004CAD69 /* NSDate+Category.m in Sources */,
 				144DF75AD32A3DAAFA34F25D /* ImgCollectModel.m in Sources */,
+				A98A2EB9259AC93D0074755C /* EditBottomView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
