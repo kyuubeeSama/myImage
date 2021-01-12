@@ -13,6 +13,7 @@
 #import "ImgDetailViewController.h"
 #import "ImgListCollectionView.h"
 #import "SearchResultViewController.h"
+#import "ImgListCollectionViewCell.h"
 @interface ImgListViewController ()<UISearchBarDelegate>
 
 @property(nonatomic, strong) ImgListCollectionView *mainCollection;
@@ -161,6 +162,7 @@
         }];
         _mainCollection.model = self.model;
         WeakSelf(self)
+        StrongSelf(self)
         _mainCollection.cellDidSelect = ^(NSIndexPath * _Nonnull indexPath) {
             NSMutableArray *dataArr = [[NSMutableArray alloc]initWithArray:weakself.listArr[weakself.categoryIndex]];
             ArticleModel *aModel = dataArr[(NSUInteger) indexPath.row];
@@ -170,6 +172,10 @@
             VC.imageSaved = ^(ArticleModel *_Nonnull model) {
                 dataArr[indexPath.row] = model;
                 weakself.listArr[weakself.categoryIndex] = dataArr;
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    ImgListCollectionViewCell *cell = (ImgListCollectionViewCell *)[strongself->_mainCollection cellForItemAtIndexPath:indexPath];
+                     cell.signView.hidden = NO;
+                });
             };
             [weakself.navigationController pushViewController:VC animated:YES];
         };

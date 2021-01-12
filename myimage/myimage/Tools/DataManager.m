@@ -270,6 +270,15 @@ typedef enum : NSUInteger {
         }else{
             success(self.imageArr);
         }
+    }else if(websiteType == sxchinesegirlz){
+        NSString *htmlContent = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+        NSLog(@"%@",htmlContent);
+        if ([htmlContent containsString:@"class=currenttext>Next</span>"]) {
+            pageNum += 1;
+            [self getImageWithUrl:url withWebsiteValue:websiteType withPageNum:pageNum success:success failure:failure];
+        }else{
+            success(self.imageArr);
+        }
     }else{
         NSArray *nextNodeArr = [xpathDoc searchWithXPathQuery:nextXpath];
         if (nextNodeArr.count>0){
@@ -293,7 +302,7 @@ typedef enum : NSUInteger {
     return utf8HtmlData;
 }
 
-/// 站点搜索
+/// 站点搜索(搜索结果不存入数据库)
 /// @param websiteModel websiteModel
 /// @param pageNum 页码
 /// @param keyword 搜索关键字
@@ -303,7 +312,14 @@ typedef enum : NSUInteger {
     NSString *urlStr;
     NSMutableArray *resultArr = [[NSMutableArray alloc]init];
     if (websiteModel.value == lunv) {
+//        下一页
+//    https://www.lunu8.com/search.php?q=%E6%97%A0%E5%9C%A3%E5%85%89&page=2
         // 撸女吧
+        //*[@id="container"]/main/article[1]/div/a/img/@original
+        //*[@id="container"]/main/article[1]/div/a/@href
+        //*[@id="container"]/main/article[1]/div/a/@title
+//        如果获取数组为空，表示已经全部加载完毕
+        
     }else if (websiteModel.value == luge){
         // 撸哥吧
     }else if(websiteModel.value == twofourfa){
@@ -336,69 +352,57 @@ typedef enum : NSUInteger {
                 detail = [detail stringByReplacingOccurrencesOfString:@"\"" withString:@""];
                 
                 SqliteTool *sqlTool = [SqliteTool sharedInstance];
-                ArticleModel *result = (ArticleModel *) [sqlTool findDataFromTable:@"article"
-                                                                             where:[NSString stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, detail]
-                                                                             field:@"*"
-                                                                             Class:[ArticleModel class]];
-                if (result.name == nil) {
-                    NSString *title;
-                    NSMutableArray *titleArr = [Tool getDataWithRegularExpression:@"title=\"([\\s\\S]+?)\"" content:article];
+                NSString *title;
+                NSMutableArray *titleArr = [Tool getDataWithRegularExpression:@"title=\"([\\s\\S]+?)\"" content:article];
+                if (titleArr.count>0){
+                    title = titleArr[0];
+                    title = [title stringByReplacingOccurrencesOfString:@"title=\"" withString:@""];
+                    title = [title stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+                }else{
+                    titleArr = [Tool getDataWithRegularExpression:@"/i>([\\s\\S]+?)<" content:article];
                     if (titleArr.count>0){
                         title = titleArr[0];
-                        title = [title stringByReplacingOccurrencesOfString:@"title=\"" withString:@""];
-                        title = [title stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+                        title = [title stringByReplacingOccurrencesOfString:@"/i>" withString:@""];
+                        title = [title stringByReplacingOccurrencesOfString:@"<" withString:@""];
                     }else{
-                        titleArr = [Tool getDataWithRegularExpression:@"/i>([\\s\\S]+?)<" content:article];
-                        if (titleArr.count>0){
-                            title = titleArr[0];
-                            title = [title stringByReplacingOccurrencesOfString:@"/i>" withString:@""];
-                            title = [title stringByReplacingOccurrencesOfString:@"<" withString:@""];
-                        }else{
-                            titleArr = [Tool getDataWithRegularExpression:@"\">([\\s\\S]+?)</a>" content:article];
-                            title = titleArr[0];
-                            title = [title stringByReplacingOccurrencesOfString:@"\">" withString:@""];
-                            title = [title stringByReplacingOccurrencesOfString:@"</a>" withString:@""];
-                            title = [title stringByReplacingOccurrencesOfString:@"</a>" withString:@""];
-                            title = [title stringByReplacingOccurrencesOfString:@"</a>" withString:@""];
-                        }
+                        titleArr = [Tool getDataWithRegularExpression:@"\">([\\s\\S]+?)</a>" content:article];
+                        title = titleArr[0];
+                        title = [title stringByReplacingOccurrencesOfString:@"\">" withString:@""];
+                        title = [title stringByReplacingOccurrencesOfString:@"</a>" withString:@""];
+                        title = [title stringByReplacingOccurrencesOfString:@"</a>" withString:@""];
+                        title = [title stringByReplacingOccurrencesOfString:@"</a>" withString:@""];
                     }
-                    NSString *detailUrl = [NSString stringWithFormat:@"%@/%@", websiteModel.url, detail];
-                    [NetWorkingTool getHtmlWithUrl:detailUrl WithData:nil success:^(NSString *html) {
-                        NSString *contentRegex = @"content\">([\\s\\S]+?)<\\/article>";
-                        NSString *detailStr = [Tool getDataWithRegularExpression:contentRegex content:html][0];
-                        NSString *imgRegex = @"src=\"([\\s\\S]+?)\"";
-                        NSString *imgPath = [Tool getDataWithRegularExpression:imgRegex content:detailStr][0];
-                        imgPath = [imgPath stringByReplacingOccurrencesOfString:@"src=\"" withString:@""];
-                        imgPath = [imgPath stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                        model.name = title;
-                        model.detail_url = detail;
-                        model.img_url = imgPath;
-                        if ([sqlTool insertTable:@"article"
-                                         element:@"website_id,category_id,name,detail_url,img_url"
-                                           value:[NSString stringWithFormat:@"%d,0,\"%@\",'%@','%@'", websiteModel.value, model.name, model.detail_url, model.img_url]
-                                           where:nil]) {
-                            ArticleModel *newModel = (ArticleModel *) [sqlTool findDataFromTable:@"article"
-                                                                                           where:[NSString
-                                                                                                  stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, model.detail_url]
-                                                                                           field:@"*"
-                                                                                           Class:[ArticleModel class]];
-                            [resultArr addObject:newModel];
-                        }
-                        if (resultArr.count == articleArr.count){
-                            success(resultArr);
-                        }
-                        
-                    }                      failure:nil];
-                } else {
-                    model = result;
-                    [resultArr addObject:model];
+                }
+                NSString *detailUrl = [NSString stringWithFormat:@"%@/%@", websiteModel.url, detail];
+                [NetWorkingTool getHtmlWithUrl:detailUrl WithData:nil success:^(NSString *html) {
+                    NSString *contentRegex = @"content\">([\\s\\S]+?)<\\/article>";
+                    NSString *detailStr = [Tool getDataWithRegularExpression:contentRegex content:html][0];
+                    NSString *imgRegex = @"src=\"([\\s\\S]+?)\"";
+                    NSString *imgPath = [Tool getDataWithRegularExpression:imgRegex content:detailStr][0];
+                    imgPath = [imgPath stringByReplacingOccurrencesOfString:@"src=\"" withString:@""];
+                    imgPath = [imgPath stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+                    model.name = title;
+                    model.detail_url = detail;
+                    model.img_url = imgPath;
+                    if ([sqlTool insertTable:@"article"
+                                     element:@"website_id,category_id,name,detail_url,img_url"
+                                       value:[NSString stringWithFormat:@"%d,0,\"%@\",'%@','%@'", websiteModel.value, model.name, model.detail_url, model.img_url]
+                                       where:nil]) {
+                        ArticleModel *newModel = (ArticleModel *) [sqlTool findDataFromTable:@"article"
+                                                                                       where:[NSString
+                                                                                              stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, model.detail_url]
+                                                                                       field:@"*"
+                                                                                       Class:[ArticleModel class]];
+                        [resultArr addObject:newModel];
+                    }
                     if (resultArr.count == articleArr.count){
                         success(resultArr);
                     }
-                }
+                    
+                }                      failure:nil];
             }
         } failure:^(NSError * _Nonnull error) {
-            
+            failure(error);
         }];
     }else if(websiteModel.value == qushibaike){
         // 趣事百科
@@ -419,28 +423,30 @@ typedef enum : NSUInteger {
             NSString *detail = detailNodeArr[i].text;
             NSString *imgPath = imgNodeArr[i].text;
             SqliteTool *sqlTool = [SqliteTool sharedInstance];
-            ArticleModel *result = (ArticleModel *) [sqlTool findDataFromTable:@"article"
-                                                                         where:[NSString stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, detail]
-                                                                         field:@"*"
-                                                                         Class:[ArticleModel class]];
-            if (result.name == nil) {
-                result.name = title;
-                result.detail_url = detail;
-                result.img_url = imgPath;
-                if ([sqlTool insertTable:@"article"
-                                 element:@"website_id,category_id,name,detail_url,img_url"
-                                   value:[NSString stringWithFormat:@"%d,0,'%@','%@','%@'", websiteModel.value, result.name, result.detail_url, result.img_url]
-                                   where:nil]) {
-                    result = (ArticleModel *) [sqlTool findDataFromTable:@"article"
-                                                                   where:[NSString
-                                                                           stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, result.detail_url]
-                                                                   field:@"*"
-                                                                   Class:[ArticleModel class]];
-                }
+            ArticleModel *result = [[ArticleModel alloc]init];
+            result.name = title;
+            result.detail_url = detail;
+            result.img_url = imgPath;
+            if ([sqlTool insertTable:@"article"
+                             element:@"website_id,category_id,name,detail_url,img_url"
+                               value:[NSString stringWithFormat:@"%d,0,'%@','%@','%@'", websiteModel.value, result.name, result.detail_url, result.img_url]
+                               where:nil]) {
+                result = (ArticleModel *) [sqlTool findDataFromTable:@"article"
+                                                               where:[NSString
+                                                                      stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, result.detail_url]
+                                                               field:@"*"
+                                                               Class:[ArticleModel class]];
             }
             [resultArr addObject:result];
         }
         success(resultArr);
+    }else if(websiteModel.value == piaoliangwanghong){
+//        无搜索功能
+    }else if(websiteModel.value == sxchinesegirlz){
+//    https://sxchinesegirlz.com/page/2/?s=%E5%AE%89%E5%AE%89
+        //*[@id="content_box"]/div/div/article[1]/a/div[1]/img/@src
+        //*[@id="content_box"]/div/div/article[1]/a/@href
+        //*[@id="content_box"]/div/div/article[1]/a/@title
     }
 }
 

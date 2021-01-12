@@ -28,7 +28,7 @@
         }];
         self.signView.hidden = YES;
         self.signView.backgroundColor = [UIColor blueColor];
-        [self.signView setTitle:@"已下载" forState:UIControlStateNormal];
+        [self.signView setTitle:@"已缓存" forState:UIControlStateNormal];
         [self.signView setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         self.signView.titleLabel.font = [UIFont systemFontOfSize:14];
         
@@ -45,5 +45,7 @@
     }
     return self;
 }
+
+
 
 @end

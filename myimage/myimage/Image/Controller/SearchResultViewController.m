@@ -98,9 +98,9 @@
                 ImgDetailViewController *VC = [[ImgDetailViewController alloc] init];
                 VC.articleModel = aModel;
                 VC.websiteModel = weakself.model;
-                VC.imageSaved = ^(ArticleModel *_Nonnull model) {
-                    weakself.listArr[indexPath.row] = model;
-                };
+//                VC.imageSaved = ^(ArticleModel *_Nonnull model) {
+//                    weakself.listArr[indexPath.row] = model;
+//                };
                 [weakself.navigationController pushViewController:VC animated:YES];
         };
         [_mainCollection mas_makeConstraints:^(MASConstraintMaker *make) {

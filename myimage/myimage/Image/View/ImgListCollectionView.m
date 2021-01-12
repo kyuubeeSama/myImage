@@ -49,6 +49,9 @@
         SDWebImageDownloader *downloader = [SDWebImageManager sharedManager].imageLoader;
         [downloader setValue:[NSString stringWithFormat:@"%@/",self.model.url] forHTTPHeaderField:@"Referer"];
     }
+    if (model.has_done == 2) {
+        cell.signView.hidden = NO;
+    }
      [cell.headImg sd_setImageWithURL:[NSURL URLWithString:imageStr] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
     return cell;
 }

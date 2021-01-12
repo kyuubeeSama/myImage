@@ -66,8 +66,8 @@
         [sqlTool createTableWithSql:@"CREATE TABLE IF NOT EXISTS `website`  (website_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,name VARCHAR(200) NOT NULL,value INT NOT NULl,url VARCHAR(200) NOT NULL,is_delete INT NOT NULL DEFAULT(1))"];
 //        category
         [sqlTool createTableWithSql:@"CREATE TABLE IF NOT EXISTS `category` (category_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,website_id INT NOT NULL,name VARCHAR(200) NOT NULL,value VARCHAR(50) NOT NULL,is_delete INT NOT NULL DEFAULT(1))"];
-//        article
-        [sqlTool createTableWithSql:@"CREATE TABLE IF NOT EXISTS `article` (article_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,website_id INT NOT NULL,name VARCHAR(200) NOT NULL,category_id INT NOT NULL,detail_url VARCHAR(200) NOT NULL,has_done INT NOT NULL DEFAULT(1),is_delete INT NOT NULL DEFAULT(1),img_url VARCHAR(200) NOT NULL)"];
+//        article ex_id 原来项目中的id
+        [sqlTool createTableWithSql:@"CREATE TABLE IF NOT EXISTS `article` (article_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,website_id INT NOT NULL,name VARCHAR(200) NOT NULL,ex_id INT NOT NULL,category_id INT NOT NULL,detail_url VARCHAR(200) NOT NULL,has_done INT NOT NULL DEFAULT(1),is_delete INT NOT NULL DEFAULT(1),img_url VARCHAR(200) NOT NULL)"];
 //        image
         [sqlTool createTableWithSql:@"CREATE TABLE IF NOT EXISTS `image` (image_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,image_url VARCHAR(200) NOT NULL,website_id INT NOT NULL,article_id INT NOT NULL,width FLOAT DEFAULT(0),height FLOAT DEFAULT(0))"];
 //        collect

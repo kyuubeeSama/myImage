@@ -66,10 +66,12 @@
                     self.mainTable.listArr = [[NSMutableArray alloc]initWithArray:array];
                 });
             } failure:^(NSError * _Nonnull error) {
-                NSLog(@"数据获取失败%@", error);
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self endProgress];
                     [self alertWithTitle:@"数据获取失败"];
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3*NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [self.navigationController popViewControllerAnimated:YES];
+                    });
                 });
             }];
             

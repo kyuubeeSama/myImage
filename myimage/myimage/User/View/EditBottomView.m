@@ -23,6 +23,7 @@
             make.left.equalTo(self).offset(30);
         }];
         [self.allBtn setTitle:@"全选" forState:UIControlStateNormal];
+        [self.allBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [self.allBtn setImage:[UIImage systemImageNamed:@"circle"] forState:UIControlStateNormal];
         [self.allBtn setImagePositionWithType:SSImagePositionTypeLeft spacing:5];
         [self.allBtn addTarget:self action:@selector(allBtnClick) forControlEvents:UIControlEventTouchUpInside];
@@ -38,7 +39,7 @@
         [deleteBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [deleteBtn addTarget:self action:@selector(deleteBtnClick) forControlEvents:UIControlEventTouchUpInside];
         deleteBtn.layer.masksToBounds = YES;
-        deleteBtn.layer.cornerRadius = 40;
+        deleteBtn.layer.cornerRadius = 20;
         deleteBtn.backgroundColor = [UIColor redColor];
     }
     return self;
