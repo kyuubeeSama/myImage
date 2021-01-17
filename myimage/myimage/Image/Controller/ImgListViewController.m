@@ -47,7 +47,7 @@
 // 获取数据
 -(void)getData{
     if ([self.boolArr[self.categoryIndex] boolValue]) {
-        [self getListData];
+        [self getListDataWithType:2];
     }else{
         //    从本地数据库获取已经缓存的数据
         SqliteTool *sqliteTool = [SqliteTool sharedInstance];
@@ -65,13 +65,13 @@
             [self.mainCollection reloadData];
         }else{
             // 本地没有数据，从网络获取。
-            [self getListData];
+            [self getListDataWithType:2];
             self.boolArr[self.categoryIndex] = @(YES);
         }
     }
 }
 
-- (void)getListData {
+- (void)getListDataWithType:(NSInteger)type {
     // 从网络获取数据
     [self beginProgressWithTitle:@"爬取中"];
     DataManager *dataManager = [[DataManager alloc]init];
@@ -87,7 +87,11 @@
                 [self endProgress];
                 if (array.count > 0) {
                     self.pageArr[self.categoryIndex] = @([self.pageArr[self.categoryIndex] integerValue]+1);
-                    [self.mainCollection.mj_footer endRefreshing];
+                    if (type == 1) {
+                        [self.mainCollection.mj_header endRefreshing];
+                    }else{
+                        [self.mainCollection.mj_footer endRefreshing];
+                    }
                 } else {
                     [self.mainCollection.mj_footer endRefreshingWithNoMoreData];
                 }
@@ -186,7 +190,7 @@
 - (void)getMoreData {
     self.mainCollection.mj_footer = [MJRefreshBackFooter footerWithRefreshingBlock:^{
         if ([self.boolArr[self.categoryIndex] boolValue]) {
-            [self getListData];
+            [self getListDataWithType:2];
         }
     }];
 }
@@ -196,7 +200,7 @@
         self.boolArr[self.categoryIndex] = @(YES);
         self.pageArr[self.categoryIndex] = @(1);
         self.listArr[self.categoryIndex] = @[];
-        [self getListData];
+        [self getListDataWithType:1];
     }];
 }
 

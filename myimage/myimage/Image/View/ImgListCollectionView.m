@@ -21,6 +21,7 @@
     if (self){
         self.delegate = self;
         self.dataSource = self;
+        self.automaticallyAdjustsScrollIndicatorInsets = NO;
         [self registerClass:[ImgListCollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
         self.backgroundColor = [UIColor systemBackgroundColor];
     }
@@ -51,6 +52,8 @@
     }
     if (model.has_done == 2) {
         cell.signView.hidden = NO;
+    }else{
+        cell.signView.hidden = YES;
     }
      [cell.headImg sd_setImageWithURL:[NSURL URLWithString:imageStr] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
     return cell;

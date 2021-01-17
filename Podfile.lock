@@ -29,7 +29,7 @@ PODS:
   - SDWebImage (5.10.2):
     - SDWebImage/Core (= 5.10.2)
   - SDWebImage/Core (5.10.2)
-  - SGPagingView (1.7.0)
+  - SGPagingView (1.7.1)
   - Shimmer (1.0.2)
 
 DEPENDENCIES:
@@ -78,9 +78,9 @@ SPEC CHECKSUMS:
   MJRefresh: 6afc955813966afb08305477dd7a0d9ad5e79a16
   ReactiveObjC: 011caa393aa0383245f2dcf9bf02e86b80b36040
   SDWebImage: b969dcfc02c40a5da71eac0b03b8f1a0c794a86f
-  SGPagingView: 17624ec46e3306ef3d3d0357e071c9d6e44f0527
+  SGPagingView: 2ac3cec4ea8d1156c7522e521e2799123602ae28
   Shimmer: c5374be1c2b0c9e292fb05b339a513cf291cac86
 
 PODFILE CHECKSUM: d78a9918c1d77d66c8430c8e4ed04f58b3bffd24
 
-COCOAPODS: 1.10.0.beta.2
+COCOAPODS: 1.10.1

@@ -65,6 +65,8 @@
                     if (![self.detailArr containsObject:model.detail_url]) {
                         [self.detailArr addObject:model.detail_url];
                         [self.listArr addObject:model];
+                    }else{
+                        [self.mainCollection.mj_footer endRefreshingWithNoMoreData];
                     }
                 }
                 self.mainCollection.listArr = self.listArr;
@@ -106,6 +108,7 @@
         [_mainCollection mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.top.bottom.equalTo(self.view);
         }];
+        // TODO:插入空白提醒
     }
     return _mainCollection;
 }
