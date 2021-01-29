@@ -35,6 +35,7 @@
                                                                   Class:[WebsiteModel class]];
     }
     [self makeUI];
+    [self addHistory];
     [self getData];
     [self setNav];
 }
@@ -86,6 +87,12 @@
         self.listArr = array;
         self.mainTable.listArr = [[NSMutableArray alloc]initWithArray:array];
     }
+}
+
+// 插入历史数据
+-(void)addHistory{
+    SqliteTool *sqlTool = [SqliteTool sharedInstance];
+    [sqlTool replaceTable:@"history" element:@"article_id,add_time" value:[NSString stringWithFormat:@"%d,%@",self.articleModel.article_id,[NSDate nowTimestamp]]];
 }
 
 - (BOOL)saveImageWithArr:(NSMutableArray *)array {
@@ -164,25 +171,55 @@
 }
 
 - (void)setNav {
+//    UIBarButtonItem *collectBtn = [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:colImgStr] style:UIBarButtonItemStylePlain target:self action:@selector(collectBtnClick:)];
+//    UIBarButtonItem *openBtn = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"browser"] style:UIBarButtonItemStylePlain target:self action:@selector(browserBtnClick:)];
+//    UIBarButtonItem *webviewBtn = [[UIBarButtonItem alloc]initWithImage:[UIImage systemImageNamed:@"paperplane"] style:UIBarButtonItemStylePlain target:self action:@selector(webViewBtnClick)];
+    //TODO:使用一个按钮，在弹出的uialertviewcontroller中添加具体的按钮
+    UIBarButtonItem *moreBtnItem = [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:@"filemenu.and.selection"] style:UIBarButtonItemStylePlain target:self action:@selector(moreBtnClick)];
+//    self.navigationItem.rightBarButtonItems = @[collectBtn, openBtn,webviewBtn];
+    self.navigationItem.rightBarButtonItem = moreBtnItem;
+    
+}
+
+-(void)moreBtnClick{
     SqliteTool *sqlTool = [SqliteTool sharedInstance];
     CollectModel *model = (CollectModel *) [sqlTool findDataFromTable:@"collect"
                                                                 where:[NSString stringWithFormat:@"value = %d and type = 1", self.articleModel.article_id]
                                                                 field:@"*"
                                                                 Class:[CollectModel class]];
-    NSString *colImgStr;
+    NSString *colStr;
     if (model.value == 0) {
-        colImgStr = @"star";
+        colStr = @"收藏";
     } else {
-        colImgStr = @"star.fill";
+        colStr = @"取消收藏";
     }
-    UIBarButtonItem *collectBtn = [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:colImgStr] style:UIBarButtonItemStylePlain target:self action:@selector(collectBtnClick:)];
-    UIBarButtonItem *openBtn = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"browser"] style:UIBarButtonItemStylePlain target:self action:@selector(browserBtnClick:)];
-    UIBarButtonItem *webviewBtn = [[UIBarButtonItem alloc]initWithImage:[UIImage systemImageNamed:@"paperplane"] style:UIBarButtonItemStylePlain target:self action:@selector(webViewBtnClick)];
-    self.navigationItem.rightBarButtonItems = @[collectBtn, openBtn,webviewBtn];
-    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"菜单" message:@"" preferredStyle:UIAlertControllerStyleActionSheet];
+//    收藏
+    UIAlertAction *collectAction = [UIAlertAction actionWithTitle:colStr style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [self collectBtnClick];
+    }];
+    [alertController addAction:collectAction];
+// 系统浏览器打开
+UIAlertAction *webAction = [UIAlertAction actionWithTitle:@"浏览器打开" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    [self browserBtnClick];
+}];
+    [alertController addAction:webAction];
+// 删除本地缓存
+    UIAlertAction *cleanAction = [UIAlertAction actionWithTitle:@"删除本地缓存" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+       BOOL result = [sqlTool updateTable:@"article" where:[NSString stringWithFormat:@"article_id = %d",self.articleModel.article_id] value:@"has_done = 1"];
+       if (result && self.imageSaved){
+           self.articleModel.has_done = 1;
+           self.imageSaved(self.articleModel);
+       }
+    }];
+    [alertController addAction:cleanAction];
+    // 取消
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+    [alertController addAction:cancelAction];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
-- (void)collectBtnClick:(UIBarButtonItem *)button {
+- (void)collectBtnClick {
     // 收藏操作
     SqliteTool *sqlTool = [SqliteTool sharedInstance];
     CollectModel *model = (CollectModel *) [sqlTool findDataFromTable:@"collect"
@@ -195,31 +232,25 @@
                          element:@"value,type"
                            value:[NSString stringWithFormat:@"%d,1", self.articleModel.article_id]
                            where:nil]) {
-            [button setImage:[UIImage systemImageNamed:@"star.fill"]];
+            [self alertWithTitle:@"收藏成功"];
+//            [button setImage:[UIImage systemImageNamed:@"star.fill"]];
         } else {
             [self alertWithTitle:@"收藏失败"];
         }
     } else {
         // 取消收藏
         if ([sqlTool deleteDataFromTable:@"collect" where:[NSString stringWithFormat:@"value = %d and type = 1", self.articleModel.article_id]]) {
-            [button setImage:[UIImage systemImageNamed:@"star"]];
+            [self alertWithTitle:@"取消收藏"];
+//            [button setImage:[UIImage systemImageNamed:@"star"]];
         } else {
             [self alertWithTitle:@"操作失败"];
         }
     }
 }
 
-- (void)browserBtnClick:(UIButton *)button {
+- (void)browserBtnClick {
     NSString  *urlStr = [NSString stringWithFormat:@"%@/%@", self.websiteModel.url, self.articleModel.detail_url];
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlStr] options:@{} completionHandler:nil];
-}
-
--(void)webViewBtnClick{
-    WKWebViewController *VC = [[WKWebViewController alloc]init];
-    VC.model = self.websiteModel;
-    NSString *urlStr = [NSString stringWithFormat:@"%@/%@", self.websiteModel.url, self.articleModel.detail_url];
-    VC.urlStr = urlStr;
-    [self.navigationController pushViewController:VC animated:YES];
 }
 
 /*

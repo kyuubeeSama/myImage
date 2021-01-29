@@ -10,6 +10,7 @@
 #import "ImgListCollectionView.h"
 #import "ArticleModel.h"
 #import "ImgDetailViewController.h"
+#import "ImgListCollectionViewCell.h"
 @interface SearchResultViewController ()
 
 @property(nonatomic, strong) ImgListCollectionView *mainCollection;
@@ -100,15 +101,23 @@
                 ImgDetailViewController *VC = [[ImgDetailViewController alloc] init];
                 VC.articleModel = aModel;
                 VC.websiteModel = weakself.model;
-//                VC.imageSaved = ^(ArticleModel *_Nonnull model) {
-//                    weakself.listArr[indexPath.row] = model;
-//                };
+                VC.imageSaved = ^(ArticleModel *_Nonnull model) {
+                    weakself.listArr[indexPath.row] = model;
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        ImgListCollectionViewCell *cell = (ImgListCollectionViewCell *)[_mainCollection cellForItemAtIndexPath:indexPath];
+                        if (model.has_done == 1){
+                            cell.signView.hidden = YES;
+                        }else{
+                            cell.signView.hidden = NO;
+                        }
+                    });
+                };
                 [weakself.navigationController pushViewController:VC animated:YES];
         };
         [_mainCollection mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.top.bottom.equalTo(self.view);
         }];
-        // TODO:插入空白提醒
+        _mainCollection.ly_emptyView = [LYEmptyView emptyViewWithImageStr:@"no_data" titleStr:@"" detailStr:@""];
     }
     return _mainCollection;
 }

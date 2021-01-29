@@ -6,6 +6,7 @@
 //  Copyright © 2018 liuqingyuan. All rights reserved.
 //
 
+#import <FMDB/FMDatabase.h>
 #import "SqliteTool.h"
 #import "FMDatabaseQueue.h"
 #import "FMDatabaseAdditions.h"
@@ -74,7 +75,10 @@ static id sharedSingleton = nil;
     }
 }
 
--(BOOL)insertTable:(NSString *)tableName element:(NSString *)element value:(NSString *)value  where:(NSString * _Nullable)where {
+-(BOOL)insertTable:(NSString *)tableName
+           element:(NSString *)element
+             value:(NSString *)value
+             where:(NSString * _Nullable)where {
     FMDatabase *db = [self openDB];
     if ([NSString MyStringIsNULL:where]) {
         NSString *sql = [NSString stringWithFormat:@"INSERT INTO %@ (%@) VALUES (%@)", tableName, element, value];
@@ -85,6 +89,15 @@ static id sharedSingleton = nil;
         NSLog(@"insert and where not exist:%@",sql);
         return [db executeUpdate:sql];
     }
+}
+
+-(BOOL)replaceTable:(NSString *)tableName
+            element:(NSString *)element
+              value:(NSString *)value {
+    FMDatabase *db = [self openDB];
+    NSString *sql = [NSString stringWithFormat:@"REPLACE INTO %@ (%@) VALUES (%@)",tableName,element,value];
+    NSLog(@"replace:%@",sql);
+    return [db executeUpdate:sql];
 }
 
 - (NSMutableArray *)selectDataFromTable:(NSString *)tableName

@@ -21,6 +21,7 @@ PODS:
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
   - hpple (0.2.0)
+  - LYEmptyView (1.3.1)
   - Masonry (1.1.0)
   - MBProgressHUD (1.2.0)
   - MJExtension (3.2.2)
@@ -39,6 +40,7 @@ DEPENDENCIES:
   - FluentDarkModeKit
   - FMDB
   - hpple
+  - LYEmptyView
   - Masonry
   - MBProgressHUD
   - MJExtension
@@ -56,6 +58,7 @@ SPEC REPOS:
     - FluentDarkModeKit
     - FMDB
     - hpple
+    - LYEmptyView
     - Masonry
     - MBProgressHUD
     - MJExtension
@@ -72,6 +75,7 @@ SPEC CHECKSUMS:
   FluentDarkModeKit: 0c5f31ca81eb058f3e8b6d79b3d08afbe7c40c42
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   hpple: 3b765f96fc2cd56ad1a49aef6f7be5cb2aa64b57
+  LYEmptyView: b6d418cfa38b78df0cf243f9a9c25ccbdc399922
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
   MJExtension: d9b9c74cbdeb724c1e9ecbb157b318276e62e876
@@ -81,6 +85,6 @@ SPEC CHECKSUMS:
   SGPagingView: 2ac3cec4ea8d1156c7522e521e2799123602ae28
   Shimmer: c5374be1c2b0c9e292fb05b339a513cf291cac86
 
-PODFILE CHECKSUM: d78a9918c1d77d66c8430c8e4ed04f58b3bffd24
+PODFILE CHECKSUM: d429731c7e515ce25b8c0e4896d54ddb556b6b05
 
 COCOAPODS: 1.10.1

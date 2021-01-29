@@ -64,6 +64,7 @@
             self.mainCollection.listArr = self.listArr[self.categoryIndex];
             [self.mainCollection reloadData];
         }else{
+            [self.mainCollection reloadData];
             // 本地没有数据，从网络获取。
             [self getListDataWithType:2];
             self.boolArr[self.categoryIndex] = @(YES);
@@ -176,9 +177,13 @@
             VC.imageSaved = ^(ArticleModel *_Nonnull model) {
                 dataArr[indexPath.row] = model;
                 weakself.listArr[weakself.categoryIndex] = dataArr;
-                dispatch_sync(dispatch_get_main_queue(), ^{
+                dispatch_async(dispatch_get_main_queue(), ^{
                     ImgListCollectionViewCell *cell = (ImgListCollectionViewCell *)[strongself->_mainCollection cellForItemAtIndexPath:indexPath];
-                     cell.signView.hidden = NO;
+                    if (model.has_done == 1){
+                        cell.signView.hidden = YES;
+                    }else{
+                        cell.signView.hidden = NO;
+                    }
                 });
             };
             [weakself.navigationController pushViewController:VC animated:YES];

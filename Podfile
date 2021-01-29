@@ -18,6 +18,7 @@ target 'myimage' do
 #  pod 'Texture'
   pod 'Shimmer'
 pod 'SGPagingView'
+pod 'LYEmptyView'
 use_frameworks!
 pod 'FluentDarkModeKit'
 

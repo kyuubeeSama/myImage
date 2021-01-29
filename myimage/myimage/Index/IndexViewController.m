@@ -11,16 +11,17 @@
 #import "UserViewController.h"
 #import "ImgListViewController.h"
 #import "UIViewController+CWLateralSlide.h"
-@interface IndexViewController ()<UITableViewDelegate,UITableViewDataSource>
 
-@property(nonatomic,strong)UITableView *mainTable;
-@property(nonatomic,copy)NSArray *listArr;
+@interface IndexViewController () <UITableViewDelegate, UITableViewDataSource>
+
+@property(nonatomic, strong) UITableView *mainTable;
+@property(nonatomic, copy) NSArray *listArr;
 
 @end
 
 @implementation IndexViewController
 
--(void)viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
     [self getData];
 }
@@ -32,7 +33,7 @@
     self.title = @"首页";
     [self setNav];
     [self makeUI];
-    NSLog(@"%@",[FileTool getDocumentPath]);
+    NSLog(@"%@", [FileTool getDocumentPath]);
     WeakSelf(self)
     [self cw_registerShowIntractiveWithEdgeGesture:YES transitionDirectionAutoBlock:^(CWDrawerTransitionDirection direction) {
         if (direction == CWDrawerTransitionFromLeft) { // 左侧滑出
@@ -48,35 +49,68 @@
     [self cw_showDefaultDrawerViewController:VC];
 }
 
--(void)getData{
+- (void)getData {
     SqliteTool *sqlTool = [SqliteTool sharedInstance];
     self.listArr = [sqlTool selectDataFromTable:@"website" where:@"is_delete = 1" field:@"*" Class:[WebsiteModel class]];
     [self.mainTable reloadData];
 }
 
--(void)makeDefaultData{
+- (void)makeDefaultData {
     SqliteTool *sqlTool = [SqliteTool sharedInstance];
     [sqlTool createDBWithName:@"imgDatabase.db" exist:^{
         // 根据需要更新数据库内容
-    } success:^{
+    }                 success:^{
         [self beginProgressWithTitle:@"正在初始化"];
         // 初次创建数据库成功
         // 创建初始表单
 //        website
-        [sqlTool createTableWithSql:@"CREATE TABLE IF NOT EXISTS `website`  (website_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,name VARCHAR(200) NOT NULL,value INT NOT NULl,url VARCHAR(200) NOT NULL,is_delete INT NOT NULL DEFAULT(1))"];
+        [sqlTool createTableWithSql:@"CREATE TABLE IF NOT EXISTS `website`  "
+                                    "(website_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
+                                    "name VARCHAR(200) NOT NULL,"
+                                    "value INT NOT NULl,"
+                                    "url VARCHAR(200) NOT NULL,"
+                                    "is_delete INT NOT NULL DEFAULT(1))"];
 //        category
-        [sqlTool createTableWithSql:@"CREATE TABLE IF NOT EXISTS `category` (category_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,website_id INT NOT NULL,name VARCHAR(200) NOT NULL,value VARCHAR(50) NOT NULL,is_delete INT NOT NULL DEFAULT(1))"];
-//        article ex_id 原来项目中的id
-        [sqlTool createTableWithSql:@"CREATE TABLE IF NOT EXISTS `article` (article_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,website_id INT NOT NULL,name VARCHAR(200) NOT NULL,ex_id INT NOT NULL,category_id INT NOT NULL,detail_url VARCHAR(200) NOT NULL,has_done INT NOT NULL DEFAULT(1),is_delete INT NOT NULL DEFAULT(1),img_url VARCHAR(200) NOT NULL)"];
+        [sqlTool createTableWithSql:@"CREATE TABLE IF NOT EXISTS `category` "
+                                    "(category_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
+                                    "website_id INT NOT NULL,"
+                                    "name VARCHAR(200) NOT NULL,"
+                                    "value VARCHAR(50) NOT NULL,"
+                                    "is_delete INT NOT NULL DEFAULT(1))"];
+//        此处使用项目时间还是使用前id
+        [sqlTool createTableWithSql:@"CREATE TABLE IF NOT EXISTS `article` "
+                                    "(article_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
+                                    "website_id INT NOT NULL,"
+                                    "name VARCHAR(200) NOT NULL,"
+                                    "category_id INT NOT NULL,"
+                                    "detail_url VARCHAR(200) NOT NULL UNIQUE,"
+                                    "has_done INT NOT NULL DEFAULT(1),"
+                                    "is_delete INT NOT NULL DEFAULT(1),"
+                                    "img_url VARCHAR(200) NOT NULL)"];
 //        image
-        [sqlTool createTableWithSql:@"CREATE TABLE IF NOT EXISTS `image` (image_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,image_url VARCHAR(200) NOT NULL,website_id INT NOT NULL,article_id INT NOT NULL,width FLOAT DEFAULT(0),height FLOAT DEFAULT(0))"];
+        [sqlTool createTableWithSql:@"CREATE TABLE IF NOT EXISTS `image` "
+                                    "(image_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                                    "image_url VARCHAR(200) NOT NULL,"
+                                    "website_id INT NOT NULL,"
+                                    "article_id INT NOT NULL,"
+                                    "width FLOAT DEFAULT(0),"
+                                    "height FLOAT DEFAULT(0))"];
 //        collect
-        [sqlTool createTableWithSql:@"CREATE TABLE IF NOT EXISTS `collect` (collect_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,value INT NOT NULL,type INT NOT NULL)"];
+        [sqlTool createTableWithSql:@"CREATE TABLE IF NOT EXISTS `collect` "
+                                    "(collect_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                                    "value INT NOT NULL,"
+                                    "type INT NOT NULL)"];
+//        history  历史记录
+        [sqlTool createTableWithSql:@"CREATE TABLE IF NOT EXISTS 'history'"
+                                    "(history_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                                    "article_id INTEGER NOT NULL UNIQUE,"
+                                    "add_time INTEGER)"];
+
         [self endProgress];
         [Tool showAlertWithTitle:@"提醒" Message:@"请在个人中心添加站点" withSureBtnClick:^{
             [self defaultAnimationFromLeft];
         }];
-    } failure:^{
+    }                 failure:^{
         // 创建数据库失败
         [self alertWithTitle:@"创建数据库失败"];
     }];
@@ -92,7 +126,7 @@
 }
 
 - (void)makeUI {
-    self.mainTable =[[UITableView alloc]init];
+    self.mainTable = [[UITableView alloc] init];
     [self.view addSubview:self.mainTable];
     self.mainTable.delegate = self;
     self.mainTable.dataSource = self;
@@ -104,14 +138,14 @@
     }];
 }
 
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.listArr.count;
 }
 
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-    if (!cell){
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     WebsiteModel *model = self.listArr[(NSUInteger) indexPath.row];
@@ -119,14 +153,14 @@
     return cell;
 }
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    ImgListViewController *VC = [[ImgListViewController alloc]init];
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    ImgListViewController *VC = [[ImgListViewController alloc] init];
     WebsiteModel *model = self.listArr[(NSUInteger) indexPath.row];
     VC.model = model;
-    [self.navigationController pushViewController:VC animated:YES];    
+    [self.navigationController pushViewController:VC animated:YES];
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 60;
 }
 
