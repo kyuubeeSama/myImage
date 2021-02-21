@@ -104,7 +104,7 @@
                 VC.imageSaved = ^(ArticleModel *_Nonnull model) {
                     weakself.listArr[indexPath.row] = model;
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        ImgListCollectionViewCell *cell = (ImgListCollectionViewCell *)[_mainCollection cellForItemAtIndexPath:indexPath];
+                        ImgListCollectionViewCell *cell = (ImgListCollectionViewCell *)[weakself.mainCollection cellForItemAtIndexPath:indexPath];
                         if (model.has_done == 1){
                             cell.signView.hidden = YES;
                         }else{

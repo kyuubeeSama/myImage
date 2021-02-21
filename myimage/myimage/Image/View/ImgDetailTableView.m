@@ -63,7 +63,7 @@
                                 options:SDWebImageLowPriority progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL *_Nullable targetURL) {
 
             }                 completed:^(UIImage *_Nullable image, NSError *_Nullable error, SDImageCacheType cacheType, NSURL *_Nullable imageURL) {
-                if (error == nil) {
+                if (error == nil && image.size.width > 0 && image.size.height > 0) {
                     [self.imgArr addObject:image];
                     model.width = image.size.width;
                     model.height = image.size.height;

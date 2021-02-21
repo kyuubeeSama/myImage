@@ -239,9 +239,11 @@ static id sharedSingleton = nil;
                                     on:(NSString *)on
                                  where:(NSString *)where
                                  field:(NSString *)field
-                                 class:(Class)modelClass{
+                                 limit:(NSInteger)limit
+                              pageSize:(NSInteger)pageSize
+                                 class:(Class)modelClass {
     FMDatabase *db = [self openDB];
-    NSString *sql = [NSString stringWithFormat:@"SELECT %@ FROM %@ %@ ON %@ WHERE %@", field, tableName, join, on, where];
+    NSString *sql = [NSString stringWithFormat:@"SELECT %@ FROM %@ %@ ON %@ WHERE %@ limit %ld,%ld", field, tableName, join, on, where,limit,pageSize];
     NSLog(@"查询语句%@", sql);
     FMResultSet *result = [db executeQuery:sql];
     NSMutableArray *array = [[NSMutableArray alloc] initWithArray:@[]];
@@ -352,16 +354,6 @@ static id sharedSingleton = nil;
 //        return false;
 //    }
     return YES;
-}
-
-// 删除站点
--(BOOL)deleteWebsiteWithID:(NSString *)ID{
-    FMDatabase *db = [self openDB];
-    // 联表删除
-    NSString *sql = [NSString stringWithFormat:@"%@",ID];
-    BOOL result = [db executeUpdate:sql];
-    [db close];
-    return result;
 }
 
 @end

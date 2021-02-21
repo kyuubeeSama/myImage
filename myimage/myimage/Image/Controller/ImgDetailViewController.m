@@ -171,12 +171,7 @@
 }
 
 - (void)setNav {
-//    UIBarButtonItem *collectBtn = [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:colImgStr] style:UIBarButtonItemStylePlain target:self action:@selector(collectBtnClick:)];
-//    UIBarButtonItem *openBtn = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"browser"] style:UIBarButtonItemStylePlain target:self action:@selector(browserBtnClick:)];
-//    UIBarButtonItem *webviewBtn = [[UIBarButtonItem alloc]initWithImage:[UIImage systemImageNamed:@"paperplane"] style:UIBarButtonItemStylePlain target:self action:@selector(webViewBtnClick)];
-    //TODO:使用一个按钮，在弹出的uialertviewcontroller中添加具体的按钮
     UIBarButtonItem *moreBtnItem = [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:@"filemenu.and.selection"] style:UIBarButtonItemStylePlain target:self action:@selector(moreBtnClick)];
-//    self.navigationItem.rightBarButtonItems = @[collectBtn, openBtn,webviewBtn];
     self.navigationItem.rightBarButtonItem = moreBtnItem;
     
 }
@@ -233,7 +228,6 @@ UIAlertAction *webAction = [UIAlertAction actionWithTitle:@"浏览器打开" sty
                            value:[NSString stringWithFormat:@"%d,1", self.articleModel.article_id]
                            where:nil]) {
             [self alertWithTitle:@"收藏成功"];
-//            [button setImage:[UIImage systemImageNamed:@"star.fill"]];
         } else {
             [self alertWithTitle:@"收藏失败"];
         }
@@ -241,7 +235,6 @@ UIAlertAction *webAction = [UIAlertAction actionWithTitle:@"浏览器打开" sty
         // 取消收藏
         if ([sqlTool deleteDataFromTable:@"collect" where:[NSString stringWithFormat:@"value = %d and type = 1", self.articleModel.article_id]]) {
             [self alertWithTitle:@"取消收藏"];
-//            [button setImage:[UIImage systemImageNamed:@"star"]];
         } else {
             [self alertWithTitle:@"操作失败"];
         }

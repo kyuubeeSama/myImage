@@ -26,7 +26,17 @@
         [self.allBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [self.allBtn setImage:[UIImage systemImageNamed:@"circle"] forState:UIControlStateNormal];
         [self.allBtn setImagePositionWithType:SSImagePositionTypeLeft spacing:5];
-        [self.allBtn addTarget:self action:@selector(allBtnClick) forControlEvents:UIControlEventTouchUpInside];
+        [[self.allBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(__kindof UIControl *x) {
+            self.is_all = !self.is_all;
+            if (self.is_all) {
+                [self.allBtn setImage:[UIImage systemImageNamed:@"circle.fill"] forState:UIControlStateNormal];
+            }else{
+                [self.allBtn setImage:[UIImage systemImageNamed:@"circle"] forState:UIControlStateNormal];
+            }
+            if (self.allBlock) {
+                self.allBlock();
+            }
+        }];
         // 右侧删除按钮
         UIButton *deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [self addSubview:deleteBtn];
@@ -37,30 +47,16 @@
         }];
         [deleteBtn setTitle:@"删除" forState:UIControlStateNormal];
         [deleteBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [deleteBtn addTarget:self action:@selector(deleteBtnClick) forControlEvents:UIControlEventTouchUpInside];
+        [[deleteBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(__kindof UIControl *x) {
+            if (self.deleteBlock) {
+                self.deleteBlock();
+            }
+        }];
         deleteBtn.layer.masksToBounds = YES;
         deleteBtn.layer.cornerRadius = 20;
         deleteBtn.backgroundColor = [UIColor redColor];
     }
     return self;
-}
-
--(void)allBtnClick{
-    self.is_all = !self.is_all;
-    if (self.is_all) {
-        [self.allBtn setImage:[UIImage systemImageNamed:@"circle.fill"] forState:UIControlStateNormal];
-    }else{
-        [self.allBtn setImage:[UIImage systemImageNamed:@"circle"] forState:UIControlStateNormal];
-    }
-    if (self.allBlock) {
-        self.allBlock();
-    }
-}
-
--(void)deleteBtnClick{
-    if (self.deleteBlock) {
-        self.deleteBlock();
-    }
 }
 
 /*

@@ -48,6 +48,7 @@
 		A98546452296895500BAEFB1 /* HZPhotoBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = A98546402296895500BAEFB1 /* HZPhotoBrowserView.m */; };
 		A98A2EB9259AC93D0074755C /* EditBottomView.m in Sources */ = {isa = PBXBuildFile; fileRef = A98A2EB8259AC93D0074755C /* EditBottomView.m */; };
 		A98A2EBD259ACB350074755C /* UIButton+SSEdgeInsets.m in Sources */ = {isa = PBXBuildFile; fileRef = A98A2EBC259ACB350074755C /* UIButton+SSEdgeInsets.m */; };
+		A997BD3825E2526200BE52AC /* ImgCategoryListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A997BD3725E2526200BE52AC /* ImgCategoryListViewController.m */; };
 		A9C202E021D49B79006572DD /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C202DF21D49B79006572DD /* UserViewController.m */; };
 		A9C2030721D5BCDA006572DD /* MYPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C2030621D5BCDA006572DD /* MYPickerView.m */; };
 		A9CDD3062473E8180045C370 /* NSObject+Tool.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CDD3052473E8180045C370 /* NSObject+Tool.m */; };
@@ -145,6 +146,8 @@
 		A98A2EBB259ACB350074755C /* UIButton+SSEdgeInsets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+SSEdgeInsets.h"; sourceTree = "<group>"; };
 		A98A2EBC259ACB350074755C /* UIButton+SSEdgeInsets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+SSEdgeInsets.m"; sourceTree = "<group>"; };
 		A98CB95024CE9E4C00310FDE /* myimage.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = myimage.entitlements; sourceTree = "<group>"; };
+		A997BD3625E2526200BE52AC /* ImgCategoryListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImgCategoryListViewController.h; sourceTree = "<group>"; };
+		A997BD3725E2526200BE52AC /* ImgCategoryListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImgCategoryListViewController.m; sourceTree = "<group>"; };
 		A9C202DE21D49B79006572DD /* UserViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserViewController.h; sourceTree = "<group>"; };
 		A9C202DF21D49B79006572DD /* UserViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserViewController.m; sourceTree = "<group>"; };
 		A9C2030521D5BCDA006572DD /* MYPickerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MYPickerView.h; sourceTree = "<group>"; };
@@ -399,6 +402,8 @@
 				A9F4ABA721C23EBC00FE84E9 /* ImgDetailViewController.m */,
 				A9452AEC25072427003D9CC9 /* SearchResultViewController.h */,
 				A9452AED25072427003D9CC9 /* SearchResultViewController.m */,
+				A997BD3625E2526200BE52AC /* ImgCategoryListViewController.h */,
+				A997BD3725E2526200BE52AC /* ImgCategoryListViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -610,6 +615,7 @@
 				144DFE45B68135B215C346F1 /* NetWorkingTool.m in Sources */,
 				144DF203A82CC66B137DAAAD /* CategoryChooseView.m in Sources */,
 				144DF4FC324FB18EA55C73FB /* UIColor+Extension.m in Sources */,
+				A997BD3825E2526200BE52AC /* ImgCategoryListViewController.m in Sources */,
 				A904AC4C23BDE2EA00E3281E /* ImageModel.m in Sources */,
 				A97975FA24EE4BC90099C518 /* ImgListCollectionView.m in Sources */,
 				144DF654369E360B57068032 /* NSString+Extension.m in Sources */,

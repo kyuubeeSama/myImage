@@ -28,8 +28,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 // 删除数据
 -(BOOL)deleteDataFromTable:(NSString *)tablename where:(NSString *)where;
-// 删除站点
--(BOOL)deleteWebsiteWithID:(NSString *)ID;
 
 // 读取数据
 
@@ -56,7 +54,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param modelClass 返回对象
 -(Class)findDataFromTable:(NSString *)tableName where:(NSString *)where field:(NSString *)field Class:(Class)modelClass;
 
--(NSMutableArray *)selectDataFromTable:(NSString *)tableName join:(NSString *)join on:(NSString *)on where:(NSString *)where field:(NSString *)field class:(Class)modelClass;
+-(NSMutableArray *)selectDataFromTable:(NSString *)tableName join:(NSString *)join on:(NSString *)on where:(NSString *)where field:(NSString *)field limit:(NSInteger)limit pageSize:(NSInteger)pageSize class:(Class)modelClass;
 
 // 更新数据
 -(BOOL)updateTable:(NSString *)tablename where:(NSString *)where value:(NSString *)value;

@@ -1,5 +1,5 @@
 source 'https://gitee.com/mirrors/CocoaPods-Specs.git'
-platform :ios,'13.0'
+platform :ios, '13.0'
 target 'myimage' do
   pod 'MJRefresh'
   pod 'FMDB'
@@ -15,11 +15,13 @@ target 'myimage' do
   # xpath
   pod 'hpple'
   # 离屏渲染
-#  pod 'Texture'
+  #  pod 'Texture'
   pod 'Shimmer'
-pod 'SGPagingView'
-pod 'LYEmptyView'
-use_frameworks!
-pod 'FluentDarkModeKit'
+
+  pod 'LYEmptyView'
+
+  pod 'JXCategoryView'
+  use_frameworks!
+  pod 'FluentDarkModeKit'
 
 end

@@ -63,6 +63,8 @@
                                                           on:@"article.article_id = collect.value and website.value = article.website_id"
                                                        where:@"collect.type = 1"
                                                        field:@"article.*,website.url"
+                                                       limit:self.listArr.count
+                                                    pageSize:20
                                                        class:[ArticleCollectModel class]];
         if (array.count > 0) {
         } else {
@@ -76,6 +78,8 @@
                                                           on:@"image.image_id = collect.value and image.article_id = article.article_id and article.website_id = website.value"
                                                        where:@"collect.type = 2"
                                                        field:@"image.*,website.url"
+                                                       limit:self.listArr.count
+                                                    pageSize:20
                                                        class:[ImgCollectModel class]];
         if (array.count > 0) {
         } else {
@@ -129,14 +133,7 @@
     if (self.type == 1) {
         ArticleCollectModel *model = self.listArr[(NSUInteger) indexPath.row];
         ImgDetailViewController *VC = [[ImgDetailViewController alloc] init];
-        VC.articleModel = [[ArticleModel alloc] init];
-        VC.articleModel.article_id = model.article_id;
-        VC.articleModel.website_id = model.website_id;
-        VC.articleModel.img_url = model.img_url;
-        VC.articleModel.detail_url = model.img_url;
-        VC.articleModel.name = model.name;
-        VC.articleModel.has_done = model.has_done;
-        VC.articleModel.is_delete = model.is_delete;
+        VC.articleModel = [[ArticleModel alloc] initWithArticleCollectModel:model];
         [self.navigationController pushViewController:VC animated:YES];
     } else {
         ImgCollectModel *model = self.listArr[(NSUInteger) indexPath.row];

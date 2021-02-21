@@ -6,7 +6,7 @@
 //  Copyright © 2020 liuqingyuan. All rights reserved.
 //
 
-
+#import "ArticleCollectModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy)NSString *img_url;
 @property (nonatomic, assign)int has_done;
 @property (nonatomic, assign)int is_delete;
+
+-(instancetype)initWithArticleCollectModel:(ArticleCollectModel *)model;
 
 @end
 

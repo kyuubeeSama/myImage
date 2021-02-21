@@ -22,6 +22,7 @@
 #import "FluentDarkModeKit.h"
 #import <ReactiveObjC/ReactiveObjC.h>
 #import <LYEmptyView/LYEmptyViewHeader.h>
+#import <JXCategoryView/JXCategoryView.h>
 
 #import "SqliteTool.h"
 #import "FileTool.h"
