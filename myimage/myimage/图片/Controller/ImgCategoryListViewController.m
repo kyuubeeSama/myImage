@@ -51,6 +51,7 @@
         NSArray *array = [sqliteTool selectDataFromTable:@"article"
                                                    where:[NSString stringWithFormat:@"website_id = %d and category_id = %d", self.webModel.value, self.categoryModel.category_id]
                                                    field:@"*"
+                                                 orderby:@"aid desc"
                                                    Class:[ArticleModel class]];
         if ([array count]) {
             self.listArr = [[NSMutableArray alloc] initWithArray:array];
@@ -107,6 +108,7 @@
             [self getListDataWithType:2];
         }
     }];
+    self.mainCollection.model = self.webModel;
     self.mainCollection.mj_header = [MJRefreshHeader headerWithRefreshingBlock:^{
         self.is_web = YES;
         self.pageNum = 1;

@@ -82,6 +82,7 @@
         NSMutableArray *array = [sqlTool selectDataFromTable:@"image"
                                                        where:[NSString stringWithFormat:@"article_id = %d", self.articleModel.article_id]
                                                        field:@"*"
+                                                     orderby:@""
                                                        Class:[ImageModel class]];
         [self endProgress];
         self.listArr = array;

@@ -29,6 +29,14 @@ NS_ASSUME_NONNULL_BEGIN
 // 删除数据
 -(BOOL)deleteDataFromTable:(NSString *)tablename where:(NSString *)where;
 
+// 判断表是否存在
+
+// 判断字段是否存在
+-(BOOL)findColumnExistFromTable:(NSString *)tableName column:(NSString *)column;
+
+// 表中添加新字段
+-(BOOL)addColumnFromTable:(NSString *)tableName columnAndValue:(NSString *)column;
+
 // 读取数据
 
 /// 查询数据(全查询)
@@ -36,7 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param where 查询条件
 /// @param field 查询字段
 /// @param modelClass 返回对象
--(NSMutableArray *)selectDataFromTable:(NSString *)tableName where:(NSString *)where field:(NSString *)field Class:(Class)modelClass;
+-(NSMutableArray *)selectDataFromTable:(NSString *)tableName where:(NSString *)where field:(NSString *)field orderby:(NSString *)order Class:(Class)modelClass;
 
 /// 查询数据（带页码）
 /// @param tableName 表名

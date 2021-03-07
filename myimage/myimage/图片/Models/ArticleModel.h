@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy)NSString *detail_url;
 @property (nonatomic, copy)NSString *img_url;
 @property (nonatomic, assign)int has_done;
+@property(nonatomic, assign) int aid;
 @property (nonatomic, assign)int is_delete;
 
 -(instancetype)initWithArticleCollectModel:(ArticleCollectModel *)model;

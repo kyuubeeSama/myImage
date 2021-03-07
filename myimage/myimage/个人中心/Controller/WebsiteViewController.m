@@ -34,7 +34,7 @@
 
 -(void)getData{
     SqliteTool *sqlTool = [SqliteTool sharedInstance];
-    NSMutableArray *webArr = [sqlTool selectDataFromTable:@"website" where:@"is_delete = 1" field:@"*" Class:[WebsiteModel class]];
+    NSMutableArray *webArr = [sqlTool selectDataFromTable:@"website" where:@"is_delete = 1" field:@"*" orderby:@"" Class:[WebsiteModel class]];
     for(WebsiteModel *model  in webArr){
         [self.websiteArr addObject:model.name];
     }

@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign)int image_id;
 @property (nonatomic, copy)NSString *image_url;
 @property(nonatomic,assign)int article_id;
+@property(nonatomic, copy) NSString *website_id;
 @property (nonatomic, assign)CGFloat width;
 @property (nonatomic, assign)CGFloat height;
 @property (nonatomic, copy)NSString *url;

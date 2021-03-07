@@ -262,12 +262,12 @@
 		A938825B21C1FB350085958B /* myimage */ = {
 			isa = PBXGroup;
 			children = (
-				A9C202D521D49B2A006572DD /* User */,
+				A9C202D521D49B2A006572DD /* 个人中心 */,
 				A9F63F0F21C220BD00F29893 /* config */,
 				A938826521C1FC320085958B /* Extension */,
 				A938826121C1FBB00085958B /* Tools */,
-				A938825E21C1FB7F0085958B /* Image */,
-				A938825D21C1FB6C0085958B /* Index */,
+				A938825E21C1FB7F0085958B /* 图片 */,
+				A938825D21C1FB6C0085958B /* 首页 */,
 				A938825C21C1FB610085958B /* Base */,
 			);
 			path = myimage;
@@ -284,24 +284,24 @@
 			path = Base;
 			sourceTree = "<group>";
 		};
-		A938825D21C1FB6C0085958B /* Index */ = {
+		A938825D21C1FB6C0085958B /* 首页 */ = {
 			isa = PBXGroup;
 			children = (
 				A938826621C1FD3C0085958B /* IndexViewController.h */,
 				A938826721C1FD3C0085958B /* IndexViewController.m */,
 				A9CDD3012473D2C80045C370 /* myimage-Bridging-Header.h */,
 			);
-			path = Index;
+			path = "首页";
 			sourceTree = "<group>";
 		};
-		A938825E21C1FB7F0085958B /* Image */ = {
+		A938825E21C1FB7F0085958B /* 图片 */ = {
 			isa = PBXGroup;
 			children = (
 				A9F4ABC121C3ADEA00FE84E9 /* View */,
 				A9F4ABC021C3ADDD00FE84E9 /* Controller */,
 				144DFFE4D7C1FCB8EFABFA87 /* Models */,
 			);
-			path = Image;
+			path = "图片";
 			sourceTree = "<group>";
 		};
 		A938826121C1FBB00085958B /* Tools */ = {
@@ -354,14 +354,14 @@
 			path = ptotoBrowser;
 			sourceTree = "<group>";
 		};
-		A9C202D521D49B2A006572DD /* User */ = {
+		A9C202D521D49B2A006572DD /* 个人中心 */ = {
 			isa = PBXGroup;
 			children = (
 				A904AC5823BF219000E3281E /* Models */,
 				A9C202D721D49B3A006572DD /* View */,
 				A9C202D621D49B34006572DD /* Controller */,
 			);
-			path = User;
+			path = "个人中心";
 			sourceTree = "<group>";
 		};
 		A9C202D621D49B34006572DD /* Controller */ = {

@@ -35,7 +35,6 @@
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     ArticleModel *model = self.listArr[indexPath.row];
     ImgListCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
-    //TODO:如果该图片已经在本地加载，添加标识。如果该图片已收藏，添加标识
     NSLog(@"%@,%@,%@", model.name, model.img_url, model.detail_url);
     cell.titleLab.text = model.name;
     NSString *imageStr;
@@ -55,6 +54,7 @@
     }else{
         cell.signView.hidden = YES;
     }
+    NSLog(@"图片地址是%@",imageStr);
      [cell.headImg sd_setImageWithURL:[NSURL URLWithString:imageStr] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
     return cell;
 }
@@ -71,7 +71,6 @@
     if (self.cellDidSelect){
         self.cellDidSelect(indexPath);
     }
-
 }
 
 /*

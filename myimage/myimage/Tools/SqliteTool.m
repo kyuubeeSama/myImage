@@ -7,6 +7,7 @@
 //
 
 #import <FMDB/FMDatabase.h>
+#import <FMDB/FMDatabaseAdditions.h>
 #import "SqliteTool.h"
 #import "FMDatabaseQueue.h"
 #import "FMDatabaseAdditions.h"
@@ -100,12 +101,17 @@ static id sharedSingleton = nil;
     return [db executeUpdate:sql];
 }
 
-- (NSMutableArray *)selectDataFromTable:(NSString *)tableName
-                                  where:(NSString *)where
-                                  field:(NSString *)field
-                                  Class:(Class)modelClass {
+-(NSMutableArray *)selectDataFromTable:(NSString *)tableName
+                                 where:(NSString *)where
+                                 field:(NSString *)field
+                               orderby:(NSString *)order
+                                 Class:(Class)modelClass{
     FMDatabase *db = [self openDB];
-    NSString *sql = [NSString stringWithFormat:@"SELECT %@ FROM %@ WHERE %@", field, tableName, where];
+    NSString *orderInfo = @"";
+    if (order.length > 0) {
+        orderInfo = [NSString stringWithFormat:@"order by %@",order];
+    }
+    NSString *sql = [NSString stringWithFormat:@"SELECT %@ FROM %@ WHERE %@ %@", field, tableName, where, orderInfo];
     NSLog(@"查询语句%@", sql);
     FMResultSet *result = [db executeQuery:sql];
     NSMutableArray *array = [[NSMutableArray alloc] initWithArray:@[]];
@@ -145,6 +151,20 @@ static id sharedSingleton = nil;
     return array;
 }
 
+-(BOOL)findColumnExistFromTable:(NSString *)tableName column:(NSString *)column {
+    FMDatabase *db = [self openDB];
+//    select * from sqlite_master where name = 'article' and sql like '%aid%'
+    return [db columnExists:column inTableWithName:tableName];
+}
+
+-(BOOL)addColumnFromTable:(NSString *)tableName columnAndValue:(NSString *)column {
+    FMDatabase *db = [self openDB];
+//    alter table article add aid INT default 0
+    NSString *sql = [NSString stringWithFormat:@"alter table %@ add %@", tableName, column];
+    BOOL result = [db executeUpdate:sql];
+    [db close];
+    return result;
+}
 - (NSMutableArray *)selectDataFromTable:(NSString *)tableName
                                   where:(NSString *)where
                                   field:(NSString *)field

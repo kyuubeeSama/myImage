@@ -51,7 +51,7 @@
 
 - (void)getData {
     SqliteTool *sqlTool = [SqliteTool sharedInstance];
-    self.listArr = [sqlTool selectDataFromTable:@"website" where:@"is_delete = 1" field:@"*" Class:[WebsiteModel class]];
+    self.listArr = [sqlTool selectDataFromTable:@"website" where:@"is_delete = 1" field:@"*" orderby:@"" Class:[WebsiteModel class]];
     [self.mainTable reloadData];
 }
 
@@ -59,6 +59,17 @@
     SqliteTool *sqlTool = [SqliteTool sharedInstance];
     [sqlTool createDBWithName:@"imgDatabase.db" exist:^{
         // 根据需要更新数据库内容
+//        查询是否存在某字段，如果不存在，添加字段
+        BOOL result = [sqlTool findColumnExistFromTable:@"article" column:@"aid"];
+        if (!result) {
+            // 添加字段
+            BOOL result1 = [sqlTool addColumnFromTable:@"article" columnAndValue:@"aid INT DEFAULT(0)"];
+            if (result1) {
+                NSLog(@"添加成功");
+            } else {
+                NSLog(@"添加失败");
+            }
+        }
     }                 success:^{
         [self beginProgressWithTitle:@"正在初始化"];
         // 初次创建数据库成功
@@ -86,6 +97,7 @@
                                     "detail_url VARCHAR(200) NOT NULL UNIQUE,"
                                     "has_done INT NOT NULL DEFAULT(1),"
                                     "is_delete INT NOT NULL DEFAULT(1),"
+                                    "aid INT DEFAULT(0),"
                                     "img_url VARCHAR(200) NOT NULL)"];
 //        image
         [sqlTool createTableWithSql:@"CREATE TABLE IF NOT EXISTS `image` "

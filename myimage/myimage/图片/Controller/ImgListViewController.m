@@ -52,6 +52,7 @@
     self.categoryArr = [sqlTool selectDataFromTable:@"category"
                                                   where:[NSString stringWithFormat:@"website_id = %d and is_delete = 1", self.model.value]
                                                   field:@"*"
+                                                orderby:@""
                                                   Class:[CategoryModel class]];
     for (CategoryModel *model in self.categoryArr){
         [self.titleArr addObject:model.name];

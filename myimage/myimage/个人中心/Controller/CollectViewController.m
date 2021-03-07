@@ -56,6 +56,7 @@
 
 - (void)getData {
     SqliteTool *sqlTool = [SqliteTool sharedInstance];
+    // 获取相册
     if (self.type == 1) {
 //    select article.*,website.url from article left join collect,website on collect.value = article.article_id and website.website_id = article.website_id where type = 1
         NSMutableArray *array = [sqlTool selectDataFromTable:@"article"
@@ -72,12 +73,13 @@
         }
         [self.listArr addObjectsFromArray:array];
     } else {
-//        select image.*,website.url from image left join collect,article,website on image.image_id = collect.value and image.article_id = article.article_id and article.website_id = website.website_id where collect.type = 2
+        // 获取图片
+//        select image.*,website.url,website.value as website_id from image left join collect,article,website on image.image_id = collect.value and image.article_id = article.article_id and article.website_id = website.website_id where collect.type = 2
         NSMutableArray *array = [sqlTool selectDataFromTable:@"image"
                                                         join:@"left join collect,article,website"
                                                           on:@"image.image_id = collect.value and image.article_id = article.article_id and article.website_id = website.value"
                                                        where:@"collect.type = 2"
-                                                       field:@"image.*,website.url"
+                                                       field:@"image.*,website.url,website.value as website_id"
                                                        limit:self.listArr.count
                                                     pageSize:20
                                                        class:[ImgCollectModel class]];
@@ -112,8 +114,12 @@
         }else{
             img_url = [NSString stringWithFormat:@"%@/%@", model.url, model.img_url];
         }
+        if (model.website_id != 4) {
+            SDWebImageDownloader *downloader = [SDWebImageManager sharedManager].imageLoader;
+            [downloader setValue:[NSString stringWithFormat:@"%@/",model.url] forHTTPHeaderField:@"Referer"];
+        }
+        NSLog(@"图片地址是%@",img_url);
         [cell.headImg sd_setImageWithURL:[NSURL URLWithString:img_url] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
-
         return cell;
     } else {
         ImgCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"imgCell" forIndexPath:indexPath];
@@ -123,6 +129,10 @@
             img_url = model.image_url;
         }else{
             img_url = [NSString stringWithFormat:@"%@/%@", model.url, model.image_url];
+        }
+        if (model.website_id != 4) {
+            SDWebImageDownloader *downloader = [SDWebImageManager sharedManager].imageLoader;
+            [downloader setValue:[NSString stringWithFormat:@"%@/",model.url] forHTTPHeaderField:@"Referer"];
         }
         [cell.contentImg sd_setImageWithURL:[NSURL URLWithString:img_url] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
         return cell;
