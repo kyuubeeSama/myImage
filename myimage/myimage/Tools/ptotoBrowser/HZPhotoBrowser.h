@@ -44,4 +44,6 @@
 
 - (void)show;
 
+- (void)hidePhotoBrowser;
+
 @end

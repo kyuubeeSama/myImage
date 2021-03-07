@@ -39,8 +39,8 @@
     // TODO:编辑按钮，选中开始编辑。状态分为编辑=>完成
 //    编辑状态下，collection图片右上加选中框，选中图片，图片位置做内敛
 //    底部横幅，左侧添加全选按钮，右侧添加删除按钮
-    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(editBtnClick:)];
-    self.navigationItem.rightBarButtonItem = rightItem;
+//    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(editBtnClick:)];
+//    self.navigationItem.rightBarButtonItem = rightItem;
 }
 
 -(void)editBtnClick:(UIBarButtonItem *)buttonItem{
@@ -52,6 +52,7 @@
         buttonItem.title = @"编辑";
         self.bottomView.hidden = YES;
     }
+    [self.collectionView reloadData];
 }
 
 -(void)getData{
@@ -69,12 +70,21 @@
             make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom);
             make.height.mas_equalTo(40);
         }];
+        WeakSelf(self)
         _bottomView.allBlock = ^{
           // 全选
+            for (QYFileModel *model in weakself.listArr) {
+                model.choose = YES;
+            }
+            [weakself.collectionView reloadData];
         };
         _bottomView.deleteBlock = ^{
           //删除选中的图片
-            
+            for (QYFileModel *model in weakself.listArr) {
+                if (model.choose) {
+                    [FileTool deleteLocalFileWithPath:model.filePath];
+                }
+            }
         };
     }
     return _bottomView;
@@ -106,6 +116,16 @@
     ImgCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"imgCell" forIndexPath:indexPath];
     QYFileModel *model = self.listArr[(NSUInteger) indexPath.row];
     [cell.contentImg sd_setImageWithURL:[NSURL fileURLWithPath:model.filePath] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
+    cell.chooseBtn.hidden = !self.is_edit;
+    WeakSelf(cell)
+    cell.chooseBlock = ^{
+        model.choose = !model.choose;
+        if (model.choose) {
+            [weakcell.chooseBtn setImage:[UIImage systemImageNamed:@"circle.fill"] forState:UIControlStateNormal];
+        }else{
+            [weakcell.chooseBtn setImage:[UIImage systemImageNamed:@"circle"] forState:UIControlStateNormal];
+        };
+    };
     return cell;
 }
 
@@ -126,6 +146,7 @@
             // 删除本地图片
             if ([FileTool deleteLocalFileWithPath:model.filePath]) {
                 [weakbrowser showTip:@"删除文件成功"];
+                [weakbrowser hidePhotoBrowser];
                 [self getData];
             }else{
                 [weakbrowser showTip:@"删除失败"];

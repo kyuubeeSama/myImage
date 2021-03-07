@@ -14,5 +14,10 @@
     [super awakeFromNib];
     // Initialization code
 }
+- (IBAction)chooseBtnClick:(UIButton *)sender {
+    if (self.chooseBlock) {
+        self.chooseBlock();
+    }
+}
 
 @end

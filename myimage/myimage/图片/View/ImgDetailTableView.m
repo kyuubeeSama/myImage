@@ -47,7 +47,6 @@
     ImageModel *model = self.listArr[(NSUInteger) indexPath.row];
     NSString *img_url;
     if (![model.image_url containsString:@"zhu.js"]){
-        // FIXME:图片无法正常获取，在浏览器中可以，直接读取地址不行
         if([model.image_url containsString:@"http"] || [model.image_url containsString:@"https"]){
             img_url = model.image_url;
         }else{

@@ -23,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy) NSString *fileurl;
 @property(nonatomic, strong) PHAsset *set;
 @property (nonatomic, assign) BOOL has_upload;
+@property(nonatomic,assign)BOOL choose;
 -(void)getImageAndInfoComplete:(void(^)(void))complete;
 
 @end

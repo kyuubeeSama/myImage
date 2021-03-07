@@ -13,12 +13,17 @@
 -(instancetype)init{
     self = [super init];
     if (self) {
+        self.backgroundColor = [UIColor whiteColor];
+        CALayer *layer = [[CALayer alloc]init];
+        [self.layer addSublayer:layer];
+        layer.frame = CGRectMake(0, 0, screenW, 1);
+        layer.backgroundColor = [UIColor colorWithHexString:@"888888"].CGColor;
         self.is_all = NO;
         // 左侧全选按钮
         self.allBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [self addSubview:self.allBtn];
         [self.allBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(100, 40));
+            make.size.mas_equalTo(CGSizeMake(100, 30));
             make.centerY.equalTo(self.mas_centerY);
             make.left.equalTo(self).offset(30);
         }];
@@ -41,7 +46,7 @@
         UIButton *deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [self addSubview:deleteBtn];
         [deleteBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(100, 40));
+            make.size.mas_equalTo(CGSizeMake(100, 30));
             make.centerY.equalTo(self.mas_centerY);
             make.right.equalTo(self).offset(-30);
         }];
@@ -52,8 +57,9 @@
                 self.deleteBlock();
             }
         }];
+        deleteBtn.titleLabel.font= [UIFont systemFontOfSize:15];
         deleteBtn.layer.masksToBounds = YES;
-        deleteBtn.layer.cornerRadius = 20;
+        deleteBtn.layer.cornerRadius = 15;
         deleteBtn.backgroundColor = [UIColor redColor];
     }
     return self;

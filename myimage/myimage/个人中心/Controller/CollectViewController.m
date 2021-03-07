@@ -122,7 +122,9 @@
         [cell.headImg sd_setImageWithURL:[NSURL URLWithString:img_url] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
         return cell;
     } else {
+        // 图片列表
         ImgCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"imgCell" forIndexPath:indexPath];
+        cell.chooseBtn.hidden = YES;
         ImgCollectModel *model = self.listArr[(NSUInteger) indexPath.row];
         NSString *img_url;
         if([model.image_url containsString:@"http"] || [model.image_url containsString:@"https"]){
@@ -134,7 +136,20 @@
             SDWebImageDownloader *downloader = [SDWebImageManager sharedManager].imageLoader;
             [downloader setValue:[NSString stringWithFormat:@"%@/",model.url] forHTTPHeaderField:@"Referer"];
         }
-        [cell.contentImg sd_setImageWithURL:[NSURL URLWithString:img_url] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
+//        [cell.contentImg sd_setImageWithURL:[NSURL URLWithString:img_url] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
+        [cell.contentImg sd_setImageWithURL:[NSURL URLWithString:img_url]
+                       placeholderImage:[UIImage imageNamed:@"placeholder1"]
+                                options:SDWebImageLowPriority progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL *_Nullable targetURL) {
+
+            }                 completed:^(UIImage *_Nullable image, NSError *_Nullable error, SDImageCacheType cacheType, NSURL *_Nullable imageURL) {
+                if (error == nil && image.size.width > 0 && image.size.height > 0) {
+                    model.width = image.size.width;
+                    model.height = image.size.height;
+                } else {
+                    NSLog(@"第%ld张图片出错，出错图片地址是%@%@,错误信息是%@，错误码是%@", (long) indexPath.row, model.url, model.image_url, error.localizedDescription,error.userInfo[@"SDWebImageErrorDownloadStatusCodeKey"]);
+                }
+            }];
+
         return cell;
     }
 }
@@ -147,24 +162,37 @@
         [self.navigationController pushViewController:VC animated:YES];
     } else {
         ImgCollectModel *model = self.listArr[(NSUInteger) indexPath.row];
-        HZPhotoBrowser *browser = [[HZPhotoBrowser alloc] init];
-        browser.isFullWidthForLandScape = YES;
-        browser.isNeedLandscape = YES;
-        browser.currentImageIndex = 0;
-        browser.btnArr = @[@"取消收藏"];
-        browser.imageArray = @[[NSString stringWithFormat:@"%@/%@", model.url, model.image_url]];
-        [browser show];
-        WeakSelf(browser)
-        browser.otherBtnBlock = ^(NSInteger index) {
-            if (index == 0) {
-                SqliteTool *sqlTool = [SqliteTool sharedInstance];
-                if ([sqlTool deleteDataFromTable:@"collect" where:[NSString stringWithFormat:@"value = %d and type = 2", model.image_id]]) {
-                    [self.listArr removeObjectAtIndex:(NSUInteger) indexPath.row];
-                    [weakbrowser showTip:@"取消收藏成功"];
-                    [self.mainCollect reloadData];
-                }
+        if (model.width > 0 && model.height>0) {
+            HZPhotoBrowser *browser = [[HZPhotoBrowser alloc] init];
+            browser.isFullWidthForLandScape = YES;
+            browser.isNeedLandscape = YES;
+            browser.currentImageIndex = 0;
+            browser.btnArr = @[@"取消收藏"];
+            NSString *img_url;
+            if([model.image_url containsString:@"http"] || [model.image_url containsString:@"https"]){
+                img_url = model.image_url;
+            }else{
+                img_url = [NSString stringWithFormat:@"%@/%@", model.url, model.image_url];
+                img_url = [img_url stringByReplacingOccurrencesOfString:@"//" withString:@"/"];
             }
-        };
+            if (model.website_id == 4) {
+                img_url = model.image_url;
+            }
+            browser.imageArray = @[img_url];
+            [browser show];
+            WeakSelf(browser)
+            browser.otherBtnBlock = ^(NSInteger index) {
+                if (index == 0) {
+                    SqliteTool *sqlTool = [SqliteTool sharedInstance];
+                    if ([sqlTool deleteDataFromTable:@"collect" where:[NSString stringWithFormat:@"value = %d and type = 2", model.image_id]]) {
+                        [self.listArr removeObjectAtIndex:(NSUInteger) indexPath.row];
+                        [weakbrowser showTip:@"取消收藏成功"];
+                        [weakbrowser hidePhotoBrowser];
+                        [self.mainCollect reloadData];
+                    }
+                }
+            };
+        }
     }
 }
 
