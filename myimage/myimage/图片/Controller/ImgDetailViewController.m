@@ -153,7 +153,6 @@
                         }
                     }
                 }else if(index == 1){
-                    // TODO:保存图片到本地
                     //                    创佳文件名
                     NSString *fileName = [NSString stringWithFormat:@"%d_%@.jpg",weakself.websiteModel.value,[NSDate nowTimestamp]];
                     NSString *filePath = [FileTool createFilePathWithName:[NSString stringWithFormat:@"images/%@",fileName]];

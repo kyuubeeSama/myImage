@@ -78,7 +78,7 @@
             SqliteTool *sqlTool = [SqliteTool sharedInstance];
             NSArray *valueArr = @[@"'撸女吧','https://www.lunu8.com',1",
                                   @"'撸哥吧','https://www.luge8.cc',2",
-                                  @"'24fa','https://www.24fa.cc',3",
+                                  @"'24fa','https://www.24faw.com',3",
                                   @"'趣事百科','https://qq5lk.com',4",
                                   @"'sxchinesegirlz','https://sxchinesegirlz.com',5",
                                   @"'漂亮网红图','http://www.plwht.com',6",
@@ -89,7 +89,7 @@
             @[@"欲女",@"撸女",@"亚洲",@"欧美",@"日韩"],
             @[@"美女",@"欧美"],
             @[@"宅福利",@"宅男社",@"撸一管",@"蜜桃社"],
-            @[@"nude",@"xiuren"],
+            @[@"nude",@"xiuren",@"chokmoson",@"feilin",@"huayang",@"imiss",@"mfstar",@"mistar",@"mygirl",@"tuigirl",@"ugirls",@"xiaoyu",@"yalayi",@"youmei",@"youmi"],
             @[@"性感美女",@"精品套图",@"高清套图",@"无圣光"]
             ];
             NSArray *allIdArr = @[
@@ -97,7 +97,7 @@
             @[@"1",@"2",@"6",@"8",@"9"],
             @[@"49",@"71"],
             @[@"zhaifuli/list_2_",@"zhainanshe/list_4_",@"luyilu/list_5_",@"MiiTao/list_12_"],
-            @[@"nude",@"xiuren"],
+            @[@"nude",@"xiuren",@"chokmoson",@"feilin",@"huayang",@"imiss",@"mfstar",@"mistar",@"mygirl",@"tuigirl",@"ugirls",@"xiaoyu",@"yalayi",@"youmei",@"youmi"],
             @[@"1",@"18",@"24",@"25"]
             ];
             [sqlTool insertTable:@"website"

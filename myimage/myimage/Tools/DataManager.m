@@ -5,7 +5,6 @@
 //  Created by liuqingyuan on 2019/12/31.
 //  Copyright © 2019 liuqingyuan. All rights reserved.
 //
-// TODO: 替换先查后插入为replace
 
 #import "DataManager.h"
 #import "ArticleModel.h"
@@ -201,7 +200,6 @@ typedef enum : NSUInteger {
             failure(error);
         }];
     } else if (websiteModel.value == twofourfa) {
-        //TODO:修改为使用xpath获取详情
         [NetWorkingTool getHtmlWithUrl:urlStr WithData:nil success:^(NSString *_Nonnull html) {
             // 获取页码
             // 获取页码  pager">([\s\S]+?)\/table> 之后加  <a([\s\S]+?)<\/a>
@@ -275,7 +273,7 @@ typedef enum : NSUInteger {
         }
     } else if (websiteType == sxchinesegirlz) {
         urlStr = [NSString stringWithFormat:@"%@/%ld", urlStr, (long) pageNum];
-        imageXPath = @"/html/body/div/div/article/div/div[1]/div[2]/div/div[2]/figure/img/@src";
+        imageXPath = @"/html/body/div/div/article/div/div[1]/div[1]/div[2]/div[2]/figure/img/@src";
         nextXpath = @"/html/body/div/div/article/div/div[1]/div[2]/div/div[3]/a/span/span";
     }
     NSError *error = nil;
@@ -291,7 +289,6 @@ typedef enum : NSUInteger {
     TFHpple *xpathDoc = [[TFHpple alloc] initWithHTMLData:data];
     NSArray *imgNodeArr = [xpathDoc searchWithXPathQuery:imageXPath];
     for (TFHppleElement *element in imgNodeArr) {
-        NSLog(@"%@", element.text);
         ImageModel *model = [[ImageModel alloc] init];
         model.image_url = element.text;
         model.website_id = (int) websiteType;
@@ -307,8 +304,7 @@ typedef enum : NSUInteger {
         }
     } else if (websiteType == sxchinesegirlz) {
         NSString *htmlContent = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        NSLog(@"%@", htmlContent);
-        if ([htmlContent containsString:@"class=currenttext>Next</span>"]) {
+        if ([htmlContent containsString:@"class=\"currenttext\">Next</span>"]) {
             pageNum += 1;
             [self getImageWithUrl:url withWebsiteValue:websiteType withPageNum:pageNum success:success failure:failure];
         } else {
@@ -348,7 +344,7 @@ typedef enum : NSUInteger {
     NSMutableArray *resultArr = [[NSMutableArray alloc] init];
     if (websiteModel.value == piaoliangwanghong) {
         // 无搜索功能
-        success(@[]);
+        success([[NSMutableArray alloc]init]);
     } else {
         if (websiteModel.value == lunv || websiteModel.value == luge) {
             urlStr = [NSString stringWithFormat:@"%@/search.php?q=%@&page=%ld", websiteModel.url, keyword, (long) pageNum];
@@ -382,6 +378,7 @@ typedef enum : NSUInteger {
             detailXpath = @"//*[@id=\"container\"]/main/article/div/a/@href";
             imgXpath = @"//*[@id=\"container\"]/main/article/div/a/img/@src";
         } else if (websiteModel.value == twofourfa) {
+            //FIXME:此处获取的标题不争取
             titleXpath = @"/html/body/section/article/ul/li/h4/a";
             detailXpath = @"/html/body/section/article/ul/li/h4/a/@href";
         } else if (websiteModel.value == qushibaike) {

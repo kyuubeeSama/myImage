@@ -141,7 +141,6 @@
     [browser show];
     WeakSelf(browser)
     browser.otherBtnBlock = ^(NSInteger index) {
-        // TODO:删除后关闭browser
         if (index == 0) {
             // 删除本地图片
             if ([FileTool deleteLocalFileWithPath:model.filePath]) {

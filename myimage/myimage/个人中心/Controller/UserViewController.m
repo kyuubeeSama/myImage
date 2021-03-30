@@ -25,7 +25,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     NSString *cache = [NSString stringWithFormat:@"缓存(%@)", [Tool getMemonry]];
-    self.listArr = [[NSMutableArray alloc] initWithArray:@[@"相册收藏",@"图片收藏", @"站点管理",@"本地图片",cache]];
+    self.listArr = [[NSMutableArray alloc] initWithArray:@[@"相册收藏",@"图片收藏", @"站点管理",@"本地图片",@"历史记录",cache]];
     [self makeUI];
 }
 
@@ -71,7 +71,6 @@
             break;
         case 3:{
             // 打开本地自建相册
-            //TODO:跳转到相册界面
             LocalImgViewController *VC = [[LocalImgViewController alloc]init];
             [self cw_pushViewController:VC];
         }break;

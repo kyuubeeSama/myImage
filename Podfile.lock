@@ -16,7 +16,7 @@ PODS:
     - AFNetworking/NSURLSession
   - CWLateralSlide (1.6.5)
   - FLAnimatedImage (1.0.15)
-  - FluentDarkModeKit (1.0.1)
+  - FluentDarkModeKit (1.0.2)
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
@@ -72,7 +72,7 @@ SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
   CWLateralSlide: 8939c8dea91a24e40d0793553118cb57cd67f64b
   FLAnimatedImage: dd3db277b17e909ec3c7fd41adfce79b321d960e
-  FluentDarkModeKit: 0c5f31ca81eb058f3e8b6d79b3d08afbe7c40c42
+  FluentDarkModeKit: 636f1968d2109f064f0c210dcef3cc4f9f72d0ca
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   hpple: 3b765f96fc2cd56ad1a49aef6f7be5cb2aa64b57
   JXCategoryView: 778a620f76070d6598fd8d7239991b8da8326170
