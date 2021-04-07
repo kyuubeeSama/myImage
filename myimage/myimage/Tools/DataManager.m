@@ -288,6 +288,10 @@ typedef enum : NSUInteger {
     }
     TFHpple *xpathDoc = [[TFHpple alloc] initWithHTMLData:data];
     NSArray *imgNodeArr = [xpathDoc searchWithXPathQuery:imageXPath];
+    if (websiteType == sxchinesegirlz && ![imgNodeArr count]) {
+        imageXPath = @"/html/body/div/div/article/div/div[1]/div[1]/div/div[2]/figure/img/@src";
+        imgNodeArr = [xpathDoc searchWithXPathQuery:imageXPath];
+    }
     for (TFHppleElement *element in imgNodeArr) {
         ImageModel *model = [[ImageModel alloc] init];
         model.image_url = element.text;
@@ -378,7 +382,7 @@ typedef enum : NSUInteger {
             detailXpath = @"//*[@id=\"container\"]/main/article/div/a/@href";
             imgXpath = @"//*[@id=\"container\"]/main/article/div/a/img/@src";
         } else if (websiteModel.value == twofourfa) {
-            //FIXME:此处获取的标题不争取
+            //FIXME:此处获取的标题不正确
             titleXpath = @"/html/body/section/article/ul/li/h4/a";
             detailXpath = @"/html/body/section/article/ul/li/h4/a/@href";
         } else if (websiteModel.value == qushibaike) {
