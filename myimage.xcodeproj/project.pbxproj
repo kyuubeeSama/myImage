@@ -39,6 +39,7 @@
 		A94296DB23BAE625003391B5 /* DataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A94296DA23BAE625003391B5 /* DataManager.m */; };
 		A9452AEE25072428003D9CC9 /* SearchResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9452AED25072427003D9CC9 /* SearchResultViewController.m */; };
 		A95C17F52564F79C00AB3E0F /* LocalImgViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A95C17F42564F79C00AB3E0F /* LocalImgViewController.m */; };
+		A961719A262EB0D700CDB64D /* website.plist in Resources */ = {isa = PBXBuildFile; fileRef = A9617199262EB0D600CDB64D /* website.plist */; };
 		A96DB3722507131E00060CB4 /* WKWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A96DB3702507131E00060CB4 /* WKWebViewController.m */; };
 		A97975FA24EE4BC90099C518 /* ImgListCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = A97975F924EE4BC90099C518 /* ImgListCollectionView.m */; };
 		A97975FD24EE57AB0099C518 /* ImgDetailTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = A97975FC24EE57AB0099C518 /* ImgDetailTableView.m */; };
@@ -127,6 +128,7 @@
 		A95A34B5250BBF6E00A93C7B /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		A95C17F32564F79C00AB3E0F /* LocalImgViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocalImgViewController.h; sourceTree = "<group>"; };
 		A95C17F42564F79C00AB3E0F /* LocalImgViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocalImgViewController.m; sourceTree = "<group>"; };
+		A9617199262EB0D600CDB64D /* website.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = website.plist; sourceTree = "<group>"; };
 		A96DB3702507131E00060CB4 /* WKWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKWebViewController.m; sourceTree = "<group>"; };
 		A96DB3712507131E00060CB4 /* WKWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKWebViewController.h; sourceTree = "<group>"; };
 		A97975F824EE4BC90099C518 /* ImgListCollectionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImgListCollectionView.h; sourceTree = "<group>"; };
@@ -246,6 +248,7 @@
 				A938824D21C1F8EA0085958B /* Assets.xcassets */,
 				A938824F21C1F8EA0085958B /* LaunchScreen.storyboard */,
 				A938825221C1F8EA0085958B /* Info.plist */,
+				A9617199262EB0D600CDB64D /* website.plist */,
 				A938825321C1F8EA0085958B /* main.m */,
 				144DF1DAFB8DBA5398B525B7 /* database.txt */,
 			);
@@ -526,6 +529,7 @@
 			files = (
 				A93F765E2462A0E1005E9E51 /* WebSiteTableViewCell.xib in Resources */,
 				A904AC5723BF0C8900E3281E /* ImgCollectionViewCell.xib in Resources */,
+				A961719A262EB0D700CDB64D /* website.plist in Resources */,
 				A98546442296895500BAEFB1 /* HZPhotoBrowser.bundle in Resources */,
 				A938825121C1F8EA0085958B /* LaunchScreen.storyboard in Resources */,
 				A938824E21C1F8EA0085958B /* Assets.xcassets in Resources */,

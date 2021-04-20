@@ -76,40 +76,86 @@ static id sharedSingleton = nil;
     }
 }
 
--(BOOL)insertTable:(NSString *)tableName
-           element:(NSString *)element
-             value:(NSString *)value
-             where:(NSString * _Nullable)where {
+- (void)createDbTableAndColumn {
+    //        website
+    [self createTableWithSql:@"CREATE TABLE IF NOT EXISTS `website`  "
+                             "(website_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
+                             "name VARCHAR(200) NOT NULL,"
+                             "value INT NOT NULl,"
+                             "url VARCHAR(200) NOT NULL,"
+                             "is_delete INT NOT NULL DEFAULT(1))"];
+    //        category
+    [self createTableWithSql:@"CREATE TABLE IF NOT EXISTS `category` "
+                             "(category_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
+                             "website_id INT NOT NULL,"
+                             "name VARCHAR(200) NOT NULL,"
+                             "value VARCHAR(50) NOT NULL,"
+                             "is_delete INT NOT NULL DEFAULT(1))"];
+    //        此处使用项目时间还是使用前id
+    [self createTableWithSql:@"CREATE TABLE IF NOT EXISTS `article` "
+                             "(article_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
+                             "website_id INT NOT NULL,"
+                             "name VARCHAR(200) NOT NULL,"
+                             "category_id INT NOT NULL,"
+                             "detail_url VARCHAR(200) NOT NULL UNIQUE,"
+                             "has_done INT NOT NULL DEFAULT(1),"
+                             "is_delete INT NOT NULL DEFAULT(1),"
+                             "aid INT DEFAULT(0),"
+                             "img_url VARCHAR(200) NOT NULL)"];
+    //        image
+    [self createTableWithSql:@"CREATE TABLE IF NOT EXISTS `image` "
+                             "(image_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                             "image_url VARCHAR(200) NOT NULL,"
+                             "website_id INT NOT NULL,"
+                             "article_id INT NOT NULL,"
+                             "width FLOAT DEFAULT(0),"
+                             "height FLOAT DEFAULT(0))"];
+    //        collect
+    [self createTableWithSql:@"CREATE TABLE IF NOT EXISTS `collect` "
+                             "(collect_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                             "value INT NOT NULL,"
+                             "type INT NOT NULL)"];
+    //        history  历史记录
+    [self createTableWithSql:@"CREATE TABLE IF NOT EXISTS 'history'"
+                             "(history_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                             "article_id INTEGER NOT NULL UNIQUE,"
+                             "add_time INTEGER)"];
+}
+
+- (BOOL)insertTable:(NSString *)tableName
+            element:(NSString *)element
+              value:(NSString *)value
+              where:(NSString *_Nullable)where {
     FMDatabase *db = [self openDB];
     if ([NSString MyStringIsNULL:where]) {
         NSString *sql = [NSString stringWithFormat:@"INSERT INTO %@ (%@) VALUES (%@)", tableName, element, value];
         NSLog(@"insert:%@", sql);
         return [db executeUpdate:sql];
-    }else{
-        NSString *sql = [NSString stringWithFormat:@"INSERT INTO %@ (%@) SELECT %@ WHERE NOT EXISTS (%@)",tableName,element,value,where];
-        NSLog(@"insert and where not exist:%@",sql);
+    } else {
+        NSString *sql = [NSString stringWithFormat:@"INSERT INTO %@ (%@) SELECT %@ WHERE NOT EXISTS (%@)", tableName, element, value, where];
+        NSLog(@"insert and where not exist:%@", sql);
         return [db executeUpdate:sql];
     }
 }
 
--(BOOL)replaceTable:(NSString *)tableName
-            element:(NSString *)element
-              value:(NSString *)value {
+- (BOOL)replaceTable:(NSString *)tableName
+             element:(NSString *)element
+               value:(NSString *)value {
     FMDatabase *db = [self openDB];
-    NSString *sql = [NSString stringWithFormat:@"REPLACE INTO %@ (%@) VALUES (%@)",tableName,element,value];
-    NSLog(@"replace:%@",sql);
+    NSString *sql = [NSString stringWithFormat:@"REPLACE INTO %@ (%@) VALUES (%@)", tableName, element, value];
+    NSLog(@"replace:%@", sql);
     return [db executeUpdate:sql];
 }
 
--(NSMutableArray *)selectDataFromTable:(NSString *)tableName
-                                 where:(NSString *)where
-                                 field:(NSString *)field
-                               orderby:(NSString *)order
-                                 Class:(Class)modelClass{
+- (NSMutableArray *)selectDataFromTable:(NSString *)tableName
+                                  where:(NSString *)where
+                                  field:(NSString *)field
+                                orderby:(NSString *)order
+                                  Class:(Class)modelClass {
     FMDatabase *db = [self openDB];
     NSString *orderInfo = @"";
     if (order.length > 0) {
-        orderInfo = [NSString stringWithFormat:@"order by %@",order];
+        orderInfo = [NSString stringWithFormat:@"order by %@", order];
     }
     NSString *sql = [NSString stringWithFormat:@"SELECT %@ FROM %@ WHERE %@ %@", field, tableName, where, orderInfo];
     NSLog(@"查询语句%@", sql);
@@ -143,7 +189,7 @@ static id sharedSingleton = nil;
             // 添加
             [array addObject:object];
         } @catch (NSException *exception) {
-            NSLog(@"name:%@,reson:%@",exception.name,exception.reason);
+            NSLog(@"name:%@,reson:%@", exception.name, exception.reason);
         } @finally {
         }
     }
@@ -151,13 +197,13 @@ static id sharedSingleton = nil;
     return array;
 }
 
--(BOOL)findColumnExistFromTable:(NSString *)tableName column:(NSString *)column {
+- (BOOL)findColumnExistFromTable:(NSString *)tableName column:(NSString *)column {
     FMDatabase *db = [self openDB];
 //    select * from sqlite_master where name = 'article' and sql like '%aid%'
     return [db columnExists:column inTableWithName:tableName];
 }
 
--(BOOL)addColumnFromTable:(NSString *)tableName columnAndValue:(NSString *)column {
+- (BOOL)addColumnFromTable:(NSString *)tableName columnAndValue:(NSString *)column {
     FMDatabase *db = [self openDB];
 //    alter table article add aid INT default 0
     NSString *sql = [NSString stringWithFormat:@"alter table %@ add %@", tableName, column];
@@ -165,14 +211,15 @@ static id sharedSingleton = nil;
     [db close];
     return result;
 }
+
 - (NSMutableArray *)selectDataFromTable:(NSString *)tableName
                                   where:(NSString *)where
                                   field:(NSString *)field
                                   Class:(Class)modelClass
                                   limit:(NSInteger)limit
-                               pageSize:(NSInteger)pageSize{
+                               pageSize:(NSInteger)pageSize {
     FMDatabase *db = [self openDB];
-    NSString *sql = [NSString stringWithFormat:@"SELECT %@ FROM %@ WHERE %@ limit %ld,%ld", field, tableName, where,(long)limit,(long)pageSize];
+    NSString *sql = [NSString stringWithFormat:@"SELECT %@ FROM %@ WHERE %@ limit %ld,%ld", field, tableName, where, (long) limit, (long) pageSize];
     NSLog(@"查询语句%@", sql);
     FMResultSet *result = [db executeQuery:sql];
     NSMutableArray *array = [[NSMutableArray alloc] initWithArray:@[]];
@@ -204,7 +251,7 @@ static id sharedSingleton = nil;
             // 添加
             [array addObject:object];
         } @catch (NSException *exception) {
-            NSLog(@"name:%@,reson:%@",exception.name,exception.reason);
+            NSLog(@"name:%@,reson:%@", exception.name, exception.reason);
         } @finally {
         }
     }
@@ -212,10 +259,10 @@ static id sharedSingleton = nil;
     return array;
 }
 
--(Class)findDataFromTable:(NSString *)tableName
-                    where:(NSString *)where
-                    field:(NSString *)field
-                    Class:(Class)modelClass {
+- (Class)findDataFromTable:(NSString *)tableName
+                     where:(NSString *)where
+                     field:(NSString *)field
+                     Class:(Class)modelClass {
     FMDatabase *db = [self openDB];
     NSString *sql = [NSString stringWithFormat:@"SELECT %@ FROM %@ WHERE %@", field, tableName, where];
     NSLog(@"查询语句%@", sql);
@@ -246,7 +293,7 @@ static id sharedSingleton = nil;
                 }
             }
         } @catch (NSException *exception) {
-            NSLog(@"name:%@,reson:%@",exception.name,exception.reason);
+            NSLog(@"name:%@,reson:%@", exception.name, exception.reason);
         } @finally {
         }
     }
@@ -254,16 +301,16 @@ static id sharedSingleton = nil;
     return object;
 }
 
--(NSMutableArray *)selectDataFromTable:(NSString *)tableName
-                                  join:(NSString *)join
-                                    on:(NSString *)on
-                                 where:(NSString *)where
-                                 field:(NSString *)field
-                                 limit:(NSInteger)limit
-                              pageSize:(NSInteger)pageSize
-                                 class:(Class)modelClass {
+- (NSMutableArray *)selectDataFromTable:(NSString *)tableName
+                                   join:(NSString *)join
+                                     on:(NSString *)on
+                                  where:(NSString *)where
+                                  field:(NSString *)field
+                                  limit:(NSInteger)limit
+                               pageSize:(NSInteger)pageSize
+                                  class:(Class)modelClass {
     FMDatabase *db = [self openDB];
-    NSString *sql = [NSString stringWithFormat:@"SELECT %@ FROM %@ %@ ON %@ WHERE %@ limit %ld,%ld", field, tableName, join, on, where,limit,pageSize];
+    NSString *sql = [NSString stringWithFormat:@"SELECT %@ FROM %@ %@ ON %@ WHERE %@ limit %ld,%ld", field, tableName, join, on, where, limit, pageSize];
     NSLog(@"查询语句%@", sql);
     FMResultSet *result = [db executeQuery:sql];
     NSMutableArray *array = [[NSMutableArray alloc] initWithArray:@[]];
@@ -295,7 +342,7 @@ static id sharedSingleton = nil;
             // 添加
             [array addObject:object];
         } @catch (NSException *exception) {
-            NSLog(@"name:%@,reson:%@",exception.name,exception.reason);
+            NSLog(@"name:%@,reson:%@", exception.name, exception.reason);
         } @finally {
         }
     }
@@ -361,19 +408,6 @@ static id sharedSingleton = nil;
     BOOL result = [db executeUpdate:sql];
     [db close];
     return result;
-}
-
-- (BOOL)updateDatabase {
-    // 在表中增加新字段
-//    FMDatabase *db = [self openDB];
-//    if (![db columnExists:@"img_id" inTableWithName:@"image"]){
-//        NSString *alertStr = [NSString stringWithFormat:@"ALTER TABLE %@ ADD %@ INTEGER",@"image",@"img_id"];
-//        BOOL worked = [db executeUpdate:alertStr];
-//        return worked;
-//    } else{
-//        return false;
-//    }
-    return YES;
 }
 
 @end

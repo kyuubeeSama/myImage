@@ -76,14 +76,19 @@
             // 添加
             [self beginProgressWithTitle:nil];
             SqliteTool *sqlTool = [SqliteTool sharedInstance];
-            NSArray *valueArr = @[@"'撸女吧','https://www.lunu8.com',1",
-                                  @"'撸哥吧','https://www.luge8.cc',2",
-                                  @"'24fa','https://www.24faw.com',3",
-                                  @"'趣事百科','https://qq5lk.com',4",
-                                  @"'sxchinesegirlz','https://sxchinesegirlz.com',5",
-                                  @"'漂亮网红图','http://www.plwht.com',6",
-                                  
-            ];
+            //TODO:修改为可以从外部修改。使用plist文件。
+//            NSArray *valueArr = @[@"'撸女吧','https://www.lunu8.com',1",
+//                                  @"'撸哥吧','https://www.luge8.cc',2",
+//                                  @"'24fa','https://www.24faw.com',3",
+//                                  @"'趣事百科','https://v8.qqv13.vip',4",
+//                                  @"'sxchinesegirlz','https://sxchinesegirlz.com',5",
+//                                  @"'漂亮网红图','http://www.plwht.com',6",
+//            ];
+            NSArray *array = [[NSArray alloc]initWithContentsOfFile:[FileTool createFilePathWithName:@"website.plist"]];
+            NSMutableArray *valueArr = [[NSMutableArray alloc]init];
+            for (NSArray *array1 in array) {
+                [valueArr addObject:[array1 componentsJoinedByString:@","]];
+            }
             NSArray *allTitleArr = @[
             @[@"撸女",@"撸吧",@"推图",@"亚洲",@"欧美",@"日韩"],
             @[@"欲女",@"撸女",@"亚洲",@"欧美",@"日韩"],
@@ -135,6 +140,51 @@
         }
     };
     return cell;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    // 点击编辑
+    NSString *plistPath = [FileTool createFilePathWithName:@"website.plist"];
+    NSMutableArray<NSMutableArray<NSString *> *> *array = [[NSMutableArray alloc]initWithContentsOfFile:plistPath];
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"修改网站地址" preferredStyle:UIAlertControllerStyleAlert];
+    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+            
+    }];
+    alert.textFields.firstObject.text = [array[indexPath.row][1] stringByReplacingOccurrencesOfString:@"'" withString:@""];
+    UIAlertAction *sureAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        // 修改plist文件内容
+        // 判断地址是否是网址,是就更新到plist文件中
+        NSString *urlStr = alert.textFields.firstObject.text;
+        if ([self urlValidation:urlStr]) {
+            array[indexPath.row][1] = [NSString stringWithFormat:@"'%@'",urlStr];
+            // TODO:同时需要判断数据库中是否该数据，是否需要更新
+            if ([[SqliteTool sharedInstance]updateTable:@"website" where:[NSString stringWithFormat:@"value = %@",array[indexPath.row][2]] value:[NSString stringWithFormat:@"url = %@",array[indexPath.row][1]]]) {
+                [array writeToFile:plistPath atomically:YES];
+            };
+        }else{
+            [self alertWithTitle:@"输入的网址错误"];
+        }
+    }];
+    [alert addAction:sureAction];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+    [alert addAction:cancelAction];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (BOOL)urlValidation:(NSString *)string {
+    NSError *error;
+    // 正则1
+    NSString *regulaStr =@"\\bhttps?://[a-zA-Z0-9\\-.]+(?::(\\d+))?(?:(?:/[a-zA-Z0-9\\-._?,'+\\&%$=~*!():@\\\\]*)+)?";
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:regulaStr
+                                                                          options:NSRegularExpressionCaseInsensitive
+                                                                            error:&error];
+    NSArray *arrayOfAllMatches = [regex matchesInString:string options:0 range:NSMakeRange(0, [string length])];
+    for (NSTextCheckingResult *match in arrayOfAllMatches){
+        return YES;
+    }
+    return NO;
 }
 
 /*

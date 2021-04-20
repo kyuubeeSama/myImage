@@ -186,7 +186,8 @@ typedef enum : NSUInteger {
                     NSString *imgUrl = imgArr[0];
                     imgUrl = [imgUrl stringByReplacingOccurrencesOfString:@"src=\"" withString:@""];
                     imgUrl = [imgUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                    model.image_url = [imgUrl stringByReplacingOccurrencesOfString:websiteModel.url withString:@""];
+//                    model.image_url = [imgUrl stringByReplacingOccurrencesOfString:websiteModel.url withString:@""];
+                    model.image_url = [self replaceDomain:websiteModel urlStr:imgUrl];
                     model.website_id = websiteModel.value;
                     [imgListArr addObject:model];
                     if (imgListArr.count == pageArr.count + 1) {
@@ -227,7 +228,8 @@ typedef enum : NSUInteger {
                         imgStr = [imgPath stringByReplacingOccurrencesOfString:@"src=\"" withString:@""];
                         imgStr = [imgStr stringByReplacingOccurrencesOfString:@"\"" withString:@""];
                         ImageModel *model = [[ImageModel alloc] init];
-                        model.image_url = imgStr;
+//                        model.image_url = imgStr;
+                        model.image_url = [self replaceDomain:websiteModel urlStr:imgStr];
                         model.website_id = websiteModel.value;
                         [imgListArr addObject:model];
                     }
@@ -240,7 +242,8 @@ typedef enum : NSUInteger {
             failure(error);
         }];
     } else if (websiteModel.value == qushibaike || websiteModel.value == sxchinesegirlz || websiteModel.value == piaoliangwanghong) {
-        [self getImageWithUrl:urlStr withWebsiteValue:websiteModel.value withPageNum:1 success:success failure:failure];
+        //MARK:group线程优化1可以 2可以 3.可以  4.不可 5.可以 6.可以
+        [self getImageWithUrl:urlStr withWebsiteValue:websiteModel withPageNum:1 success:success failure:failure];
     }
 }
 
@@ -253,25 +256,25 @@ typedef enum : NSUInteger {
 
 /// 递归获取每页详情
 /// @param url 详情地址
-/// @param websiteType 站点类型
+/// @param websiteModel 站点model
 /// @param pageNum 页码
 /// @param success 成功block
 /// @param failure 失败block
-- (void)getImageWithUrl:(NSString *)url withWebsiteValue:(websiteType)websiteType withPageNum:(NSInteger)pageNum success:(void (^)(NSMutableArray *_Nonnull))success failure:(void (^)(NSError *_Nonnull))failure {
+- (void)getImageWithUrl:(NSString *)url withWebsiteValue:(WebsiteModel *)websiteModel withPageNum:(NSInteger)pageNum success:(void (^)(NSMutableArray *_Nonnull))success failure:(void (^)(NSError *_Nonnull))failure {
     NSString *urlStr = url;
     NSString *imageXPath = @"";
     NSString *nextXpath = @"";
-    if (websiteType == qushibaike || websiteType == piaoliangwanghong) {
+    if (websiteModel.value == qushibaike || websiteModel.value == piaoliangwanghong) {
         if (pageNum != 1) {
             urlStr = [urlStr stringByReplacingOccurrencesOfString:@".html" withString:[NSString stringWithFormat:@"_%ld.html", (long) pageNum]];
         }
-        if (websiteType == qushibaike) {
+        if (websiteModel.value == qushibaike) {
             imageXPath = @"/html/body/section/div/div/article/p[position()>1]/img/@src";
             nextXpath = @"//*[@class=\"next-page\"]";
         } else {
             imageXPath = @"//*[@id=\"picg\"]/p/a/img/@src";
         }
-    } else if (websiteType == sxchinesegirlz) {
+    } else if (websiteModel.value == sxchinesegirlz) {
         urlStr = [NSString stringWithFormat:@"%@/%ld", urlStr, (long) pageNum];
         imageXPath = @"/html/body/div/div/article/div/div[1]/div[1]/div[2]/div[2]/figure/img/@src";
         nextXpath = @"/html/body/div/div/article/div/div[1]/div[2]/div/div[3]/a/span/span";
@@ -283,34 +286,35 @@ typedef enum : NSUInteger {
         NSLog(@"错误信息是%@", error.localizedDescription);
         failure(error);
     }
-    if (websiteType == qushibaike || websiteType == piaoliangwanghong) {
+    if (websiteModel.value == qushibaike || websiteModel.value == piaoliangwanghong) {
         data = [self getGBKDataWithData:data];
     }
     TFHpple *xpathDoc = [[TFHpple alloc] initWithHTMLData:data];
     NSArray *imgNodeArr = [xpathDoc searchWithXPathQuery:imageXPath];
-    if (websiteType == sxchinesegirlz && ![imgNodeArr count]) {
+    if (websiteModel.value == sxchinesegirlz && ![imgNodeArr count]) {
         imageXPath = @"/html/body/div/div/article/div/div[1]/div[1]/div/div[2]/figure/img/@src";
         imgNodeArr = [xpathDoc searchWithXPathQuery:imageXPath];
     }
     for (TFHppleElement *element in imgNodeArr) {
         ImageModel *model = [[ImageModel alloc] init];
-        model.image_url = element.text;
-        model.website_id = (int) websiteType;
+//        model.image_url = element.text;
+        model.image_url = [self replaceDomain:websiteModel urlStr:element.text];
+        model.website_id = websiteModel.value;
         [self.imageArr addObject:model];
     }
-    if (websiteType == piaoliangwanghong) {
+    if (websiteModel.value == piaoliangwanghong) {
         NSString *htmlContent = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         if ([htmlContent containsString:@"下一页"]) {
             pageNum += 1;
-            [self getImageWithUrl:url withWebsiteValue:websiteType withPageNum:pageNum success:success failure:failure];
+            [self getImageWithUrl:url withWebsiteValue:websiteModel withPageNum:pageNum success:success failure:failure];
         } else {
             success(self.imageArr);
         }
-    } else if (websiteType == sxchinesegirlz) {
+    } else if (websiteModel.value == sxchinesegirlz) {
         NSString *htmlContent = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         if ([htmlContent containsString:@"class=\"currenttext\">Next</span>"]) {
             pageNum += 1;
-            [self getImageWithUrl:url withWebsiteValue:websiteType withPageNum:pageNum success:success failure:failure];
+            [self getImageWithUrl:url withWebsiteValue:websiteModel withPageNum:pageNum success:success failure:failure];
         } else {
             success(self.imageArr);
         }
@@ -319,7 +323,7 @@ typedef enum : NSUInteger {
         if (nextNodeArr.count > 0) {
             // 有下一页
             pageNum += 1;
-            [self getImageWithUrl:url withWebsiteValue:websiteType withPageNum:pageNum success:success failure:failure];
+            [self getImageWithUrl:url withWebsiteValue:websiteModel withPageNum:pageNum success:success failure:failure];
         } else {
             // 没有下一页
             success(self.imageArr);
@@ -407,7 +411,8 @@ typedef enum : NSUInteger {
             }
             ArticleModel *result = [[ArticleModel alloc] init];
             result.name = title;
-            result.detail_url = detail;
+//            result.detail_url = detail;
+            result.detail_url = [self replaceDomain:websiteModel urlStr:detail];
             if (websiteModel.value == twofourfa) {
                 NSString *picPath = @"";
                 NSString *detailUrl = [NSString stringWithFormat:@"%@/%@", websiteModel.url, detail];
@@ -439,6 +444,13 @@ typedef enum : NSUInteger {
         }
         success(resultArr);
     }
+}
+// 替换图片中可能包含的域名地址
+-(NSString *)replaceDomain:(WebsiteModel *)model urlStr:(NSString *)urlStr{
+    if ([urlStr containsString:model.url]) {
+        urlStr = [urlStr stringByReplacingOccurrencesOfString:model.url withString:@""];
+    }
+    return urlStr;
 }
 
 - (NSString *)filterHTML:(NSString *)html {

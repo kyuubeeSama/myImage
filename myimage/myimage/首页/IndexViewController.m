@@ -74,50 +74,7 @@
         [self beginProgressWithTitle:@"正在初始化"];
         // 初次创建数据库成功
         // 创建初始表单
-//        website
-        [sqlTool createTableWithSql:@"CREATE TABLE IF NOT EXISTS `website`  "
-                                    "(website_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                                    "name VARCHAR(200) NOT NULL,"
-                                    "value INT NOT NULl,"
-                                    "url VARCHAR(200) NOT NULL,"
-                                    "is_delete INT NOT NULL DEFAULT(1))"];
-//        category
-        [sqlTool createTableWithSql:@"CREATE TABLE IF NOT EXISTS `category` "
-                                    "(category_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                                    "website_id INT NOT NULL,"
-                                    "name VARCHAR(200) NOT NULL,"
-                                    "value VARCHAR(50) NOT NULL,"
-                                    "is_delete INT NOT NULL DEFAULT(1))"];
-//        此处使用项目时间还是使用前id
-        [sqlTool createTableWithSql:@"CREATE TABLE IF NOT EXISTS `article` "
-                                    "(article_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                                    "website_id INT NOT NULL,"
-                                    "name VARCHAR(200) NOT NULL,"
-                                    "category_id INT NOT NULL,"
-                                    "detail_url VARCHAR(200) NOT NULL UNIQUE,"
-                                    "has_done INT NOT NULL DEFAULT(1),"
-                                    "is_delete INT NOT NULL DEFAULT(1),"
-                                    "aid INT DEFAULT(0),"
-                                    "img_url VARCHAR(200) NOT NULL)"];
-//        image
-        [sqlTool createTableWithSql:@"CREATE TABLE IF NOT EXISTS `image` "
-                                    "(image_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                                    "image_url VARCHAR(200) NOT NULL,"
-                                    "website_id INT NOT NULL,"
-                                    "article_id INT NOT NULL,"
-                                    "width FLOAT DEFAULT(0),"
-                                    "height FLOAT DEFAULT(0))"];
-//        collect
-        [sqlTool createTableWithSql:@"CREATE TABLE IF NOT EXISTS `collect` "
-                                    "(collect_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                                    "value INT NOT NULL,"
-                                    "type INT NOT NULL)"];
-//        history  历史记录
-        [sqlTool createTableWithSql:@"CREATE TABLE IF NOT EXISTS 'history'"
-                                    "(history_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                                    "article_id INTEGER NOT NULL UNIQUE,"
-                                    "add_time INTEGER)"];
-
+        [sqlTool createDbTableAndColumn];
         [self endProgress];
         [Tool showAlertWithTitle:@"提醒" Message:@"请在个人中心添加站点" withSureBtnClick:^{
             [self defaultAnimationFromLeft];
@@ -126,6 +83,18 @@
         // 创建数据库失败
         [self alertWithTitle:@"创建数据库失败"];
     }];
+    // 判断本地是否有plist文件，如果没有就拷贝到doc中，如果有，就不操作
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *filePath = [FileTool createFilePathWithName:@"website.plist"];
+    if (![fileManager fileExistsAtPath:filePath]) {
+        // 需要拷贝
+        if ([fileManager createFileAtPath:filePath contents:[NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"website" ofType:@"plist"]] attributes:nil]) {
+            NSLog(@"拷贝成功");
+        } else{
+            NSLog(@"拷贝失败");
+        }
+
+    }
 }
 
 - (void)setNav {

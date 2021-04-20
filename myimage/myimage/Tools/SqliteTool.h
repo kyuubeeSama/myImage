@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 // 创建数据库
 -(void)createDBWithName:(NSString *)name exist:(void(^)(void))exist success:(void(^)(void))success failure:(void(^)(void))failure;
+// 创建表以及相关字段
+-(void)createDbTableAndColumn;
 // 创建数据库表
 -(void)createTableWithSql:(NSString *)sql;
 // 插入数据，附带数据是否存在查询条件
@@ -66,8 +68,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 // 更新数据
 -(BOOL)updateTable:(NSString *)tablename where:(NSString *)where value:(NSString *)value;
-
--(BOOL)updateDatabase;
 
 @end
 
