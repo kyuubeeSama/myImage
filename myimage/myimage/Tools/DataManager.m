@@ -77,7 +77,7 @@ typedef enum : NSUInteger {
     NSMutableArray *resultArr = [[NSMutableArray alloc] init];
     if (websiteModel.value == qushibaike || websiteModel.value == piaoliangwanghong) {
         // 需要将GBK转换为可识别类型
-        data = [self getGBKDataWithData:data];
+        data = [Tool getGBKDataWithData:data];
     }
     TFHpple *xpathDoc = [[TFHpple alloc] initWithHTMLData:data];
     NSArray<TFHppleElement *> *titleNodeArr = [xpathDoc searchWithXPathQuery:titleXpath];
@@ -172,6 +172,65 @@ typedef enum : NSUInteger {
     if (![detailUrl containsString:@"http"] || ![detailUrl containsString:@"https"]) {
         urlStr = [NSString stringWithFormat:@"%@/%@", websiteModel.url, detailUrl];
     }
+    if (websiteModel.value == qushibaike) {
+        [self getImageWithUrl:urlStr withWebsiteValue:websiteModel withPageNum:1 success:success failure:failure];
+    }else{
+        // 新流程
+        NSString *imageXPath = @"";
+        NSString *pageNumXPath = @"";
+        if (websiteModel.value == lunv || websiteModel.value == luge) {
+            imageXPath = @"/html/body/div/main/article/div[2]/a/p/img/@src";
+            pageNumXPath = @"//*[@id=\"dm-fy\"]/li/a";
+        }else if(websiteModel.value == twofourfa){
+            imageXPath = @"/html/body/section[1]/article/div/img/@src";
+            // 长度需要-1
+            pageNumXPath = @"/html/body/section[1]/table/tr/td/div/ul/li/a/@href";
+        }else if(websiteModel.value == sxchinesegirlz){
+            // MARK:此处可能存在两种获取方式
+            imageXPath = @"/html/body/div/div/article/div/div[1]/div[1]/div/div[2]/figure/img/@src";
+            // 长度足够
+            pageNumXPath = @"/html/body/div/div/article/div/div[1]/div[1]/div/div[3]/a";
+        }else if(websiteModel.value == piaoliangwanghong){
+            imageXPath = @"//*[@id=\"picg\"]/p/a/img/@src";
+            pageNumXPath = @"/html/body/div[4]/div[2]/p/b/a";
+        }
+        
+        NSError *error = nil;
+        NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlStr] options:NSDataReadingUncached error:&error];
+        if (websiteModel.value == qushibaike || websiteModel.value == piaoliangwanghong) {
+            data = [Tool getGBKDataWithData:data];
+        }
+        if (error) {
+            // 网页加载错误
+            NSLog(@"错误信息是%@", error.localizedDescription);
+            failure(error);
+        }
+        TFHpple *xpathDoc = [[TFHpple alloc] initWithHTMLData:data];
+        NSArray *imgNodeArr = [xpathDoc searchWithXPathQuery:imageXPath];
+        NSArray *pageNumArr = [xpathDoc searchWithXPathQuery:pageNumXPath];
+        NSLog(@"本页图片%lu,总页数%lu",(unsigned long)imgNodeArr.count,(unsigned long)pageNumArr.count);
+        NSInteger pageNum = pageNumArr.count;
+        if (websiteModel.value == twofourfa) {
+            pageNum -= 1;
+        }
+        //TODO:完善细节
+        // 创建group
+        dispatch_group_t group = dispatch_group_create();
+        for (NSUInteger i=0; i<pageNum; i++) {
+            dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+            dispatch_group_enter(group);
+            dispatch_async(queue, ^{
+               // 地址累加获取所有图片
+                dispatch_group_leave(group);
+            });
+        }
+        dispatch_group_notify(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//            操作结束，block返回数据
+        });
+    }
+    
+    // 旧流程
+    /*
     if (websiteModel.value == lunv || websiteModel.value == luge) {
         [NetWorkingTool getHtmlWithUrl:urlStr WithData:nil success:^(NSString *_Nonnull html) {
             NSMutableArray *pageArr = [Tool getDataWithRegularExpression:@"<li><a href=\"([\\s\\S]+?)\">" content:html];
@@ -186,7 +245,6 @@ typedef enum : NSUInteger {
                     NSString *imgUrl = imgArr[0];
                     imgUrl = [imgUrl stringByReplacingOccurrencesOfString:@"src=\"" withString:@""];
                     imgUrl = [imgUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-//                    model.image_url = [imgUrl stringByReplacingOccurrencesOfString:websiteModel.url withString:@""];
                     model.image_url = [self replaceDomain:websiteModel urlStr:imgUrl];
                     model.website_id = websiteModel.value;
                     [imgListArr addObject:model];
@@ -228,7 +286,6 @@ typedef enum : NSUInteger {
                         imgStr = [imgPath stringByReplacingOccurrencesOfString:@"src=\"" withString:@""];
                         imgStr = [imgStr stringByReplacingOccurrencesOfString:@"\"" withString:@""];
                         ImageModel *model = [[ImageModel alloc] init];
-//                        model.image_url = imgStr;
                         model.image_url = [self replaceDomain:websiteModel urlStr:imgStr];
                         model.website_id = websiteModel.value;
                         [imgListArr addObject:model];
@@ -245,6 +302,7 @@ typedef enum : NSUInteger {
         //MARK:group线程优化1可以 2可以 3.可以  4.不可 5.可以 6.可以
         [self getImageWithUrl:urlStr withWebsiteValue:websiteModel withPageNum:1 success:success failure:failure];
     }
+    */
 }
 
 - (NSMutableArray *)imageArr {
@@ -256,7 +314,7 @@ typedef enum : NSUInteger {
 
 /// 递归获取每页详情
 /// @param url 详情地址
-/// @param websiteModel 站点model
+/// @param websiteModel 站点m odel
 /// @param pageNum 页码
 /// @param success 成功block
 /// @param failure 失败block
@@ -287,7 +345,7 @@ typedef enum : NSUInteger {
         failure(error);
     }
     if (websiteModel.value == qushibaike || websiteModel.value == piaoliangwanghong) {
-        data = [self getGBKDataWithData:data];
+        data = [Tool getGBKDataWithData:data];
     }
     TFHpple *xpathDoc = [[TFHpple alloc] initWithHTMLData:data];
     NSArray *imgNodeArr = [xpathDoc searchWithXPathQuery:imageXPath];
@@ -297,7 +355,6 @@ typedef enum : NSUInteger {
     }
     for (TFHppleElement *element in imgNodeArr) {
         ImageModel *model = [[ImageModel alloc] init];
-//        model.image_url = element.text;
         model.image_url = [self replaceDomain:websiteModel urlStr:element.text];
         model.website_id = websiteModel.value;
         [self.imageArr addObject:model];
@@ -331,16 +388,6 @@ typedef enum : NSUInteger {
     }
 }
 
-/// gbk网页内容转utf8
-/// @param data 数据
-- (NSData *)getGBKDataWithData:(NSData *)data {
-    NSStringEncoding gbkEncoding = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
-    NSString *postHtmlStr = [[NSString alloc] initWithData:data encoding:gbkEncoding];
-    NSString *utf8HtmlStr = [postHtmlStr stringByReplacingOccurrencesOfString:@"<meta HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=gb2312\">" withString:@"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">"];
-    NSData *utf8HtmlData = [utf8HtmlStr dataUsingEncoding:NSUTF8StringEncoding];
-    return utf8HtmlData;
-}
-
 /// 站点搜索(搜索结果不存入数据库)
 /// @param websiteModel websiteModel
 /// @param pageNum 页码
@@ -365,7 +412,7 @@ typedef enum : NSUInteger {
             urlStr = [urlStr stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
         } else if (websiteModel.value == qushibaike) {
             urlStr = [NSString stringWithFormat:@"https://so.azs2019.com/serch.php?keyword=%@&page=%ld", keyword, (long) pageNum];
-            urlStr = [self UTFtoGBK:urlStr];
+            urlStr = [Tool UTFtoGBK:urlStr];
         }
         NSError *error;
         NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlStr] options:NSDataReadingUncached error:&error];
@@ -375,7 +422,7 @@ typedef enum : NSUInteger {
             failure(error);
         }
         if (websiteModel.value == qushibaike) {
-            data = [self getGBKDataWithData:data];
+            data = [Tool getGBKDataWithData:data];
         }
         TFHpple *xpathDoc = [[TFHpple alloc] initWithHTMLData:data];
         NSString *titleXpath = @"";
@@ -404,14 +451,13 @@ typedef enum : NSUInteger {
         SqliteTool *sqlTool = [SqliteTool sharedInstance];
         for (NSUInteger i = 0; i < titleNodeArr.count; i++) {
             NSString *title = titleNodeArr[i].text;
-            title = [self filterHTML:title];
+            title = [Tool filterHTML:title];
             NSString *detail = detailNodeArr[i].text;
             if (websiteModel.value == twofourfa && ![detail containsString:@"c49"]) {
                 continue;
             }
             ArticleModel *result = [[ArticleModel alloc] init];
             result.name = title;
-//            result.detail_url = detail;
             result.detail_url = [self replaceDomain:websiteModel urlStr:detail];
             if (websiteModel.value == twofourfa) {
                 NSString *picPath = @"";
@@ -453,35 +499,4 @@ typedef enum : NSUInteger {
     return urlStr;
 }
 
-- (NSString *)filterHTML:(NSString *)html {
-    NSScanner *scanner = [NSScanner scannerWithString:html];
-    NSString *text = nil;
-    while ([scanner isAtEnd] == NO) {
-        //找到标签的起始位置
-        [scanner scanUpToString:@"<" intoString:nil];
-        //找到标签的结束位置
-        [scanner scanUpToString:@">" intoString:&text];
-        //替换字符
-        html = [html stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@>", text] withString:@""];
-    }
-    NSArray *currentArr = @[@"&quot;", @"&amp;", @"&lt;", @"&gt;", @"&nbsp;"];
-    NSArray *withArr = @[@"\"", @"&", @"<", @">", @" "];
-    for (NSUInteger i = 0; i < currentArr.count; i++) {
-        html = [html stringByReplacingOccurrencesOfString:currentArr[i] withString:withArr[i]];
-    }
-//    NSString * regEx = @"<([^>]*)>";
-//    html = [html stringByReplacingOccurrencesOfString:regEx withString:@""];
-    return html;
-}
-
-/// 网页地址utf格式转gbk格式
-/// @param urlStr 网页地址
-- (NSString *)UTFtoGBK:(NSString *)urlStr {
-    //GBK编码
-    NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
-    NSString *encodeContent = [urlStr stringByAddingPercentEscapesUsingEncoding:enc];
-    return encodeContent;
-}
-
 @end
-//449

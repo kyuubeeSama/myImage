@@ -51,4 +51,44 @@
     [[self currentViewController] presentViewController:alert animated:YES completion:nil];
 }
 
++ (NSString *)filterHTML:(NSString *)html {
+    NSScanner *scanner = [NSScanner scannerWithString:html];
+    NSString *text = nil;
+    while ([scanner isAtEnd] == NO) {
+        //找到标签的起始位置
+        [scanner scanUpToString:@"<" intoString:nil];
+        //找到标签的结束位置
+        [scanner scanUpToString:@">" intoString:&text];
+        //替换字符
+        html = [html stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@>", text] withString:@""];
+    }
+    NSArray *currentArr = @[@"&quot;", @"&amp;", @"&lt;", @"&gt;", @"&nbsp;"];
+    NSArray *withArr = @[@"\"", @"&", @"<", @">", @" "];
+    for (NSUInteger i = 0; i < currentArr.count; i++) {
+        html = [html stringByReplacingOccurrencesOfString:currentArr[i] withString:withArr[i]];
+    }
+//    NSString * regEx = @"<([^>]*)>";
+//    html = [html stringByReplacingOccurrencesOfString:regEx withString:@""];
+    return html;
+}
+
+/// 网页地址utf格式转gbk格式
+/// @param urlStr 网页地址
++ (NSString *)UTFtoGBK:(NSString *)urlStr {
+    //GBK编码
+    NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
+    NSString *encodeContent = [urlStr stringByAddingPercentEscapesUsingEncoding:enc];
+    return encodeContent;
+}
+
+/// gbk网页内容转utf8
+/// @param data 数据
++ (NSData *)getGBKDataWithData:(NSData *)data {
+    NSStringEncoding gbkEncoding = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
+    NSString *postHtmlStr = [[NSString alloc] initWithData:data encoding:gbkEncoding];
+    NSString *utf8HtmlStr = [postHtmlStr stringByReplacingOccurrencesOfString:@"<meta HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=gb2312\">" withString:@"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">"];
+    NSData *utf8HtmlData = [utf8HtmlStr dataUsingEncoding:NSUTF8StringEncoding];
+    return utf8HtmlData;
+}
+
 @end

@@ -18,6 +18,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(void)showAlertWithTitle:(nullable NSString *)title Message:(nullable NSString *)message withSureBtnClick:(void(^ __nullable)(void))sureBtnClick;
 
+// 剔除html内容
++ (NSString *)filterHTML:(NSString *)html;
+// 网址转换
++ (NSString *)UTFtoGBK:(NSString *)urlStr;
+// 网页内容转换
++ (NSData *)getGBKDataWithData:(NSData *)data;
 @end
 
 NS_ASSUME_NONNULL_END
