@@ -213,96 +213,49 @@ typedef enum : NSUInteger {
         if (websiteModel.value == twofourfa) {
             pageNum -= 1;
         }
-        //TODO:完善细节
         // 创建group
         dispatch_group_t group = dispatch_group_create();
-        for (NSUInteger i=0; i<pageNum; i++) {
+        __block NSString *blockUrlStr = urlStr;
+        for (NSUInteger i=1; i<=pageNum; i++) {
             dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
             dispatch_group_enter(group);
             dispatch_async(queue, ^{
                // 地址累加获取所有图片
+                if (websiteModel.value == piaoliangwanghong && i != 1) {
+                    blockUrlStr = [urlStr stringByReplacingOccurrencesOfString:@".html" withString:[NSString stringWithFormat:@"_%ld.html",i]];
+                }else if(websiteModel.value == sxchinesegirlz){
+                    blockUrlStr = [NSString stringWithFormat:@"%@/%lu",urlStr,(unsigned long)i];
+                }else if(websiteModel.value == lunv || websiteModel.value == luge){
+                    blockUrlStr = [NSString stringWithFormat:@"%@?page=%lu", urlStr, i];
+                }else if(websiteModel.value == twofourfa){
+                    blockUrlStr = [urlStr stringByReplacingOccurrencesOfString:@".aspx" withString:[NSString stringWithFormat:@"p%lu.aspx", i]];
+                }
+                NSError *error = nil;
+                NSData *detailData = [NSData dataWithContentsOfURL:[NSURL URLWithString:blockUrlStr] options:NSDataReadingUncached error:&error];
+                if (error) {
+                    // 网页加载错误
+                    NSLog(@"错误信息是%@", error.localizedDescription);
+                    failure(error);
+                }
+                if (websiteModel.value == piaoliangwanghong) {
+                    detailData = [Tool getGBKDataWithData:detailData];
+                }
+                TFHpple *detailXpathDoc = [[TFHpple alloc] initWithHTMLData:detailData];
+                NSArray *detailImgNodeArr = [detailXpathDoc searchWithXPathQuery:imageXPath];
+                for (TFHppleElement *element in detailImgNodeArr) {
+                    ImageModel *model = [[ImageModel alloc] init];
+                    model.image_url = [self replaceDomain:websiteModel urlStr:element.text];
+                    model.website_id = websiteModel.value;
+                    [self.imageArr addObject:model];
+                }
                 dispatch_group_leave(group);
             });
         }
         dispatch_group_notify(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 //            操作结束，block返回数据
+            success(self.imageArr);
         });
     }
-    
-    // 旧流程
-    /*
-    if (websiteModel.value == lunv || websiteModel.value == luge) {
-        [NetWorkingTool getHtmlWithUrl:urlStr WithData:nil success:^(NSString *_Nonnull html) {
-            NSMutableArray *pageArr = [Tool getDataWithRegularExpression:@"<li><a href=\"([\\s\\S]+?)\">" content:html];
-            NSMutableArray *imgListArr = [[NSMutableArray alloc] init];
-            for (NSUInteger i = 0; i <= pageArr.count; i++) {
-                ImageModel *model = [[ImageModel alloc] init];
-                NSString *relDetailUrl = [NSString stringWithFormat:@"%@?page=%lu", urlStr, i + 1];
-                [NetWorkingTool getHtmlWithUrl:relDetailUrl WithData:nil success:^(NSString *html) {
-                    progress(i + 1);
-                    NSMutableArray *imgAreaArr = [Tool getDataWithRegularExpression:@"article-content([\\s\\S]+?)<\\/a>" content:html];
-                    NSMutableArray *imgArr = [Tool getDataWithRegularExpression:@"src=\"([\\s\\S]+?)\"" content:imgAreaArr[0]];
-                    NSString *imgUrl = imgArr[0];
-                    imgUrl = [imgUrl stringByReplacingOccurrencesOfString:@"src=\"" withString:@""];
-                    imgUrl = [imgUrl stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                    model.image_url = [self replaceDomain:websiteModel urlStr:imgUrl];
-                    model.website_id = websiteModel.value;
-                    [imgListArr addObject:model];
-                    if (imgListArr.count == pageArr.count + 1) {
-                        success(imgListArr);
-                    }
-                }                      failure:^(NSError *error) {
-                    failure(error);
-                }];
-            }
-        }                      failure:^(NSError *_Nonnull error) {
-            failure(error);
-        }];
-    } else if (websiteModel.value == twofourfa) {
-        [NetWorkingTool getHtmlWithUrl:urlStr WithData:nil success:^(NSString *_Nonnull html) {
-            // 获取页码
-            // 获取页码  pager">([\s\S]+?)\/table> 之后加  <a([\s\S]+?)<\/a>
-            // 根据页码for循环
-            // 获取每页的图片
-            NSMutableArray *pageContentArr = [Tool getDataWithRegularExpression:@"pager\">([\\s\\S]+?)\\/table>" content:html];
-            NSMutableArray *pageArr = [[NSMutableArray alloc] init];
-            if ([pageContentArr count]) {
-                pageArr = [Tool getDataWithRegularExpression:@"<a([\\s\\S]+?)<\\/a>" content:pageContentArr[0]];
-            } else {
-//                如果只有1页
-                [pageArr addObject:@""];
-            }
-            NSMutableArray *imgListArr = [[NSMutableArray alloc] init];
-            for (NSUInteger i = 0; i <= pageArr.count; i++) {
-                NSString *relDetailUrl = [urlStr stringByReplacingOccurrencesOfString:@".aspx" withString:[NSString stringWithFormat:@"p%lu.aspx", i + 1]];
-                [NetWorkingTool getHtmlWithUrl:relDetailUrl WithData:nil success:^(NSString *html) {
-                    progress(i + 1);
-                    NSString *contentRegex = @"content\">([\\s\\S]+?)<\\/article>";
-                    NSString *detailStr = [Tool getDataWithRegularExpression:contentRegex content:html][0];
-                    NSString *imgRegex = @"src=\"([\\s\\S]+?)\"";
-                    NSMutableArray *imgArr = [Tool getDataWithRegularExpression:imgRegex content:detailStr];
-                    for (NSString *imgPath in imgArr) {
-                        NSString *imgStr;
-                        imgStr = [imgPath stringByReplacingOccurrencesOfString:@"src=\"" withString:@""];
-                        imgStr = [imgStr stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                        ImageModel *model = [[ImageModel alloc] init];
-                        model.image_url = [self replaceDomain:websiteModel urlStr:imgStr];
-                        model.website_id = websiteModel.value;
-                        [imgListArr addObject:model];
-                    }
-                    success(imgListArr);
-                }                      failure:^(NSError *error) {
-                    failure(error);
-                }];
-            }
-        }                      failure:^(NSError *_Nonnull error) {
-            failure(error);
-        }];
-    } else if (websiteModel.value == qushibaike || websiteModel.value == sxchinesegirlz || websiteModel.value == piaoliangwanghong) {
-        //MARK:group线程优化1可以 2可以 3.可以  4.不可 5.可以 6.可以
-        [self getImageWithUrl:urlStr withWebsiteValue:websiteModel withPageNum:1 success:success failure:failure];
-    }
-    */
 }
 
 - (NSMutableArray *)imageArr {
@@ -322,20 +275,12 @@ typedef enum : NSUInteger {
     NSString *urlStr = url;
     NSString *imageXPath = @"";
     NSString *nextXpath = @"";
-    if (websiteModel.value == qushibaike || websiteModel.value == piaoliangwanghong) {
+    if (websiteModel.value == qushibaike) {
         if (pageNum != 1) {
             urlStr = [urlStr stringByReplacingOccurrencesOfString:@".html" withString:[NSString stringWithFormat:@"_%ld.html", (long) pageNum]];
         }
-        if (websiteModel.value == qushibaike) {
-            imageXPath = @"/html/body/section/div/div/article/p[position()>1]/img/@src";
-            nextXpath = @"//*[@class=\"next-page\"]";
-        } else {
-            imageXPath = @"//*[@id=\"picg\"]/p/a/img/@src";
-        }
-    } else if (websiteModel.value == sxchinesegirlz) {
-        urlStr = [NSString stringWithFormat:@"%@/%ld", urlStr, (long) pageNum];
-        imageXPath = @"/html/body/div/div/article/div/div[1]/div[1]/div[2]/div[2]/figure/img/@src";
-        nextXpath = @"/html/body/div/div/article/div/div[1]/div[2]/div/div[3]/a/span/span";
+        imageXPath = @"/html/body/section/div/div/article/p[position()>1]/img/@src";
+        nextXpath = @"//*[@class=\"next-page\"]";
     }
     NSError *error = nil;
     NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlStr] options:NSDataReadingUncached error:&error];
@@ -344,47 +289,25 @@ typedef enum : NSUInteger {
         NSLog(@"错误信息是%@", error.localizedDescription);
         failure(error);
     }
-    if (websiteModel.value == qushibaike || websiteModel.value == piaoliangwanghong) {
+    if (websiteModel.value == qushibaike) {
         data = [Tool getGBKDataWithData:data];
     }
     TFHpple *xpathDoc = [[TFHpple alloc] initWithHTMLData:data];
     NSArray *imgNodeArr = [xpathDoc searchWithXPathQuery:imageXPath];
-    if (websiteModel.value == sxchinesegirlz && ![imgNodeArr count]) {
-        imageXPath = @"/html/body/div/div/article/div/div[1]/div[1]/div/div[2]/figure/img/@src";
-        imgNodeArr = [xpathDoc searchWithXPathQuery:imageXPath];
-    }
-    for (TFHppleElement *element in imgNodeArr) {
+   for (TFHppleElement *element in imgNodeArr) {
         ImageModel *model = [[ImageModel alloc] init];
         model.image_url = [self replaceDomain:websiteModel urlStr:element.text];
         model.website_id = websiteModel.value;
         [self.imageArr addObject:model];
     }
-    if (websiteModel.value == piaoliangwanghong) {
-        NSString *htmlContent = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        if ([htmlContent containsString:@"下一页"]) {
-            pageNum += 1;
-            [self getImageWithUrl:url withWebsiteValue:websiteModel withPageNum:pageNum success:success failure:failure];
-        } else {
-            success(self.imageArr);
-        }
-    } else if (websiteModel.value == sxchinesegirlz) {
-        NSString *htmlContent = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        if ([htmlContent containsString:@"class=\"currenttext\">Next</span>"]) {
-            pageNum += 1;
-            [self getImageWithUrl:url withWebsiteValue:websiteModel withPageNum:pageNum success:success failure:failure];
-        } else {
-            success(self.imageArr);
-        }
+    NSArray *nextNodeArr = [xpathDoc searchWithXPathQuery:nextXpath];
+    if (nextNodeArr.count > 0) {
+        // 有下一页
+        pageNum += 1;
+        [self getImageWithUrl:url withWebsiteValue:websiteModel withPageNum:pageNum success:success failure:failure];
     } else {
-        NSArray *nextNodeArr = [xpathDoc searchWithXPathQuery:nextXpath];
-        if (nextNodeArr.count > 0) {
-            // 有下一页
-            pageNum += 1;
-            [self getImageWithUrl:url withWebsiteValue:websiteModel withPageNum:pageNum success:success failure:failure];
-        } else {
-            // 没有下一页
-            success(self.imageArr);
-        }
+        // 没有下一页
+        success(self.imageArr);
     }
 }
 
