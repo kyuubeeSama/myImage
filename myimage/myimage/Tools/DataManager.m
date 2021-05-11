@@ -30,7 +30,7 @@ typedef enum : NSUInteger {
 /// @param success 成功返回
 /// @param failure 失败返回
 - (void)getDataWithType:(WebsiteModel *)websiteModel pageNum:(NSInteger)PageNum category:(CategoryModel *)category success:(void (^)(NSMutableArray *_Nonnull))success failure:(void (^)(NSError *_Nonnull))failure {
-//    拼接域名
+    //    拼接域名
     NSString *urlStr;
     NSString *titleXpath = @"";//标题
     NSString *detailXpath = @"";//详情
@@ -44,7 +44,7 @@ typedef enum : NSUInteger {
     } else if (websiteModel.value == twofourfa) {
         //        24fa
         urlStr = [NSString stringWithFormat:@"%@/mc%@p%ld.aspx", websiteModel.url, category.value, (long) PageNum];
-        titleXpath = @"/html/body/ul[3]/li/a";
+        titleXpath = @"/html/body/ul[3]/li/a/@title";
         detailXpath = @"/html/body/ul[3]/li/a/@href";
     } else if (websiteModel.value == qushibaike) {
         // 趣事百科
@@ -53,7 +53,7 @@ typedef enum : NSUInteger {
         detailXpath = @"/html/body/section/div/div/article/header/h2/a/@href";
         picXpath = @"/html/body/section/div/div/article/p[2]/a/span/span/img/@src";
     } else if (websiteModel.value == sxchinesegirlz) {
-//        sxchinesegirlz
+        //        sxchinesegirlz
         urlStr = [NSString stringWithFormat:@"%@/category/%@/page/%ld/", websiteModel.url, category.value, (long) PageNum];
         titleXpath = @"//*[@id=\"content_box\"]/div/div/article/a/@title";
         detailXpath = @"//*[@id=\"content_box\"]/div/div/article/a/@href";
@@ -124,7 +124,7 @@ typedef enum : NSUInteger {
                                where:nil]) {
                 result = (ArticleModel *) [sqlTool findDataFromTable:@"article"
                                                                where:[NSString
-                                                                       stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, result.detail_url]
+                                                                      stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, result.detail_url]
                                                                field:@"*"
                                                                Class:[ArticleModel class]];
             }
@@ -150,11 +150,11 @@ typedef enum : NSUInteger {
 -(int)getArticleIdWithWebsiteValue:(int)value urlStr:(NSString *)detail{
     int aid = 0;
     if (value == twofourfa) {
-//            mn80542c49.aspx
+        //            mn80542c49.aspx
         NSString *idStr = [detail stringByReplacingOccurrencesOfString:@"c49.aspx" withString:@""];
         aid = [[idStr stringByReplacingOccurrencesOfString:@"mn" withString:@""] intValue];
     } else if (value != sxchinesegirlz) {
-//            /jin/caitu/20211217/117394.html
+        //            /jin/caitu/20211217/117394.html
         NSArray<NSString *> *array = [detail componentsSeparatedByString:@"/"];
         aid = [[array.lastObject stringByReplacingOccurrencesOfString:@".html" withString:@""] intValue];
     }
@@ -220,7 +220,7 @@ typedef enum : NSUInteger {
             dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
             dispatch_group_enter(group);
             dispatch_async(queue, ^{
-               // 地址累加获取所有图片
+                // 地址累加获取所有图片
                 if (websiteModel.value == piaoliangwanghong && i != 1) {
                     blockUrlStr = [urlStr stringByReplacingOccurrencesOfString:@".html" withString:[NSString stringWithFormat:@"_%ld.html",i]];
                 }else if(websiteModel.value == sxchinesegirlz){
@@ -252,7 +252,7 @@ typedef enum : NSUInteger {
             });
         }
         dispatch_group_notify(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//            操作结束，block返回数据
+            //操作结束，block返回数据
             success(self.imageArr);
         });
     }
@@ -294,7 +294,7 @@ typedef enum : NSUInteger {
     }
     TFHpple *xpathDoc = [[TFHpple alloc] initWithHTMLData:data];
     NSArray *imgNodeArr = [xpathDoc searchWithXPathQuery:imageXPath];
-   for (TFHppleElement *element in imgNodeArr) {
+    for (TFHppleElement *element in imgNodeArr) {
         ImageModel *model = [[ImageModel alloc] init];
         model.image_url = [self replaceDomain:websiteModel urlStr:element.text];
         model.website_id = websiteModel.value;
@@ -330,6 +330,7 @@ typedef enum : NSUInteger {
         } else if (websiteModel.value == twofourfa) {
             urlStr = [NSString stringWithFormat:@"%@/mSearch.aspx?page=%ld&keyword=%@&where=title", websiteModel.url, (long) pageNum, keyword];
             urlStr = [urlStr stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+            NSLog(@"搜索地址是%@",urlStr);
         } else if (websiteModel.value == sxchinesegirlz) {
             urlStr = [NSString stringWithFormat:@"%@/page/%ld/?s=%@", websiteModel.url, (long) pageNum, keyword];
             urlStr = [urlStr stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
@@ -376,12 +377,17 @@ typedef enum : NSUInteger {
             NSString *title = titleNodeArr[i].text;
             title = [Tool filterHTML:title];
             NSString *detail = detailNodeArr[i].text;
+            // 剔除24fa中无关的结果
             if (websiteModel.value == twofourfa && ![detail containsString:@"c49"]) {
                 continue;
             }
             ArticleModel *result = [[ArticleModel alloc] init];
             result.name = title;
-            result.detail_url = [self replaceDomain:websiteModel urlStr:detail];
+            if (websiteModel.value == qushibaike) {
+                result.detail_url = detail;
+            }else{
+                result.detail_url = [self replaceDomain:websiteModel urlStr:detail];
+            }
             if (websiteModel.value == twofourfa) {
                 NSString *picPath = @"";
                 NSString *detailUrl = [NSString stringWithFormat:@"%@/%@", websiteModel.url, detail];
@@ -405,7 +411,7 @@ typedef enum : NSUInteger {
                                where:[NSString stringWithFormat:@"select * from article where detail_url = '%@'", result.detail_url]]) {
                 result = (ArticleModel *) [sqlTool findDataFromTable:@"article"
                                                                where:[NSString
-                                                                       stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, result.detail_url]
+                                                                      stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, result.detail_url]
                                                                field:@"*"
                                                                Class:[ArticleModel class]];
             }
