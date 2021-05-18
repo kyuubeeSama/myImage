@@ -311,7 +311,7 @@ typedef enum : NSUInteger {
     }
 }
 
-/// 站点搜索(搜索结果不存入数据库)
+/// 站点搜索
 /// @param websiteModel websiteModel
 /// @param pageNum 页码
 /// @param keyword 搜索关键字
@@ -321,104 +321,106 @@ typedef enum : NSUInteger {
     NSString *urlStr;
     NSMutableArray *resultArr = [[NSMutableArray alloc] init];
     if (websiteModel.value == piaoliangwanghong) {
-        // 无搜索功能
-        success([[NSMutableArray alloc]init]);
-    } else {
-        if (websiteModel.value == lunv || websiteModel.value == luge) {
-            urlStr = [NSString stringWithFormat:@"%@/search.php?q=%@&page=%ld", websiteModel.url, keyword, (long) pageNum];
-            urlStr = [urlStr stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-        } else if (websiteModel.value == twofourfa) {
-            urlStr = [NSString stringWithFormat:@"%@/mSearch.aspx?page=%ld&keyword=%@&where=title", websiteModel.url, (long) pageNum, keyword];
-            urlStr = [urlStr stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-            NSLog(@"搜索地址是%@",urlStr);
-        } else if (websiteModel.value == sxchinesegirlz) {
-            urlStr = [NSString stringWithFormat:@"%@/page/%ld/?s=%@", websiteModel.url, (long) pageNum, keyword];
-            urlStr = [urlStr stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-        } else if (websiteModel.value == qushibaike) {
-            urlStr = [NSString stringWithFormat:@"https://so.azs2019.com/serch.php?keyword=%@&page=%ld", keyword, (long) pageNum];
-            urlStr = [Tool UTFtoGBK:urlStr];
-        }
-        NSError *error;
-        NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlStr] options:NSDataReadingUncached error:&error];
-        if (error) {
-            // 网页加载错误
-            NSLog(@"错误信息是%@", error.localizedDescription);
-            failure(error);
-        }
-        if (websiteModel.value == qushibaike) {
-            data = [Tool getGBKDataWithData:data];
-        }
-        TFHpple *xpathDoc = [[TFHpple alloc] initWithHTMLData:data];
-        NSString *titleXpath = @"";
-        NSString *detailXpath = @"";
-        NSString *imgXpath = @"";
-        if (websiteModel.value == lunv || websiteModel.value == luge) {
-            titleXpath = @"//*[@id=\"container\"]/main/article/div/a/@title";
-            detailXpath = @"//*[@id=\"container\"]/main/article/div/a/@href";
-            imgXpath = @"//*[@id=\"container\"]/main/article/div/a/img/@src";
-        } else if (websiteModel.value == twofourfa) {
-            //FIXME:此处获取的标题不正确
-            titleXpath = @"/html/body/section/article/ul/li/h4/a";
-            detailXpath = @"/html/body/section/article/ul/li/h4/a/@href";
-        } else if (websiteModel.value == qushibaike) {
-            titleXpath = @"/html/body/section/div/div/article/header/h2/a/@title";
-            detailXpath = @"/html/body/section/div/div/article/header/h2/a/@href";
-            imgXpath = @"/html/body/section/div/div/article/p[2]/a/span/span/img/@src";
-        } else if (websiteModel.value == sxchinesegirlz) {
-            titleXpath = @"//*[@id=\"content_box\"]/div/div/article/a/@title";
-            detailXpath = @"//*[@id=\"content_box\"]/div/div/article/a/@href";
-            imgXpath = @"//*[@id=\"content_box\"]/div/div/article/a/div[1]/img/@src";
-        }
-        NSArray<TFHppleElement *> *titleNodeArr = [xpathDoc searchWithXPathQuery:titleXpath];
-        NSArray<TFHppleElement *> *detailNodeArr = [xpathDoc searchWithXPathQuery:detailXpath];
-        NSArray<TFHppleElement *> *imgNodeArr = [xpathDoc searchWithXPathQuery:imgXpath];
-        SqliteTool *sqlTool = [SqliteTool sharedInstance];
-        for (NSUInteger i = 0; i < titleNodeArr.count; i++) {
-            NSString *title = titleNodeArr[i].text;
-            title = [Tool filterHTML:title];
-            NSString *detail = detailNodeArr[i].text;
-            // 剔除24fa中无关的结果
-            if (websiteModel.value == twofourfa && ![detail containsString:@"c49"]) {
-                continue;
-            }
-            ArticleModel *result = [[ArticleModel alloc] init];
-            result.name = title;
-            if (websiteModel.value == qushibaike) {
-                result.detail_url = detail;
-            }else{
-                result.detail_url = [self replaceDomain:websiteModel urlStr:detail];
-            }
-            if (websiteModel.value == twofourfa) {
-                NSString *picPath = @"";
-                NSString *detailUrl = [NSString stringWithFormat:@"%@/%@", websiteModel.url, detail];
-                NSData *detailData = [NSData dataWithContentsOfURL:[[NSURL alloc] initWithString:detailUrl]];
-                TFHpple *detailDoc = [[TFHpple alloc] initWithHTMLData:detailData];
-                NSString *picXpath = @"//*[@id=\"content\"]/div/img[1]/@src";
-                NSArray<TFHppleElement *> *picNodeArr = [detailDoc searchWithXPathQuery:picXpath];
-                if ([picNodeArr count]) {
-                    picPath = picNodeArr[0].text;
-                }
-                result.img_url = picPath;
-            } else {
-                NSString *imgPath = imgNodeArr[i].text;
-                result.img_url = imgPath;
-            }
-            result.website_id = websiteModel.value;
-            result.aid = [self getArticleIdWithWebsiteValue:websiteModel.value urlStr:detail];
-            if ([sqlTool insertTable:@"article"
-                             element:@"website_id,category_id,name,detail_url,img_url,aid"
-                               value:[NSString stringWithFormat:@"%d,0,'%@','%@','%@',%d", websiteModel.value, result.name, result.detail_url, result.img_url,result.aid]
-                               where:[NSString stringWithFormat:@"select * from article where detail_url = '%@'", result.detail_url]]) {
-                result = (ArticleModel *) [sqlTool findDataFromTable:@"article"
-                                                               where:[NSString
-                                                                      stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, result.detail_url]
-                                                               field:@"*"
-                                                               Class:[ArticleModel class]];
-            }
-            [resultArr addObject:result];
-        }
-        success(resultArr);
+        urlStr = [NSString stringWithFormat:@"%@/s.asp?page=%ld&keyword=%@",websiteModel.url,(long)pageNum,keyword];
+        urlStr = [Tool UTFtoGBK:urlStr];
+    } else if (websiteModel.value == lunv || websiteModel.value == luge) {
+        urlStr = [NSString stringWithFormat:@"%@/search.php?q=%@&page=%ld", websiteModel.url, keyword, (long) pageNum];
+        urlStr = [urlStr stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    } else if (websiteModel.value == twofourfa) {
+        urlStr = [NSString stringWithFormat:@"%@/mSearch.aspx?page=%ld&keyword=%@&where=title", websiteModel.url, (long) pageNum, keyword];
+        urlStr = [urlStr stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+        NSLog(@"搜索地址是%@",urlStr);
+    } else if (websiteModel.value == sxchinesegirlz) {
+        urlStr = [NSString stringWithFormat:@"%@/page/%ld/?s=%@", websiteModel.url, (long) pageNum, keyword];
+        urlStr = [urlStr stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    } else if (websiteModel.value == qushibaike) {
+        urlStr = [NSString stringWithFormat:@"https://so.azs2019.com/serch.php?keyword=%@&page=%ld", keyword, (long) pageNum];
+        urlStr = [Tool UTFtoGBK:urlStr];
     }
+    NSError *error;
+    NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlStr] options:NSDataReadingUncached error:&error];
+    if (error) {
+        // 网页加载错误
+        NSLog(@"错误信息是%@", error.localizedDescription);
+        failure(error);
+    }
+    if (websiteModel.value == qushibaike || websiteModel.value == piaoliangwanghong) {
+        data = [Tool getGBKDataWithData:data];
+    }
+    TFHpple *xpathDoc = [[TFHpple alloc] initWithHTMLData:data];
+    NSString *titleXpath = @"";
+    NSString *detailXpath = @"";
+    NSString *imgXpath = @"";
+    if (websiteModel.value == lunv || websiteModel.value == luge) {
+        titleXpath = @"//*[@id=\"container\"]/main/article/div/a/@title";
+        detailXpath = @"//*[@id=\"container\"]/main/article/div/a/@href";
+        imgXpath = @"//*[@id=\"container\"]/main/article/div/a/img/@src";
+    } else if (websiteModel.value == twofourfa) {
+        //FIXME:此处获取的标题不正确
+        titleXpath = @"/html/body/section/article/ul/li/h4/a";
+        detailXpath = @"/html/body/section/article/ul/li/h4/a/@href";
+    } else if (websiteModel.value == qushibaike) {
+        titleXpath = @"/html/body/section/div/div/article/header/h2/a/@title";
+        detailXpath = @"/html/body/section/div/div/article/header/h2/a/@href";
+        imgXpath = @"/html/body/section/div/div/article/p[2]/a/span/span/img/@src";
+    } else if (websiteModel.value == sxchinesegirlz) {
+        titleXpath = @"//*[@id=\"content_box\"]/div/div/article/a/@title";
+        detailXpath = @"//*[@id=\"content_box\"]/div/div/article/a/@href";
+        imgXpath = @"//*[@id=\"content_box\"]/div/div/article/a/div[1]/img/@src";
+    }else if(websiteModel.value == piaoliangwanghong){
+        titleXpath = @"//*[@id=\"list\"]/ul/li/div/a/@title";
+        detailXpath = @"//*[@id=\"list\"]/ul/li/div/a/@href";
+        imgXpath = @"//*[@id=\"list\"]/ul/li/a/img/@src";
+    }
+    NSArray<TFHppleElement *> *titleNodeArr = [xpathDoc searchWithXPathQuery:titleXpath];
+    NSArray<TFHppleElement *> *detailNodeArr = [xpathDoc searchWithXPathQuery:detailXpath];
+    NSArray<TFHppleElement *> *imgNodeArr = [xpathDoc searchWithXPathQuery:imgXpath];
+    SqliteTool *sqlTool = [SqliteTool sharedInstance];
+    for (NSUInteger i = 0; i < titleNodeArr.count; i++) {
+        NSString *title = titleNodeArr[i].text;
+        title = [Tool filterHTML:title];
+        NSString *detail = detailNodeArr[i].text;
+        // 剔除24fa中无关的结果
+        if (websiteModel.value == twofourfa && ![detail containsString:@"c49"]) {
+            continue;
+        }
+        ArticleModel *result = [[ArticleModel alloc] init];
+        result.name = title;
+        if (websiteModel.value == qushibaike) {
+            result.detail_url = detail;
+        }else{
+            result.detail_url = [self replaceDomain:websiteModel urlStr:detail];
+        }
+        if (websiteModel.value == twofourfa) {
+            NSString *picPath = @"";
+            NSString *detailUrl = [NSString stringWithFormat:@"%@/%@", websiteModel.url, detail];
+            NSData *detailData = [NSData dataWithContentsOfURL:[[NSURL alloc] initWithString:detailUrl]];
+            TFHpple *detailDoc = [[TFHpple alloc] initWithHTMLData:detailData];
+            NSString *picXpath = @"//*[@id=\"content\"]/div/img[1]/@src";
+            NSArray<TFHppleElement *> *picNodeArr = [detailDoc searchWithXPathQuery:picXpath];
+            if ([picNodeArr count]) {
+                picPath = picNodeArr[0].text;
+            }
+            result.img_url = picPath;
+        } else {
+            NSString *imgPath = imgNodeArr[i].text;
+            result.img_url = imgPath;
+        }
+        result.website_id = websiteModel.value;
+        result.aid = [self getArticleIdWithWebsiteValue:websiteModel.value urlStr:detail];
+        if ([sqlTool insertTable:@"article"
+                         element:@"website_id,category_id,name,detail_url,img_url,aid"
+                           value:[NSString stringWithFormat:@"%d,0,'%@','%@','%@',%d", websiteModel.value, result.name, result.detail_url, result.img_url,result.aid]
+                           where:[NSString stringWithFormat:@"select * from article where detail_url = '%@'", result.detail_url]]) {
+            result = (ArticleModel *) [sqlTool findDataFromTable:@"article"
+                                                           where:[NSString
+                                                                  stringWithFormat:@"website_id = %d and detail_url = '%@'", websiteModel.value, result.detail_url]
+                                                           field:@"*"
+                                                           Class:[ArticleModel class]];
+        }
+        [resultArr addObject:result];
+    }
+    success(resultArr);
 }
 // 替换图片中可能包含的域名地址
 -(NSString *)replaceDomain:(WebsiteModel *)model urlStr:(NSString *)urlStr{

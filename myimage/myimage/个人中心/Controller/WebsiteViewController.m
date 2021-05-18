@@ -95,7 +95,7 @@
             @[@"美女",@"欧美"],
             @[@"宅福利",@"宅男社",@"撸一管",@"蜜桃社"],
             @[@"nude",@"xiuren",@"chokmoson",@"feilin",@"huayang",@"imiss",@"mfstar",@"mistar",@"mygirl",@"tuigirl",@"ugirls",@"xiaoyu",@"yalayi",@"youmei",@"youmi"],
-            @[@"性感美女",@"精品套图",@"高清套图",@"无圣光"]
+            @[@"性感美女",@"精品套图",@"高清套图",@"无圣光",@"日韩套图",@"内衣丝袜",@"萌妹萝莉"]
             ];
             NSArray *allIdArr = @[
             @[@"1",@"2",@"5",@"6",@"8",@"9"],
@@ -103,7 +103,7 @@
             @[@"49",@"71"],
             @[@"zhaifuli/list_2_",@"zhainanshe/list_4_",@"luyilu/list_5_",@"MiiTao/list_12_"],
             @[@"nude",@"xiuren",@"chokmoson",@"feilin",@"huayang",@"imiss",@"mfstar",@"mistar",@"mygirl",@"tuigirl",@"ugirls",@"xiaoyu",@"yalayi",@"youmei",@"youmi"],
-            @[@"1",@"18",@"24",@"25"]
+            @[@"1",@"18",@"24",@"25",@"2",@"9",@"11"]
             ];
             [sqlTool insertTable:@"website"
                          element:@"name,url,value"
