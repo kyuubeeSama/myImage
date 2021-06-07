@@ -153,7 +153,7 @@
                         }
                     }
                 }else if(index == 1){
-                    //                    创佳文件名
+                    //                    创建文件名
                     NSString *fileName = [NSString stringWithFormat:@"%d_%@.jpg",weakself.websiteModel.value,[NSDate nowTimestamp]];
                     NSString *filePath = [FileTool createFilePathWithName:[NSString stringWithFormat:@"images/%@",fileName]];
                     [FileTool createDocumentWithname:@"images"];

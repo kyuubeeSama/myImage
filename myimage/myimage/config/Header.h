@@ -23,6 +23,7 @@
 #import <ReactiveObjC/ReactiveObjC.h>
 #import <LYEmptyView/LYEmptyViewHeader.h>
 #import <JXCategoryView/JXCategoryView.h>
+#import "GKPhotoBrowser.h"
 
 #import "SqliteTool.h"
 #import "FileTool.h"

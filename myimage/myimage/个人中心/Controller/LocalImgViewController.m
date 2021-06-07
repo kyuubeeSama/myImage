@@ -131,6 +131,15 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     QYFileModel *model = self.listArr[(NSUInteger) indexPath.row];
+    /*
+    NSMutableArray *photoArr = [[NSMutableArray alloc]init];
+    GKPhoto *photo = [[GKPhoto alloc]init];
+    photo.url = [NSURL fileURLWithPath:model.filePath];
+    [photoArr addObject:photo];
+    GKPhotoBrowser *browser = [GKPhotoBrowser photoBrowserWithPhotos:photoArr currentIndex:0];
+    browser.showStyle = GKPhotoBrowserShowStyleZoom;
+    [browser showFromVC:self];
+    */
     HZPhotoBrowser *browser = [[HZPhotoBrowser alloc] init];
     browser.isFullWidthForLandScape = YES;
     browser.isNeedLandscape = YES;

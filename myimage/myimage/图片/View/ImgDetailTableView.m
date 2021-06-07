@@ -20,6 +20,9 @@
 -(NSMutableArray *)imgArr{
     if (!_imgArr) {
         _imgArr = [[NSMutableArray alloc]init];
+        for (int i=0; i<self.listArr.count; i++) {
+            [_imgArr addObject:[[UIImage alloc]init]];
+        }
     }
     return _imgArr;
 }
@@ -63,7 +66,7 @@
 
             }                 completed:^(UIImage *_Nullable image, NSError *_Nullable error, SDImageCacheType cacheType, NSURL *_Nullable imageURL) {
                 if (error == nil && image.size.width > 0 && image.size.height > 0) {
-                    [self.imgArr addObject:image];
+                    self.imgArr[indexPath.row] = image;
                     model.width = image.size.width;
                     model.height = image.size.height;
                     [self reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];

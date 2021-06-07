@@ -19,6 +19,8 @@ target 'myimage' do
   pod 'Shimmer'
 
   pod 'LYEmptyView'
+  
+  pod 'GKPhotoBrowser'
 
   pod 'JXCategoryView'
   use_frameworks!

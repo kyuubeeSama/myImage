@@ -80,6 +80,18 @@ typedef enum : NSUInteger {
         data = [Tool getGBKDataWithData:data];
     }
     TFHpple *xpathDoc = [[TFHpple alloc] initWithHTMLData:data];
+    // 获取漂亮网红图的搜索地址
+    if (websiteModel.value == piaoliangwanghong) {
+        NSString *searchXPath = @"//*[@id=\"search\"]/center/form/@action";
+        NSArray <TFHppleElement *> *searchNodeArr = [xpathDoc searchWithXPathQuery:searchXPath];
+        if ([searchNodeArr count]) {
+            // 存在搜索地址
+            // 获取搜索地址域名地址
+            NSString *domainUrlStr = [Tool getDataWithRegularExpression:@"((http://)|(https://))[^\\.]*\\.(?<domain>[^/|?]*)" content:searchNodeArr[0].content][0];
+            // 将该地址存起来
+            [[NSUserDefaults standardUserDefaults]setObject:domainUrlStr forKey:@"plwhtSearchUrlStr"];
+        }
+    }
     NSArray<TFHppleElement *> *titleNodeArr = [xpathDoc searchWithXPathQuery:titleXpath];
     NSArray<TFHppleElement *> *detailNodeArr = [xpathDoc searchWithXPathQuery:detailXpath];
     NSArray<TFHppleElement *> *picNodeArr = [xpathDoc searchWithXPathQuery:picXpath];
@@ -321,7 +333,9 @@ typedef enum : NSUInteger {
     NSString *urlStr;
     NSMutableArray *resultArr = [[NSMutableArray alloc] init];
     if (websiteModel.value == piaoliangwanghong) {
-        urlStr = [NSString stringWithFormat:@"%@/s.asp?page=%ld&keyword=%@",websiteModel.url,(long)pageNum,keyword];
+        // 需要首先获取当前的搜索地址。根据当前的搜索地址爬取数据。
+        NSString *searchUrl = [[NSUserDefaults standardUserDefaults]objectForKey:@"plwhtSearchUrlStr"];
+        urlStr = [NSString stringWithFormat:@"%@/s.asp?page=%ld&keyword=%@",searchUrl,(long)pageNum,keyword];
         urlStr = [Tool UTFtoGBK:urlStr];
     } else if (websiteModel.value == lunv || websiteModel.value == luge) {
         urlStr = [NSString stringWithFormat:@"%@/search.php?q=%@&page=%ld", websiteModel.url, keyword, (long) pageNum];
@@ -329,7 +343,6 @@ typedef enum : NSUInteger {
     } else if (websiteModel.value == twofourfa) {
         urlStr = [NSString stringWithFormat:@"%@/mSearch.aspx?page=%ld&keyword=%@&where=title", websiteModel.url, (long) pageNum, keyword];
         urlStr = [urlStr stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-        NSLog(@"搜索地址是%@",urlStr);
     } else if (websiteModel.value == sxchinesegirlz) {
         urlStr = [NSString stringWithFormat:@"%@/page/%ld/?s=%@", websiteModel.url, (long) pageNum, keyword];
         urlStr = [urlStr stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
@@ -337,6 +350,7 @@ typedef enum : NSUInteger {
         urlStr = [NSString stringWithFormat:@"https://so.azs2019.com/serch.php?keyword=%@&page=%ld", keyword, (long) pageNum];
         urlStr = [Tool UTFtoGBK:urlStr];
     }
+    NSLog(@"搜索地址是%@",urlStr);
     NSError *error;
     NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlStr] options:NSDataReadingUncached error:&error];
     if (error) {
