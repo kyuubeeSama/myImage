@@ -106,6 +106,7 @@ typedef enum : NSUInteger {
         NSLog(@"标提是%@,详情是%@,图片地址是%@", title, detail, picPath);
         // 获取id
         int aid = [self getArticleIdWithWebsiteValue:websiteModel.value urlStr:detail];
+        detail = [self replaceDomain:websiteModel urlStr:detail];
         // 存数据库
         SqliteTool *sqlTool = [SqliteTool sharedInstance];
         // 当前流程是，先查询是否存在，存在去判断是否需要更新分类，如果不存在，就存储，存储完后返回
@@ -256,7 +257,11 @@ typedef enum : NSUInteger {
                 NSArray *detailImgNodeArr = [detailXpathDoc searchWithXPathQuery:imageXPath];
                 for (TFHppleElement *element in detailImgNodeArr) {
                     ImageModel *model = [[ImageModel alloc] init];
-                    model.image_url = [self replaceDomain:websiteModel urlStr:element.text];
+                    NSString *image_url = element.text;
+                    if (websiteModel.value == sxchinesegirlz) {
+                       image_url = [image_url stringByReplacingOccurrencesOfString:@"sxchinesegirlz.com" withString:@"sxchinesegirlz.one"];
+                    }
+                    model.image_url = [self replaceDomain:websiteModel urlStr:image_url];
                     model.website_id = websiteModel.value;
                     [self.imageArr addObject:model];
                 }
@@ -264,6 +269,8 @@ typedef enum : NSUInteger {
             });
         }
         dispatch_group_notify(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            //TODO:对已获取的文件进行排序
+            
             //操作结束，block返回数据
             success(self.imageArr);
         });
@@ -335,7 +342,7 @@ typedef enum : NSUInteger {
     if (websiteModel.value == piaoliangwanghong) {
         // 需要首先获取当前的搜索地址。根据当前的搜索地址爬取数据。
         NSString *searchUrl = [[NSUserDefaults standardUserDefaults]objectForKey:@"plwhtSearchUrlStr"];
-        urlStr = [NSString stringWithFormat:@"%@/s.asp?page=%ld&keyword=%@",searchUrl,(long)pageNum,keyword];
+        urlStr = [NSString stringWithFormat:@"%@/s.asp?page=%ld&keyword=%@",websiteModel.url,(long)pageNum,keyword];
         urlStr = [Tool UTFtoGBK:urlStr];
     } else if (websiteModel.value == lunv || websiteModel.value == luge) {
         urlStr = [NSString stringWithFormat:@"%@/search.php?q=%@&page=%ld", websiteModel.url, keyword, (long) pageNum];

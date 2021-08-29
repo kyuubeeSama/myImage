@@ -53,12 +53,22 @@
         if([model.image_url containsString:@"http"] || [model.image_url containsString:@"https"]){
             img_url = model.image_url;
         }else{
-            img_url = [NSString stringWithFormat:@"%@/%@", self.websiteModel.url, model.image_url];
-            img_url = [img_url stringByReplacingOccurrencesOfString:@"//" withString:@"/"];
+            if (model.website_id == 5 && [model.image_url containsString:@"//"]) {
+                img_url = [NSString stringWithFormat:@"https:%@",model.image_url];
+            }else{
+                img_url = [NSString stringWithFormat:@"%@/%@", self.websiteModel.url, model.image_url];
+                img_url = [img_url stringByReplacingOccurrencesOfString:@"//" withString:@"/"];
+            }
         }
         if (model.website_id != 4) {
             SDWebImageDownloader *downloader = [SDWebImageManager sharedManager].imageLoader;
             [downloader setValue:[NSString stringWithFormat:@"%@/",self.websiteModel.url] forHTTPHeaderField:@"Referer"];
+        }
+        if (model.website_id == 5) {
+            img_url = [img_url componentsSeparatedByString:@"?"][0];
+            for (NSString *itemStr in @[@"0",@"1",@"2",@"3"]) {
+                img_url = [img_url stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"https://i%@.wp.com/www.sxchinesegirlz.xyz/",itemStr] withString:@"https://sxchinesegirlz.b-cdn.net/"];
+            }
         }
         [cell.topImg sd_setImageWithURL:[NSURL URLWithString:img_url]
                        placeholderImage:[UIImage imageNamed:@"placeholder2"]
@@ -71,7 +81,7 @@
                     model.height = image.size.height;
                     [self reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
                 } else {
-                    NSLog(@"第%ld张图片出错，出错图片地址是%@%@,错误信息是%@，错误码是%@", (long) indexPath.row, self.websiteModel.url, model.image_url, error.localizedDescription,error.userInfo[@"SDWebImageErrorDownloadStatusCodeKey"]);
+                    NSLog(@"第%ld张图片出错，出错图片地址是%@,错误信息是%@，错误码是%@", (long) indexPath.row,  img_url, error.localizedDescription,error.userInfo[@"SDWebImageErrorDownloadStatusCodeKey"]);
                 }
             }];
     } else {

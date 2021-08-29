@@ -75,7 +75,6 @@
                     });
                 });
             }];
-            
         });
     } else {
         SqliteTool *sqlTool = [SqliteTool sharedInstance];
@@ -126,11 +125,21 @@
             if([model.image_url containsString:@"http"] || [model.image_url containsString:@"https"]){
                 img_url = model.image_url;
             }else{
-                img_url = [NSString stringWithFormat:@"%@/%@", self.websiteModel.url, model.image_url];
-                img_url = [img_url stringByReplacingOccurrencesOfString:@"//" withString:@"/"];
+                if (model.website_id == 5 && [model.image_url containsString:@"//"]) {
+                    img_url = [NSString stringWithFormat:@"https:%@",model.image_url];
+                }else{
+                    img_url = [NSString stringWithFormat:@"%@/%@", self.websiteModel.url, model.image_url];
+                    img_url = [img_url stringByReplacingOccurrencesOfString:@"//" withString:@"/"];
+                }
             }
             if (model.website_id == 4) {
                 img_url = model.image_url;
+            }
+            if (model.website_id == 5) {
+                img_url = [img_url componentsSeparatedByString:@"?"][0];
+                for (NSString *itemStr in @[@"0",@"1",@"2",@"3"]) {
+                    img_url = [img_url stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"https://i%@.wp.com/www.sxchinesegirlz.xyz/",itemStr] withString:@"https://sxchinesegirlz.b-cdn.net/"];
+                }
             }
             browser.imageArray = @[img_url];
             [browser show];
