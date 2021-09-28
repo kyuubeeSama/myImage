@@ -260,6 +260,9 @@ typedef enum : NSUInteger {
                     NSString *image_url = element.text;
                     if (websiteModel.value == sxchinesegirlz) {
                        image_url = [image_url stringByReplacingOccurrencesOfString:@"sxchinesegirlz.com" withString:@"sxchinesegirlz.one"];
+                        NSRange beginRange = [image_url rangeOfString:@"-" options:NSBackwardsSearch];
+                        NSRange endRange = [image_url rangeOfString:([image_url containsString:@".jpg"]?@".jpg":@".png")];
+                        image_url = [image_url stringByReplacingCharactersInRange:NSMakeRange(beginRange.location, endRange.location-beginRange.location) withString:@""];
                     }
                     model.image_url = [self replaceDomain:websiteModel urlStr:image_url];
                     model.website_id = websiteModel.value;
