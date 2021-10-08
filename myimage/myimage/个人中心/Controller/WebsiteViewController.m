@@ -38,7 +38,7 @@
     for(WebsiteModel *model  in webArr){
         [self.websiteArr addObject:model.name];
     }
-    self.listArr = @[@"撸女吧",@"撸哥吧",@"24fa",@"趣事百科",@"sxchinesegirlz",@"漂亮网红图"];
+    self.listArr = @[@"凸凹吧",@"撸哥吧",@"24fa",@"趣事百科",@"sxchinesegirlz",@"漂亮网红图"];
     [self.mainTable reloadData];
 }
 
@@ -76,21 +76,13 @@
             // 添加
             [self beginProgressWithTitle:nil];
             SqliteTool *sqlTool = [SqliteTool sharedInstance];
-            //TODO:修改为可以从外部修改。使用plist文件。
-//            NSArray *valueArr = @[@"'撸女吧','https://www.lunu8.com',1",
-//                                  @"'撸哥吧','https://www.luge8.cc',2",
-//                                  @"'24fa','https://www.24faw.com',3",
-//                                  @"'趣事百科','https://v8.qqv13.vip',4",
-//                                  @"'sxchinesegirlz','https://sxchinesegirlz.com',5",
-//                                  @"'漂亮网红图','http://www.plwht.com',6",
-//            ];
             NSArray *array = [[NSArray alloc]initWithContentsOfFile:[FileTool createFilePathWithName:@"website.plist"]];
             NSMutableArray *valueArr = [[NSMutableArray alloc]init];
             for (NSArray *array1 in array) {
                 [valueArr addObject:[array1 componentsJoinedByString:@","]];
             }
             NSArray *allTitleArr = @[
-            @[@"撸女",@"撸吧",@"推图",@"亚洲",@"欧美",@"日韩"],
+            @[@"无圣光",@"凸凹吧",@"人体艺术",@"精品套图",@"欧美女郎"],
             @[@"欲女",@"撸女",@"亚洲",@"欧美",@"日韩"],
             @[@"美女",@"欧美"],
             @[@"宅福利",@"宅男社",@"撸一管",@"蜜桃社"],
@@ -98,7 +90,7 @@
             @[@"性感美女",@"精品套图",@"高清套图",@"无圣光",@"日韩套图",@"内衣丝袜",@"萌妹萝莉"]
             ];
             NSArray *allIdArr = @[
-            @[@"1",@"2",@"5",@"6",@"8",@"9"],
+            @[@"1",@"2",@"3",@"5",@"6"],
             @[@"1",@"2",@"6",@"8",@"9"],
             @[@"49",@"71"],
             @[@"zhaifuli/list_2_",@"zhainanshe/list_4_",@"luyilu/list_5_",@"MiiTao/list_12_"],

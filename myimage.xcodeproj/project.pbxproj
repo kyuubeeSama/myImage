@@ -784,7 +784,7 @@
 				CODE_SIGN_ENTITLEMENTS = myimage/myimage.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 3KW2TU676U;
+				DEVELOPMENT_TEAM = WVJ3T6UNZ3;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/myimage/myimage/config/PrefixHeader.pch";
 				INFOPLIST_FILE = myimage/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -792,7 +792,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.qingyuannet.myimage;
+				PRODUCT_BUNDLE_IDENTIFIER = com.quanyihui.myimage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "myimage/myimage/Index/myimage-Bridging-Header.h";
@@ -820,7 +820,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.qingyuannet.myimage;
+				PRODUCT_BUNDLE_IDENTIFIER = com.quanyihui.myimage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "myimage/myimage/Index/myimage-Bridging-Header.h";

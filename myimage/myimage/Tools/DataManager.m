@@ -12,7 +12,7 @@
 #import "TFHpple.h"
 
 typedef enum : NSUInteger {
-    lunv = 1,
+    tuao = 1,
     luge = 2,
     twofourfa = 3,
     qushibaike = 4,
@@ -35,8 +35,8 @@ typedef enum : NSUInteger {
     NSString *titleXpath = @"";//标题
     NSString *detailXpath = @"";//详情
     NSString *picXpath = @"";//封面
-    if (websiteModel.value == lunv || websiteModel.value == luge) {
-        // 撸女吧 & 撸哥吧
+    if (websiteModel.value == tuao || websiteModel.value == luge) {
+        // 凸凹吧 & 撸哥吧
         urlStr = [NSString stringWithFormat:@"%@/category-%@_%ld.html", websiteModel.url, category.value, (long) PageNum];
         titleXpath = @"//*[@id=\"container\"]/main/article/div/a/@title";
         detailXpath = @"//*[@id=\"container\"]/main/article/div/a/@href";
@@ -191,7 +191,7 @@ typedef enum : NSUInteger {
         // 新流程
         NSString *imageXPath = @"";
         NSString *pageNumXPath = @"";
-        if (websiteModel.value == lunv || websiteModel.value == luge) {
+        if (websiteModel.value == tuao || websiteModel.value == luge) {
             imageXPath = @"/html/body/div/main/article/div[2]/a/p/img/@src";
             pageNumXPath = @"//*[@id=\"dm-fy\"]/li/a";
         }else if(websiteModel.value == twofourfa){
@@ -238,7 +238,7 @@ typedef enum : NSUInteger {
                     blockUrlStr = [urlStr stringByReplacingOccurrencesOfString:@".html" withString:[NSString stringWithFormat:@"_%ld.html",i]];
                 }else if(websiteModel.value == sxchinesegirlz){
                     blockUrlStr = [NSString stringWithFormat:@"%@/%lu",urlStr,(unsigned long)i];
-                }else if(websiteModel.value == lunv || websiteModel.value == luge){
+                }else if(websiteModel.value == tuao || websiteModel.value == luge){
                     blockUrlStr = [NSString stringWithFormat:@"%@?page=%lu", urlStr, i];
                 }else if(websiteModel.value == twofourfa){
                     blockUrlStr = [urlStr stringByReplacingOccurrencesOfString:@".aspx" withString:[NSString stringWithFormat:@"p%lu.aspx", i]];
@@ -347,7 +347,7 @@ typedef enum : NSUInteger {
         NSString *searchUrl = [[NSUserDefaults standardUserDefaults]objectForKey:@"plwhtSearchUrlStr"];
         urlStr = [NSString stringWithFormat:@"%@/s.asp?page=%ld&keyword=%@",websiteModel.url,(long)pageNum,keyword];
         urlStr = [Tool UTFtoGBK:urlStr];
-    } else if (websiteModel.value == lunv || websiteModel.value == luge) {
+    } else if (websiteModel.value == tuao || websiteModel.value == luge) {
         urlStr = [NSString stringWithFormat:@"%@/search.php?q=%@&page=%ld", websiteModel.url, keyword, (long) pageNum];
         urlStr = [urlStr stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     } else if (websiteModel.value == twofourfa) {
@@ -375,7 +375,7 @@ typedef enum : NSUInteger {
     NSString *titleXpath = @"";
     NSString *detailXpath = @"";
     NSString *imgXpath = @"";
-    if (websiteModel.value == lunv || websiteModel.value == luge) {
+    if (websiteModel.value == tuao || websiteModel.value == luge) {
         titleXpath = @"//*[@id=\"container\"]/main/article/div/a/@title";
         detailXpath = @"//*[@id=\"container\"]/main/article/div/a/@href";
         imgXpath = @"//*[@id=\"container\"]/main/article/div/a/img/@src";

@@ -20,10 +20,10 @@ PODS:
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
-  - GKPhotoBrowser (2.3.1):
-    - GKPhotoBrowser/SD (= 2.3.1)
-  - GKPhotoBrowser/Core (2.3.1)
-  - GKPhotoBrowser/SD (2.3.1):
+  - GKPhotoBrowser (2.3.2):
+    - GKPhotoBrowser/SD (= 2.3.2)
+  - GKPhotoBrowser/Core (2.3.2)
+  - GKPhotoBrowser/SD (2.3.2):
     - GKPhotoBrowser/Core
     - SDWebImage (~> 5.0)
   - hpple (0.2.0)
@@ -34,9 +34,9 @@ PODS:
   - MJExtension (3.3.0)
   - MJRefresh (3.7.2)
   - ReactiveObjC (3.1.1)
-  - SDWebImage (5.11.1):
-    - SDWebImage/Core (= 5.11.1)
-  - SDWebImage/Core (5.11.1)
+  - SDWebImage (5.12.0):
+    - SDWebImage/Core (= 5.12.0)
+  - SDWebImage/Core (5.12.0)
   - Shimmer (1.0.2)
 
 DEPENDENCIES:
@@ -82,7 +82,7 @@ SPEC CHECKSUMS:
   FLAnimatedImage: 8f3e854ebf9680b71f0b6e700939687fc4d82b4b
   FluentDarkModeKit: b6317653a00329564582884772ec57c4eaad1a1f
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  GKPhotoBrowser: 3b87e4370b1e7bf83af5e6977d6d5db2be650eef
+  GKPhotoBrowser: b9f6e438bffe77d111e467385d5bbdf6a50d6a4e
   hpple: 3b765f96fc2cd56ad1a49aef6f7be5cb2aa64b57
   JXCategoryView: 2ef9ecfd3735158d009ce02d1f29811aa822da65
   LYEmptyView: b6d418cfa38b78df0cf243f9a9c25ccbdc399922
@@ -91,9 +91,9 @@ SPEC CHECKSUMS:
   MJExtension: 01704cca2b60a214c10761b6491eab74069d68a9
   MJRefresh: 30997d30b347c8e9508a4db11e3a690da0c9b85a
   ReactiveObjC: 011caa393aa0383245f2dcf9bf02e86b80b36040
-  SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
+  SDWebImage: 4ea20cca2986adc5aacde07aa686742fd4c67a37
   Shimmer: c5374be1c2b0c9e292fb05b339a513cf291cac86
 
 PODFILE CHECKSUM: 0bd2e51fac824a12e8d1f6f3c4dd1629fdee8f15
 
-COCOAPODS: 1.10.2
+COCOAPODS: 1.11.2

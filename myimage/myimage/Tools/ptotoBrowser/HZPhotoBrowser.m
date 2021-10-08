@@ -288,7 +288,7 @@
             animatedImageView = (FLAnimatedImageView *)currentView.imageview;
             NSData *imageData = animatedImageView.animatedImage.data;
             if (!imageData) {
-                imageData = UIImagePNGRepresentation(animatedImageView.image);
+                imageData = UIImageJPEGRepresentation(animatedImageView.image, 1);
             }
             if (!imageData) {
                 [self showTip:HZPhotoBrowserSaveImageFailText];
