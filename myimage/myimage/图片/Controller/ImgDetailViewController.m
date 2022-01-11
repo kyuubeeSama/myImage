@@ -69,9 +69,13 @@
             } failure:^(NSError * _Nonnull error) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self endProgress];
-                    [self alertWithTitle:@"数据获取失败"];
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3*NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                        [self.navigationController popViewControllerAnimated:YES];
+                        if (![self.listArr count]) {
+                            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"数据获取失败" preferredStyle:UIAlertControllerStyleAlert];
+                            UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
+                            [alert addAction:action];
+                            [self presentViewController:alert animated:YES completion:nil];
+                        }
                     });
                 });
             }];

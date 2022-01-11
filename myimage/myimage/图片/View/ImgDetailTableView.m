@@ -14,7 +14,41 @@
 
 -(void)setListArr:(NSMutableArray *)listArr{
     _listArr = listArr;
+    [self prefetcherImage];
     [self reloadData];
+}
+
+-(void)prefetcherImage{
+    NSMutableArray *urlArr =@[].mutableCopy;
+    for (ImageModel *model in self.listArr) {
+        NSString *img_url;
+        if (![model.image_url containsString:@"zhu.js"]){
+            if([model.image_url containsString:@"http"] || [model.image_url containsString:@"https"]){
+                img_url = model.image_url;
+            }else{
+                if (model.website_id == 5 && [model.image_url containsString:@"//"]) {
+                    img_url = [NSString stringWithFormat:@"https:%@",model.image_url];
+                }else{
+                    img_url = [NSString stringWithFormat:@"%@/%@", self.websiteModel.url, model.image_url];
+                    img_url = [img_url stringByReplacingOccurrencesOfString:@"//" withString:@"/"];
+                }
+            }
+            if (model.website_id != 4) {
+                SDWebImageDownloader *downloader = [SDWebImageManager sharedManager].imageLoader;
+                [downloader setValue:[NSString stringWithFormat:@"%@/",self.websiteModel.url] forHTTPHeaderField:@"Referer"];
+            }
+            if (model.website_id == 5) {
+                img_url = [img_url componentsSeparatedByString:@"?"][0];
+                for (NSString *itemStr in @[@"0",@"1",@"2",@"3"]) {
+                    img_url = [img_url stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"https://i%@.wp.com/www.sxchinesegirlz.xyz/",itemStr] withString:@"https://sxchinesegirlz.b-cdn.net/"];
+                }
+            }
+        }
+        model.image_url = img_url;
+        NSURL *url = [NSURL URLWithString:img_url];
+        [urlArr addObject:url];
+    }
+    [[SDWebImagePrefetcher sharedImagePrefetcher] prefetchURLs:urlArr];
 }
 
 -(NSMutableArray *)imgArr{
@@ -50,40 +84,20 @@
     ImageModel *model = self.listArr[(NSUInteger) indexPath.row];
     NSString *img_url;
     if (![model.image_url containsString:@"zhu.js"]){
-        if([model.image_url containsString:@"http"] || [model.image_url containsString:@"https"]){
-            img_url = model.image_url;
-        }else{
-            if (model.website_id == 5 && [model.image_url containsString:@"//"]) {
-                img_url = [NSString stringWithFormat:@"https:%@",model.image_url];
-            }else{
-                img_url = [NSString stringWithFormat:@"%@/%@", self.websiteModel.url, model.image_url];
-                img_url = [img_url stringByReplacingOccurrencesOfString:@"//" withString:@"/"];
-            }
-        }
-        if (model.website_id != 4) {
-            SDWebImageDownloader *downloader = [SDWebImageManager sharedManager].imageLoader;
-            [downloader setValue:[NSString stringWithFormat:@"%@/",self.websiteModel.url] forHTTPHeaderField:@"Referer"];
-        }
-        if (model.website_id == 5) {
-            img_url = [img_url componentsSeparatedByString:@"?"][0];
-            for (NSString *itemStr in @[@"0",@"1",@"2",@"3"]) {
-                img_url = [img_url stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"https://i%@.wp.com/www.sxchinesegirlz.xyz/",itemStr] withString:@"https://sxchinesegirlz.b-cdn.net/"];
-            }
-        }
-        [cell.topImg sd_setImageWithURL:[NSURL URLWithString:img_url]
+        [cell.topImg sd_setImageWithURL:[NSURL URLWithString:model.image_url]
                        placeholderImage:[UIImage imageNamed:@"placeholder2"]
                                 options:SDWebImageLowPriority progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL *_Nullable targetURL) {
-
-            }                 completed:^(UIImage *_Nullable image, NSError *_Nullable error, SDImageCacheType cacheType, NSURL *_Nullable imageURL) {
-                if (error == nil && image.size.width > 0 && image.size.height > 0) {
-                    self.imgArr[indexPath.row] = image;
-                    model.width = image.size.width;
-                    model.height = image.size.height;
-                    [self reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-                } else {
-                    NSLog(@"第%ld张图片出错，出错图片地址是%@,错误信息是%@，错误码是%@", (long) indexPath.row,  img_url, error.localizedDescription,error.userInfo[@"SDWebImageErrorDownloadStatusCodeKey"]);
-                }
-            }];
+            
+        }                 completed:^(UIImage *_Nullable image, NSError *_Nullable error, SDImageCacheType cacheType, NSURL *_Nullable imageURL) {
+            if (error == nil && image.size.width > 0 && image.size.height > 0) {
+                self.imgArr[indexPath.row] = image;
+                model.width = image.size.width;
+                model.height = image.size.height;
+                [self reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+            } else {
+                NSLog(@"第%ld张图片出错，出错图片地址是%@,错误信息是%@，错误码是%@", (long) indexPath.row,  img_url, error.localizedDescription,error.userInfo[@"SDWebImageErrorDownloadStatusCodeKey"]);
+            }
+        }];
     } else {
         // 容错错误文件
         model.width = screenW;
