@@ -239,7 +239,6 @@
 			children = (
 				A98CB95024CE9E4C00310FDE /* myimage.entitlements */,
 				A938825B21C1FB350085958B /* myimage */,
-				A938825A21C1FB270085958B /* images */,
 				A938824421C1F8E90085958B /* AppDelegate.h */,
 				A938824521C1F8E90085958B /* AppDelegate.m */,
 				A938824721C1F8E90085958B /* ViewController.h */,
@@ -253,13 +252,6 @@
 				144DF1DAFB8DBA5398B525B7 /* database.txt */,
 			);
 			path = myimage;
-			sourceTree = "<group>";
-		};
-		A938825A21C1FB270085958B /* images */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = images;
 			sourceTree = "<group>";
 		};
 		A938825B21C1FB350085958B /* myimage */ = {

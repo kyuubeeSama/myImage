@@ -259,10 +259,16 @@ typedef enum : NSUInteger {
                     ImageModel *model = [[ImageModel alloc] init];
                     NSString *image_url = element.text;
                     if (websiteModel.value == sxchinesegirlz) {
-                       image_url = [image_url stringByReplacingOccurrencesOfString:@"sxchinesegirlz.com" withString:@"sxchinesegirlz.one"];
-                        NSRange beginRange = [image_url rangeOfString:@"-" options:NSBackwardsSearch];
-                        NSRange endRange = [image_url rangeOfString:([image_url containsString:@".jpg"]?@".jpg":@".png")];
-                        image_url = [image_url stringByReplacingCharactersInRange:NSMakeRange(beginRange.location, endRange.location-beginRange.location) withString:@""];
+                        image_url = [image_url stringByReplacingOccurrencesOfString:@"sxchinesegirlz.com" withString:@"sxchinesegirlz.one"];
+                        NSLog(@"%@",image_url);
+                        if ([image_url containsString:@"wp.com"]) {
+                        }else{
+                            if (![image_url containsString:@"jpeg"]) {
+                                NSRange beginRange = [image_url rangeOfString:@"-" options:NSBackwardsSearch];
+                               NSRange endRange = [image_url rangeOfString:([image_url containsString:@".jpg"]?@".jpg":@".png")];
+                               image_url = [image_url stringByReplacingCharactersInRange:NSMakeRange(beginRange.location, endRange.location-beginRange.location) withString:@""];
+                            }
+                        }
                     }
                     model.image_url = [self replaceDomain:websiteModel urlStr:image_url];
                     model.website_id = websiteModel.value;

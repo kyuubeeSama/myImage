@@ -82,7 +82,6 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     ImgDetailTableViewCell *cell = [[ImgDetailTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     ImageModel *model = self.listArr[(NSUInteger) indexPath.row];
-    NSString *img_url;
     if (![model.image_url containsString:@"zhu.js"]){
         [cell.topImg sd_setImageWithURL:[NSURL URLWithString:model.image_url]
                        placeholderImage:[UIImage imageNamed:@"placeholder2"]
@@ -95,7 +94,7 @@
                 model.height = image.size.height;
                 [self reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
             } else {
-                NSLog(@"第%ld张图片出错，出错图片地址是%@,错误信息是%@，错误码是%@", (long) indexPath.row,  img_url, error.localizedDescription,error.userInfo[@"SDWebImageErrorDownloadStatusCodeKey"]);
+                NSLog(@"第%ld张图片出错，出错图片地址是%@,错误信息是%@，错误码是%@", (long) indexPath.row,  model.image_url, error.localizedDescription,error.userInfo[@"SDWebImageErrorDownloadStatusCodeKey"]);
             }
         }];
     } else {
