@@ -40,7 +40,7 @@
             if (model.website_id == 5) {
                 img_url = [img_url componentsSeparatedByString:@"?"][0];
                 for (NSString *itemStr in @[@"0",@"1",@"2",@"3"]) {
-                    img_url = [img_url stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"https://i%@.wp.com/www.sxchinesegirlz.xyz/",itemStr] withString:@"https://sxchinesegirlz.b-cdn.net/"];
+                    img_url = [img_url stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"https://i%@.wp.com/www.sxchinesegirlz.xyz/",itemStr] withString:@"https://sxchinesegirlz-0ne.b-cdn.net/"];
                 }
             }
         }
