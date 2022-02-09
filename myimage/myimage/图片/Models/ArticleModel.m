@@ -24,4 +24,8 @@
     return self;
 }
 
+- (NSString *)description{
+    return [NSString stringWithFormat:@"名字是%@,图标是%@,详情是%@",_name,_img_url,_detail_url];
+}
+
 @end

@@ -11,6 +11,7 @@
 #import "WebsiteViewController.h"
 #import "UIViewController+CWLateralSlide.h"
 #import "LocalImgViewController.h"
+#import "HistoryListViewController.h"
 
 @interface UserViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -73,7 +74,13 @@
             // 打开本地自建相册
             LocalImgViewController *VC = [[LocalImgViewController alloc]init];
             [self cw_pushViewController:VC];
-        }break;
+        }
+            break;
+        case 4:{
+            HistoryListViewController *VC = [[HistoryListViewController alloc]init];
+            [self cw_pushViewController:VC];
+        }
+            break;
         default:{
             // 清理缓存
             [[SDImageCache sharedImageCache] clearDiskOnCompletion:nil];

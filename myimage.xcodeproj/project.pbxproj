@@ -41,6 +41,7 @@
 		A95C17F52564F79C00AB3E0F /* LocalImgViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A95C17F42564F79C00AB3E0F /* LocalImgViewController.m */; };
 		A961719A262EB0D700CDB64D /* website.plist in Resources */ = {isa = PBXBuildFile; fileRef = A9617199262EB0D600CDB64D /* website.plist */; };
 		A96DB3722507131E00060CB4 /* WKWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A96DB3702507131E00060CB4 /* WKWebViewController.m */; };
+		A976506027B3518F0091B250 /* HistoryListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A976505F27B3518F0091B250 /* HistoryListViewController.m */; };
 		A97975FA24EE4BC90099C518 /* ImgListCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = A97975F924EE4BC90099C518 /* ImgListCollectionView.m */; };
 		A97975FD24EE57AB0099C518 /* ImgDetailTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = A97975FC24EE57AB0099C518 /* ImgDetailTableView.m */; };
 		A98546422296895500BAEFB1 /* HZWaitingView.m in Sources */ = {isa = PBXBuildFile; fileRef = A985463A2296895500BAEFB1 /* HZWaitingView.m */; };
@@ -131,6 +132,8 @@
 		A9617199262EB0D600CDB64D /* website.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = website.plist; sourceTree = "<group>"; };
 		A96DB3702507131E00060CB4 /* WKWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKWebViewController.m; sourceTree = "<group>"; };
 		A96DB3712507131E00060CB4 /* WKWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKWebViewController.h; sourceTree = "<group>"; };
+		A976505E27B3518F0091B250 /* HistoryListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HistoryListViewController.h; sourceTree = "<group>"; };
+		A976505F27B3518F0091B250 /* HistoryListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HistoryListViewController.m; sourceTree = "<group>"; };
 		A97975F824EE4BC90099C518 /* ImgListCollectionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImgListCollectionView.h; sourceTree = "<group>"; };
 		A97975F924EE4BC90099C518 /* ImgListCollectionView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImgListCollectionView.m; sourceTree = "<group>"; };
 		A97975FB24EE57AB0099C518 /* ImgDetailTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImgDetailTableView.h; sourceTree = "<group>"; };
@@ -370,6 +373,8 @@
 				A9146E2E23C30E8D00E94193 /* WebsiteViewController.m */,
 				A95C17F32564F79C00AB3E0F /* LocalImgViewController.h */,
 				A95C17F42564F79C00AB3E0F /* LocalImgViewController.m */,
+				A976505E27B3518F0091B250 /* HistoryListViewController.h */,
+				A976505F27B3518F0091B250 /* HistoryListViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -623,6 +628,7 @@
 				A91ADD4025761B49004CAD69 /* NSDate+Category.m in Sources */,
 				144DF75AD32A3DAAFA34F25D /* ImgCollectModel.m in Sources */,
 				A98A2EB9259AC93D0074755C /* EditBottomView.m in Sources */,
+				A976506027B3518F0091B250 /* HistoryListViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

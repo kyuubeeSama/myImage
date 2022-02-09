@@ -30,28 +30,10 @@
     [self setNav];
     [self makeUI];
     [self getData];
-    [self getMoreData];
 }
 
 - (void)setNav {
     self.navigationItem.title = @"收藏";
-}
-
-- (void)makeUI {
-    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-    self.mainCollect = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, screenW, screenH) collectionViewLayout:layout];
-    self.mainCollect.delegate = self;
-    self.mainCollect.dataSource = self;
-    [self.view addSubview:self.mainCollect];
-    self.mainCollect.backgroundColor = [UIColor systemBackgroundColor];
-    [self.mainCollect registerClass:[ImgListCollectionViewCell class] forCellWithReuseIdentifier:@"listCell"];
-    [self.mainCollect registerNib:[UINib nibWithNibName:@"ImgCollectionViewCell" bundle:[NSBundle mainBundle]] forCellWithReuseIdentifier:@"imgCell"];
-    [self.mainCollect mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.view.mas_left);
-        make.right.equalTo(self.view.mas_right);
-        make.top.equalTo(self.view.mas_top);
-        make.bottom.equalTo(self.view.mas_bottom);
-    }];
 }
 
 - (void)getData {
@@ -93,7 +75,18 @@
     [self.mainCollect reloadData];
 }
 
-- (void)getMoreData {
+- (void)makeUI {
+    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+    self.mainCollect = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, screenW, screenH) collectionViewLayout:layout];
+    self.mainCollect.delegate = self;
+    self.mainCollect.dataSource = self;
+    [self.view addSubview:self.mainCollect];
+    self.mainCollect.backgroundColor = [UIColor systemBackgroundColor];
+    [self.mainCollect registerClass:[ImgListCollectionViewCell class] forCellWithReuseIdentifier:@"listCell"];
+    [self.mainCollect registerNib:[UINib nibWithNibName:@"ImgCollectionViewCell" bundle:[NSBundle mainBundle]] forCellWithReuseIdentifier:@"imgCell"];
+    [self.mainCollect mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.equalTo(self.view);
+    }];
     self.mainCollect.mj_footer = [MJRefreshBackFooter footerWithRefreshingBlock:^{
         [self getData];
     }];
