@@ -18,6 +18,7 @@ typedef enum : NSUInteger {
     qushibaike = 4,
     sxchinesegirlz = 5,
     piaoliangwanghong = 6,
+    lunv = 7
 } websiteType;
 
 @implementation DataManager
@@ -35,7 +36,7 @@ typedef enum : NSUInteger {
     NSString *titleXpath = @"";//标题
     NSString *detailXpath = @"";//详情
     NSString *picXpath = @"";//封面
-    if (websiteModel.value == tuao || websiteModel.value == luge) {
+    if (websiteModel.value == tuao || websiteModel.value == luge || websiteModel.value == lunv) {
         // 凸凹吧 & 撸哥吧
         urlStr = [NSString stringWithFormat:@"%@/category-%@_%ld.html", websiteModel.url, category.value, (long) PageNum];
         titleXpath = @"//*[@id=\"container\"]/main/article/div/a/@title";

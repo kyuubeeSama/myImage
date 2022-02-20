@@ -38,7 +38,7 @@
     for(WebsiteModel *model  in webArr){
         [self.websiteArr addObject:model.name];
     }
-    self.listArr = @[@"凸凹吧",@"撸哥吧",@"24fa",@"趣事百科",@"sxchinesegirlz",@"漂亮网红图"];
+    self.listArr = @[@"凸凹吧",@"女优吧",@"24fa",@"趣事百科",@"sxchinesegirlz",@"漂亮网红图",@"撸女吧"];
     [self.mainTable reloadData];
 }
 
@@ -76,26 +76,29 @@
             // 添加
             [self beginProgressWithTitle:nil];
             SqliteTool *sqlTool = [SqliteTool sharedInstance];
-            NSArray *array = [[NSArray alloc]initWithContentsOfFile:[FileTool createFilePathWithName:@"website.plist"]];
+//            NSArray *array = [[NSArray alloc]initWithContentsOfFile:[FileTool createFilePathWithName:@"website.plist"]];
+            NSArray *array = [[NSArray alloc]initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"website" ofType:@"plist"]];
             NSMutableArray *valueArr = [[NSMutableArray alloc]init];
             for (NSArray *array1 in array) {
                 [valueArr addObject:[array1 componentsJoinedByString:@","]];
             }
             NSArray *allTitleArr = @[
             @[@"无圣光",@"凸凹吧",@"人体艺术",@"精品套图",@"欧美女郎"],
-            @[@"欲女",@"撸女",@"亚洲",@"欧美",@"日韩"],
+            @[@"女优",@"av",@"撸女",@"推女",@"日韩",@"欧美"],
             @[@"美女",@"欧美"],
             @[@"宅福利",@"宅男社",@"撸一管",@"蜜桃社"],
             @[@"nude",@"xiuren",@"chokmoson",@"feilin",@"huayang",@"imiss",@"mfstar",@"mistar",@"mygirl",@"tuigirl",@"ugirls",@"xiaoyu",@"yalayi",@"youmei",@"youmi"],
-            @[@"性感美女",@"精品套图",@"高清套图",@"无圣光",@"日韩套图",@"内衣丝袜",@"萌妹萝莉"]
+            @[@"性感美女",@"精品套图",@"高清套图",@"无圣光",@"日韩套图",@"内衣丝袜",@"萌妹萝莉"],
+            @[@"撸女",@"撸吧",@"推图",@"亚洲",@"欧美",@"日韩"]
             ];
             NSArray *allIdArr = @[
             @[@"1",@"2",@"3",@"5",@"6"],
-            @[@"1",@"2",@"6",@"8",@"9"],
+            @[@"1",@"2",@"3",@"5",@"6",@"8"],
             @[@"49",@"71"],
             @[@"zhaifuli/list_2_",@"zhainanshe/list_4_",@"luyilu/list_5_",@"MiiTao/list_12_"],
             @[@"nude",@"xiuren",@"chokmoson",@"feilin",@"huayang",@"imiss",@"mfstar",@"mistar",@"mygirl",@"tuigirl",@"ugirls",@"xiaoyu",@"yalayi",@"youmei",@"youmi"],
-            @[@"1",@"18",@"24",@"25",@"2",@"9",@"11"]
+            @[@"1",@"18",@"24",@"25",@"2",@"9",@"11"],
+            @[@"1",@"2",@"5",@"6",@"8",@"9"]
             ];
             [sqlTool insertTable:@"website"
                          element:@"name,url,value"
@@ -137,7 +140,8 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     // 点击编辑
-    NSString *plistPath = [FileTool createFilePathWithName:@"website.plist"];
+//    NSString *plistPath = [FileTool createFilePathWithName:@"website.plist"];
+    NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"website" ofType:@"plist"];
     NSMutableArray<NSMutableArray<NSString *> *> *array = [[NSMutableArray alloc]initWithContentsOfFile:plistPath];
     
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"修改网站地址" preferredStyle:UIAlertControllerStyleAlert];

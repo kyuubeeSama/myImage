@@ -84,6 +84,7 @@
         [self alertWithTitle:@"创建数据库失败"];
     }];
     // 判断本地是否有plist文件，如果没有就拷贝到doc中，如果有，就不操作
+    /*
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *filePath = [FileTool createFilePathWithName:@"website.plist"];
     if (![fileManager fileExistsAtPath:filePath]) {
@@ -93,8 +94,8 @@
         } else{
             NSLog(@"拷贝失败");
         }
-
     }
+     */
 }
 
 - (void)setNav {
