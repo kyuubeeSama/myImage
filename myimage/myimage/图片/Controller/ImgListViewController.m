@@ -45,15 +45,15 @@
     searchBar.placeholder = @"搜索";
     searchBar.delegate = self;
     searchBar.searchBarStyle = UISearchBarStyleDefault;
-
+    
     // 类别UI
     self.titleArr = [[NSMutableArray alloc] init];
     SqliteTool *sqlTool = [SqliteTool sharedInstance];
     self.categoryArr = [sqlTool selectDataFromTable:@"category"
-                                                  where:[NSString stringWithFormat:@"website_id = %d and is_delete = 1", self.model.value]
-                                                  field:@"*"
-                                                orderby:@""
-                                                  Class:[CategoryModel class]];
+                                              where:[NSString stringWithFormat:@"website_id = %d and is_delete = 1", self.model.value]
+                                              field:@"*"
+                                            orderby:@""
+                                              Class:[CategoryModel class]];
     for (CategoryModel *model in self.categoryArr){
         [self.titleArr addObject:model.name];
     }
@@ -76,12 +76,12 @@
     lineView.indicatorColor = [UIColor redColor];
     lineView.indicatorWidth = JXCategoryViewAutomaticDimension;
     self.categoryView.indicators = @[lineView];
-
+    
     self.listContainerView = [[JXCategoryListContainerView alloc] initWithType:JXCategoryListContainerType_CollectionView delegate:self];
     [self.view addSubview:self.listContainerView];
     [self.listContainerView mas_makeConstraints:^(MASConstraintMaker *make) {
-       make.left.right.bottom.equalTo(self.view);
-       make.top.equalTo(self.categoryView.mas_bottom);
+        make.left.right.bottom.equalTo(self.view);
+        make.top.equalTo(self.categoryView.mas_bottom);
     }];
     self.categoryView.listContainer = self.listContainerView;
 }
@@ -115,7 +115,6 @@
 -(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
     [searchBar endEditing:YES];
     [searchBar setShowsCancelButton:NO animated:YES];
-    NSLog(@"取消");
     searchBar.text = @"";
 }
 

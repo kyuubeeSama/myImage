@@ -84,18 +84,28 @@
         [self alertWithTitle:@"创建数据库失败"];
     }];
     // 判断本地是否有plist文件，如果没有就拷贝到doc中，如果有，就不操作
-    /*
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *filePath = [FileTool createFilePathWithName:@"website.plist"];
-    if (![fileManager fileExistsAtPath:filePath]) {
+    NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"website" ofType:@"plist"];
+    if ([fileManager fileExistsAtPath:filePath]) {
+        // 存在文件，判断两个文件的长度是否一致，如果不一致，说明又增加了新的站点
+        NSMutableArray<NSMutableArray<NSString *> *> *array = [[NSMutableArray alloc]initWithContentsOfFile:filePath];
+        NSMutableArray<NSMutableArray<NSString *> *> *websiteArr = [[NSMutableArray alloc]initWithContentsOfFile:bundlePath];
+        if (array.count != websiteArr.count) {
+            if ([fileManager createFileAtPath:filePath contents:[NSData dataWithContentsOfFile:bundlePath] attributes:nil]) {
+                NSLog(@"拷贝成功");
+            } else{
+                NSLog(@"拷贝失败");
+            }
+        }
+    }else{
         // 需要拷贝
-        if ([fileManager createFileAtPath:filePath contents:[NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"website" ofType:@"plist"]] attributes:nil]) {
+        if ([fileManager createFileAtPath:filePath contents:[NSData dataWithContentsOfFile:bundlePath] attributes:nil]) {
             NSLog(@"拷贝成功");
         } else{
             NSLog(@"拷贝失败");
         }
     }
-     */
 }
 
 - (void)setNav {

@@ -97,7 +97,7 @@ static id sharedSingleton = nil;
                              "website_id INT NOT NULL,"
                              "name VARCHAR(200) NOT NULL,"
                              "category_id INT NOT NULL,"
-                             "detail_url VARCHAR(200) NOT NULL UNIQUE,"
+                             "detail_url VARCHAR(200) NOT NULL,"
                              "has_done INT NOT NULL DEFAULT(1),"
                              "is_delete INT NOT NULL DEFAULT(1),"
                              "aid INT DEFAULT(0),"

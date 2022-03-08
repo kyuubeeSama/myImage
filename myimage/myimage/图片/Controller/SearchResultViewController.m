@@ -59,27 +59,30 @@
                 if (array.count > 0) {
                     self.pageNum += 1;
                     [self.mainCollection.mj_footer endRefreshing];
+                    for (ArticleModel *model in array) {
+                        if (![self.detailArr containsObject:model.detail_url]) {
+                            [self.detailArr addObject:model.detail_url];
+                            [self.listArr addObject:model];
+                        }else{
+                            [self.mainCollection.mj_footer endRefreshingWithNoMoreData];
+                        }
+                    }
                 } else {
                     [self.mainCollection.mj_footer endRefreshingWithNoMoreData];
-                }
-                for (ArticleModel *model in array) {
-                    if (![self.detailArr containsObject:model.detail_url]) {
-                        [self.detailArr addObject:model.detail_url];
-                        [self.listArr addObject:model];
-                    }else{
-                        [self.mainCollection.mj_footer endRefreshingWithNoMoreData];
-                    }
                 }
                 self.mainCollection.listArr = self.listArr;
             });
         } failure:^(NSError *_Nonnull error) {
-            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self endProgress];
+                [self alertWithTitle:@"内容获取失败"];
+            });
         }];
     });
 }
 
 -(void)getMoreData {
-    self.mainCollection.mj_footer=[MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
+    self.mainCollection.mj_footer=[MJRefreshBackFooter footerWithRefreshingBlock:^{
         [self getData];
     }];
 }

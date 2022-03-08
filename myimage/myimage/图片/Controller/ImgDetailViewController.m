@@ -202,23 +202,23 @@
         colStr = @"取消收藏";
     }
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"菜单" message:@"" preferredStyle:UIAlertControllerStyleActionSheet];
-//    收藏
+    //    收藏
     UIAlertAction *collectAction = [UIAlertAction actionWithTitle:colStr style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [self collectBtnClick];
     }];
     [alertController addAction:collectAction];
-// 系统浏览器打开
-UIAlertAction *webAction = [UIAlertAction actionWithTitle:@"浏览器打开" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-    [self browserBtnClick];
-}];
+    // 系统浏览器打开
+    UIAlertAction *webAction = [UIAlertAction actionWithTitle:@"浏览器打开" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [self browserBtnClick];
+    }];
     [alertController addAction:webAction];
-// 删除本地缓存
+    // 删除本地缓存
     UIAlertAction *cleanAction = [UIAlertAction actionWithTitle:@"删除本地缓存" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-       BOOL result = [sqlTool updateTable:@"article" where:[NSString stringWithFormat:@"article_id = %d",self.articleModel.article_id] value:@"has_done = 1"];
-       if (result && self.imageSaved){
-           self.articleModel.has_done = 1;
-           self.imageSaved(self.articleModel);
-       }
+        BOOL result = [sqlTool updateTable:@"article" where:[NSString stringWithFormat:@"article_id = %d",self.articleModel.article_id] value:@"has_done = 1"];
+        if (result && self.imageSaved){
+            self.articleModel.has_done = 1;
+            self.imageSaved(self.articleModel);
+        }
     }];
     [alertController addAction:cleanAction];
     // 取消

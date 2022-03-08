@@ -90,6 +90,7 @@
                                  });
                              } failure:^(NSError *_Nonnull error) {
                     dispatch_async(dispatch_get_main_queue(), ^{
+                        [self endProgress];
                         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"数据获取失败" preferredStyle:UIAlertControllerStyleAlert];
                         UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
                         [alert addAction:cancelAction];

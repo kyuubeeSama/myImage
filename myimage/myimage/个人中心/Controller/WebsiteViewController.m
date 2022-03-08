@@ -140,8 +140,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     // 点击编辑
-//    NSString *plistPath = [FileTool createFilePathWithName:@"website.plist"];
-    NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"website" ofType:@"plist"];
+    NSString *plistPath = [FileTool createFilePathWithName:@"website.plist"];
     NSMutableArray<NSMutableArray<NSString *> *> *array = [[NSMutableArray alloc]initWithContentsOfFile:plistPath];
     
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"修改网站地址" preferredStyle:UIAlertControllerStyleAlert];
