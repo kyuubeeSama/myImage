@@ -21,6 +21,8 @@
 
 // 类型数组
 @property(nonatomic, copy) NSArray *categoryArr;
+@property(nonatomic,assign) NSInteger pageNum;
+@property(nonatomic,assign) BOOL isJump;
 
 @end
 
@@ -35,6 +37,29 @@
 
 - (void)setNav {
     self.navigationItem.title = self.model.name;
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithTitle:@"跳页" style:UIBarButtonItemStylePlain target:self action:@selector(jumpPage)];
+    self.navigationItem.rightBarButtonItem = rightItem;
+}
+
+-(void)jumpPage{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"跳页" message:@"请输入跳转页码" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *sureAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UITextField *textfild = alert.textFields.firstObject;
+        self.pageNum = [textfild.text integerValue];
+        self.isJump = YES;
+        [self.categoryView reloadData];
+    }];
+    [alert addAction:sureAction];
+    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = @"请输入页码";
+        if (self.pageNum != 0) {
+            textField.text = [NSString stringWithFormat:@"%ld",self.pageNum];
+        }
+        textField.keyboardType = UIKeyboardTypeNumberPad;
+    }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+    [alert addAction:cancelAction];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)makeUI {
@@ -93,7 +118,9 @@
 -(id<JXCategoryListContentViewDelegate>)listContainerView:(JXCategoryListContainerView *)listContainerView initListForIndex:(NSInteger)index {
     ImgCategoryListViewController *VC = [[ImgCategoryListViewController alloc] init];
     VC.webModel = self.model;
+    VC.pageNum = self.pageNum;
     VC.categoryModel = self.categoryArr[index];
+    VC.isJump = self.isJump;
     return VC;
 }
 

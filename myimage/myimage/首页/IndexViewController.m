@@ -47,6 +47,9 @@
     // 强引用leftVC，不用每次创建新的,也可以每次在这里创建leftVC，抽屉收起的时候会释放掉
     UserViewController *VC = [[UserViewController alloc] init];
     [self cw_showDefaultDrawerViewController:VC];
+    VC.cleanImgCacheBlock = ^{
+        [self alertWithTitle:@"清理成功"];
+    };
 }
 
 - (void)getData {

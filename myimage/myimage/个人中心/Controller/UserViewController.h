@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UserViewController : BaseViewController
 
+@property(nonatomic,copy)void(^cleanImgCacheBlock)(void);
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -61,8 +61,10 @@
                     [self.mainCollection.mj_footer endRefreshing];
                     for (ArticleModel *model in array) {
                         if (![self.detailArr containsObject:model.detail_url]) {
-                            [self.detailArr addObject:model.detail_url];
-                            [self.listArr addObject:model];
+                            if (![NSString MyStringIsNULL:model.detail_url]) {
+                                [self.detailArr addObject:model.detail_url];
+                                [self.listArr addObject:model];
+                            }
                         }else{
                             [self.mainCollection.mj_footer endRefreshingWithNoMoreData];
                         }
@@ -92,11 +94,6 @@
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
         _mainCollection = [[ImgListCollectionView alloc] initWithFrame:CGRectMake(0, 0, screenW, screenH) collectionViewLayout:layout];
         [self.view addSubview:_mainCollection];
-        [_mainCollection mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.right.equalTo(self.view);
-            make.top.equalTo(self.view).offset(45+(TOP_HEIGHT));
-            make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom);
-        }];
         _mainCollection.model = self.model;
         WeakSelf(self)
         _mainCollection.cellDidSelect = ^(NSIndexPath * _Nonnull indexPath) {

@@ -127,6 +127,13 @@ typedef enum : NSUInteger {
                 NSArray<TFHppleElement *> *picNodeArr = [detailDoc searchWithXPathQuery:picXpath];
                 if ([picNodeArr count]) {
                     picPath = picNodeArr[0].text;
+                }else{
+                    // 详情图片有2种获取方法
+                    picXpath = @"//*[@id=\"content\"]/p/img/@src";
+                    picNodeArr = [detailDoc searchWithXPathQuery:picXpath];
+                    if ([picNodeArr count]) {
+                        picPath = picNodeArr[0].text;
+                    }
                 }
                 if ([NSString MyStringIsNULL:title]) {
                     NSString *contentTitleXPath = @"/html/body/section[1]/header/h1";
@@ -441,11 +448,18 @@ typedef enum : NSUInteger {
             NSString *picPath = @"";
             NSString *detailUrl = [NSString stringWithFormat:@"%@/%@", websiteModel.url, detail];
             NSData *detailData = [NSData dataWithContentsOfURL:[[NSURL alloc] initWithString:detailUrl]];
+            NSString *htmlStr = [[NSString alloc] initWithData:detailData encoding:NSUTF8StringEncoding];
             TFHpple *detailDoc = [[TFHpple alloc] initWithHTMLData:detailData];
             NSString *picXpath = @"//*[@id=\"content\"]/div/img[1]/@src";
             NSArray<TFHppleElement *> *picNodeArr = [detailDoc searchWithXPathQuery:picXpath];
             if ([picNodeArr count]) {
                 picPath = picNodeArr[0].text;
+            }else{
+                picXpath = @"//*[@id=\"content\"]/p/img/@src";
+                picNodeArr = [detailDoc searchWithXPathQuery:picXpath];
+                if ([picNodeArr count]) {
+                    picPath = picNodeArr[0].text;
+                }
             }
             result.img_url = picPath;
         } else {

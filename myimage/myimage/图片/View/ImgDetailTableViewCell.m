@@ -27,6 +27,19 @@
     return _topImg;
 }
 
+-(CycleProgressView *)progressView{
+    if (!_progressView) {
+        _progressView = [[CycleProgressView alloc]init];
+        [self.topImg addSubview:_progressView];
+        
+        [_progressView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.centerY.equalTo(self.topImg);
+            make.size.mas_equalTo(CGSizeMake(100, 100));
+        }];
+    }
+    return _progressView;
+}
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 

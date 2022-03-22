@@ -16,6 +16,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) CategoryModel *categoryModel;
 @property (nonatomic, strong) WebsiteModel *webModel;
+// 页码
+@property(nonatomic, assign) NSInteger pageNum;
+// 是否是跳页
+@property(nonatomic,assign) BOOL isJump;
 
 @end
 

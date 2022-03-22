@@ -43,7 +43,7 @@
         imageStr = model.img_url;
     }else{
         imageStr = [NSString stringWithFormat:@"%@/%@", self.model.url, model.img_url];
-        imageStr = [imageStr stringByReplacingOccurrencesOfString:@"//" withString:@"/"];
+//        imageStr = [imageStr stringByReplacingOccurrencesOfString:@"//" withString:@"/"];
     }
     if (model.website_id != 4) {
         SDWebImageDownloader *downloader = [SDWebImageManager sharedManager].imageLoader;
@@ -55,7 +55,28 @@
         cell.signView.hidden = YES;
     }
     NSLog(@"图片地址是%@",imageStr);
-     [cell.headImg sd_setImageWithURL:[NSURL URLWithString:imageStr] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
+//     [cell.headImg sd_setImageWithURL:[NSURL URLWithString:imageStr] placeholderImage:[UIImage imageNamed:@"placeholder1"]];
+    [cell.headImg sd_setImageWithURL:[NSURL URLWithString:imageStr] placeholderImage:nil options:SDWebImageQueryMemoryData progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            CGFloat progress = (CGFloat)receivedSize/(CGFloat)expectedSize;
+            cell.progressView.progress = progress*2;
+            if (progress <= 0) {
+                progress = 0.0;
+            }
+            cell.progressView.titleLab.text = [NSString stringWithFormat:@"%ld%%",(NSInteger)(progress*100)];
+        });
+    } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (error) {
+                NSLog(@"错误码是%ld,错误的图片地址是%@",error.code,imageStr);
+                cell.progressView.progress = 0;
+                cell.progressView.titleLab.text = [NSString stringWithFormat:@"%ld",error.code];
+            }else{
+                [cell.progressView removeFromSuperview];
+                cell.progressView = nil;
+            }
+        });
+    }];
     return cell;
 }
 
