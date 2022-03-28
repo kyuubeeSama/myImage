@@ -239,15 +239,20 @@ typedef enum : NSUInteger {
             pageNum -= 1;
         }
         // 创建group
-        dispatch_group_t group = dispatch_group_create();
-        __block NSString *blockUrlStr = urlStr;
         if (websiteModel.value == luge) {
+            // luge图片最后一页会跳转到其他地方，所以这里要少一个页码
             pageNum --;
         }
+        // 使用group设置同时访问量
+        dispatch_group_t group = dispatch_group_create();
+        __block NSString *blockUrlStr = urlStr;
+        // 使用信号量设置同时可以运行的线程数量
+        dispatch_semaphore_t semaphore = dispatch_semaphore_create(3);
         for (NSUInteger i=1; i<=pageNum; i++) {
             dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
             dispatch_group_enter(group);
             dispatch_async(queue, ^{
+                dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
                 // 地址累加获取所有图片
                 if (websiteModel.value == piaoliangwanghong && i != 1) {
                     blockUrlStr = [urlStr stringByReplacingOccurrencesOfString:@".html" withString:[NSString stringWithFormat:@"_%ld.html",i]];
@@ -290,6 +295,7 @@ typedef enum : NSUInteger {
                         [self.imageArr addObject:model];
                     }
                 }
+                dispatch_semaphore_signal(semaphore);
                 dispatch_group_leave(group);
             });
         }

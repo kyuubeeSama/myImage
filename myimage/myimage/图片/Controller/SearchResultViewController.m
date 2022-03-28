@@ -74,6 +74,7 @@
             });
         } failure:^(NSError *_Nonnull error) {
             dispatch_async(dispatch_get_main_queue(), ^{
+                [self.mainCollection.mj_footer endRefreshing];
                 [self endProgress];
                 [self alertWithTitle:@"内容获取失败"];
             });
