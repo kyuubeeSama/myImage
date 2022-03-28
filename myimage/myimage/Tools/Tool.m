@@ -76,11 +76,8 @@
 /// @param urlStr 网页地址
 + (NSString *)UTFtoGBK:(NSString *)urlStr {
     //GBK编码
-//    NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
-//    NSString *encodeContent = [urlStr stringByAddingPercentEscapesUsingEncoding:enc];
-//stringByAddingPercentEncodingWithAllowedCharacters:
-//    NSCharacterSet *set = NSCharacterSet
-    NSString *encodeContent = [urlStr stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
+    NSString *encodeContent = [urlStr stringByAddingPercentEscapesUsingEncoding:enc];
     return encodeContent;
 }
 
