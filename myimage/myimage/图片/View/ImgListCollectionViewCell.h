@@ -7,14 +7,15 @@
 //  图片列表cell
 
 #import <UIKit/UIKit.h>
-
+#import "CycleProgressView.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ImgListCollectionViewCell : UICollectionViewCell
 
+@property(nonatomic,strong) CycleProgressView *progressView;
 @property (nonatomic, strong)UIImageView *headImg;
 @property (nonatomic, strong)UILabel *titleLab;
-@property (nonatomic, strong)UIButton *signView;
+@property (nonatomic, strong)UILabel *signView;
 
 @end
 

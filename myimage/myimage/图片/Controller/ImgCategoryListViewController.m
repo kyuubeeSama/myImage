@@ -18,8 +18,6 @@
 @property(nonatomic, strong) NSMutableArray *listArr;
 // 是否从web获取
 @property(nonatomic, assign) BOOL is_web;
-// 页码
-@property(nonatomic, assign) NSInteger pageNum;
 
 @end
 
@@ -28,9 +26,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.is_web = NO;
+    self.is_web = self.isJump;
     self.listArr = [[NSMutableArray alloc] init];
-    self.pageNum = 1;
+    if (self.pageNum == 0) {
+        self.pageNum = 1;
+    }
     [self makeUI];
     [self getData];
 }

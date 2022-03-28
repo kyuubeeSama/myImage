@@ -17,6 +17,7 @@
 		144DF778A22CB02F93D70BF5 /* ArticleModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 144DF828180830E5FF98D68D /* ArticleModel.m */; };
 		144DFB7FE4F2D284FE87FCEF /* database.txt in Resources */ = {isa = PBXBuildFile; fileRef = 144DF1DAFB8DBA5398B525B7 /* database.txt */; };
 		144DFE45B68135B215C346F1 /* NetWorkingTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 144DF5A9F03D5EF1B385726A /* NetWorkingTool.m */; };
+		6992404527D8E0110094BF43 /* CycleProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6992404427D8E0110094BF43 /* CycleProgressView.m */; };
 		A904AC4C23BDE2EA00E3281E /* ImageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A904AC4B23BDE2EA00E3281E /* ImageModel.m */; };
 		A904AC5223BF094C00E3281E /* CollectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A904AC5123BF094C00E3281E /* CollectViewController.m */; };
 		A904AC5623BF0C8900E3281E /* ImgCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A904AC5423BF0C8900E3281E /* ImgCollectionViewCell.m */; };
@@ -87,6 +88,8 @@
 		177EBE54415E599FD97451DC /* Pods_myimage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_myimage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		40D5A980E1BDD0AF9B2B2A67 /* Pods-myimage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-myimage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-myimage/Pods-myimage.debug.xcconfig"; sourceTree = "<group>"; };
 		4CFE4A6DB1C57641DD0E0894 /* Pods-myimage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-myimage.release.xcconfig"; path = "Pods/Target Support Files/Pods-myimage/Pods-myimage.release.xcconfig"; sourceTree = "<group>"; };
+		6992404327D8E0110094BF43 /* CycleProgressView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CycleProgressView.h; sourceTree = "<group>"; };
+		6992404427D8E0110094BF43 /* CycleProgressView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CycleProgressView.m; sourceTree = "<group>"; };
 		A904AC4A23BDE2EA00E3281E /* ImageModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageModel.h; sourceTree = "<group>"; };
 		A904AC4B23BDE2EA00E3281E /* ImageModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageModel.m; sourceTree = "<group>"; };
 		A904AC5023BF094C00E3281E /* CollectViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CollectViewController.h; sourceTree = "<group>"; };
@@ -426,6 +429,8 @@
 				A97975F924EE4BC90099C518 /* ImgListCollectionView.m */,
 				A97975FB24EE57AB0099C518 /* ImgDetailTableView.h */,
 				A97975FC24EE57AB0099C518 /* ImgDetailTableView.m */,
+				6992404327D8E0110094BF43 /* CycleProgressView.h */,
+				6992404427D8E0110094BF43 /* CycleProgressView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -598,6 +603,7 @@
 				A9C2030721D5BCDA006572DD /* MYPickerView.m in Sources */,
 				A904AC5B23BF21A500E3281E /* ArticleCollectModel.m in Sources */,
 				A938825421C1F8EA0085958B /* main.m in Sources */,
+				6992404527D8E0110094BF43 /* CycleProgressView.m in Sources */,
 				A91E39002229245700A11EC6 /* Tool.m in Sources */,
 				A904AC5623BF0C8900E3281E /* ImgCollectionViewCell.m in Sources */,
 				A96DB3722507131E00060CB4 /* WKWebViewController.m in Sources */,

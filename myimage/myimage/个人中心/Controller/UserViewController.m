@@ -86,6 +86,11 @@
             [[SDImageCache sharedImageCache] clearDiskOnCompletion:nil];
             NSString *cache = [NSString stringWithFormat:@"缓存(%@)", [Tool getMemonry]];
             self.listArr[4] = cache;
+            [self dismissViewControllerAnimated:YES completion:^{
+                if (self.cleanImgCacheBlock) {
+                    self.cleanImgCacheBlock();
+                }
+            }];
         }
             break;
     }
