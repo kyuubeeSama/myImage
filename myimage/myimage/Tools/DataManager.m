@@ -45,7 +45,7 @@ typedef enum : NSUInteger {
     } else if (websiteModel.value == twofourfa) {
         //        24fa
         urlStr = [NSString stringWithFormat:@"%@/mc%@p%ld.aspx", websiteModel.url, category.value, (long) PageNum];
-        titleXpath = @"/html/body/ul[3]/li/a/text()";
+        titleXpath = @"/html/body/ul[3]/li/a";
         detailXpath = @"/html/body/ul[3]/li/a/@href";
     } else if (websiteModel.value == qushibaike) {
         // 趣事百科
