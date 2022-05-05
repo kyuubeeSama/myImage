@@ -113,8 +113,14 @@
                     cell.progressView.progress = 0;
                     cell.progressView.titleLab.text = [NSString stringWithFormat:@"%ld",error.code];
                 }else{
-                    [cell.progressView removeFromSuperview];
-                    cell.progressView = nil;
+                    if (model.width == 0 || model.height == 0) {
+                        self.imgArr[indexPath.row] = image;
+                        model.width = image.size.width;
+                        model.height = image.size.height;
+                        [self reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                        [cell.progressView removeFromSuperview];
+                        cell.progressView = nil;
+                    }
                 }
             });
         }];
