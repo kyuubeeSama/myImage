@@ -24,7 +24,7 @@ typedef enum : NSUInteger {
 @implementation DataManager
 
 
-/// 获取写真列表
+/// MARK: 获取写真列表
 /// @param websiteModel websiteModel
 /// @param PageNum 页码
 /// @param category 类型
@@ -191,7 +191,7 @@ typedef enum : NSUInteger {
     return aid;
 }
 
-/// 获取写真详情图片列表
+/// MARK: 获取写真详情图片列表
 /// @param websiteModel websiteModel
 /// @param detailUrl 详情地址
 /// @param progress 加载进度
@@ -322,7 +322,7 @@ typedef enum : NSUInteger {
     return _imageArr;
 }
 
-/// 递归获取每页详情
+/// MARK: 递归获取每页详情
 /// @param url 详情地址
 /// @param websiteModel 站点m odel
 /// @param pageNum 页码
@@ -369,7 +369,7 @@ typedef enum : NSUInteger {
     }
 }
 
-/// 站点搜索
+/// MARK: 站点搜索
 /// @param websiteModel websiteModel
 /// @param pageNum 页码
 /// @param keyword 搜索关键字
@@ -488,6 +488,7 @@ typedef enum : NSUInteger {
     }
     success(resultArr);
 }
+
 // 替换图片中可能包含的域名地址
 -(NSString *)replaceDomain:(WebsiteModel *)model urlStr:(NSString *)urlStr{
     if ([urlStr containsString:model.url]) {
