@@ -107,7 +107,7 @@
                          element:@"image_url,article_id,website_id"
                            value:[NSString stringWithFormat:@"'%@',%d,%d", model.image_url, self.articleModel.article_id,self.articleModel.website_id]
                            where:[NSString stringWithFormat:@"select * from image where image_url = '%@' and article_id = %d",model.image_url,self.articleModel.article_id]]){
-            return false;
+            return NO;
         }
     }
     return YES;
@@ -132,7 +132,7 @@
                 if (model.website_id == 5 && [model.image_url containsString:@"//"]) {
                     img_url = [NSString stringWithFormat:@"https:%@",model.image_url];
                 }else{
-                    img_url = [NSString stringWithFormat:@"%@/%@", self.websiteModel.url, model.image_url];
+                    img_url = [NSString stringWithFormat:@"%@/%@", weakself.websiteModel.url, model.image_url];
                     img_url = [img_url stringByReplacingOccurrencesOfString:@"//" withString:@"/"];
                 }
             }
@@ -258,15 +258,5 @@
     NSString  *urlStr = [NSString stringWithFormat:@"%@/%@", self.websiteModel.url, self.articleModel.detail_url];
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlStr] options:@{} completionHandler:nil];
 }
-
-/*
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
 
 @end

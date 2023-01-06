@@ -83,20 +83,6 @@
     ImgDetailTableViewCell *cell = [[ImgDetailTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     ImageModel *model = self.listArr[(NSUInteger) indexPath.row];
     if (![model.image_url containsString:@"zhu.js"]){
-//        [cell.topImg sd_setImageWithURL:[NSURL URLWithString:model.image_url]
-//                       placeholderImage:[UIImage imageNamed:@"placeholder2"]
-//                                options:SDWebImageLowPriority progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL *_Nullable targetURL) {
-//
-//        }                 completed:^(UIImage *_Nullable image, NSError *_Nullable error, SDImageCacheType cacheType, NSURL *_Nullable imageURL) {
-//            if (error == nil && image.size.width > 0 && image.size.height > 0) {
-//                self.imgArr[indexPath.row] = image;
-//                model.width = image.size.width;
-//                model.height = image.size.height;
-//                [self reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-//            } else {
-//                NSLog(@"第%ld张图片出错，出错图片地址是%@,错误信息是%@，错误码是%@", (long) indexPath.row,  model.image_url, error.localizedDescription,error.userInfo[@"SDWebImageErrorDownloadStatusCodeKey"]);
-//            }
-//        }];
         [cell.topImg sd_setImageWithURL:[NSURL URLWithString:model.image_url] placeholderImage:nil options:SDWebImageQueryMemoryData progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 CGFloat progress = (CGFloat)receivedSize/(CGFloat)expectedSize;
@@ -146,13 +132,5 @@
         return screenW*3/2;
     }
 }
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
 
 @end
