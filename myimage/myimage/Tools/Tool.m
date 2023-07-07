@@ -91,4 +91,13 @@
     return utf8HtmlData;
 }
 
+// 替换图片中可能包含的域名地址
++ (NSString *)replaceDomain:(NSString *)webUrl urlStr:(NSString *)urlStr {
+    if ([urlStr containsString:webUrl]) {
+        urlStr = [urlStr stringByReplacingOccurrencesOfString:webUrl withString:@""];
+    }
+    return urlStr;
+}
+
+
 @end

@@ -34,7 +34,7 @@
     for (WebsiteModel *model  in webArr) {
         [self.websiteArr addObject:model.name];
     }
-    self.listArr = @[@"凸凹吧", @"女优吧", @"24fa", @"趣事百科", @"sxchinesegirlz", @"漂亮网红图", @"撸女吧"];
+    self.listArr = @[@"24fa", @"sxchinesegirlz", @"漂亮网红图"];
     [self.mainTable reloadData];
 }
 - (UITableView *)mainTable {
@@ -69,37 +69,19 @@
             // 添加
             [self beginProgressWithTitle:nil];
             SqliteTool *sqlTool = [SqliteTool sharedInstance];
-//            NSArray *array = [[NSArray alloc]initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"website" ofType:@"plist"]];
             NSError *error;
             NSArray *array = [[NSArray alloc] initWithContentsOfURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"website" ofType:@"plist"]] error:&error];
             NSMutableArray *valueArr = [[NSMutableArray alloc] init];
             for (NSArray *array1 in array) {
                 [valueArr addObject:[array1 componentsJoinedByString:@","]];
             }
-            NSArray *allTitleArr = @[
-                    @[@"无圣光", @"凸凹吧", @"人体艺术", @"精品套图", @"欧美女郎"],
-                    @[@"女优", @"av", @"撸女", @"推女", @"日韩", @"欧美"],
-                    @[@"美女", @"欧美"],
-                    @[@"宅福利", @"宅男社", @"撸一管", @"蜜桃社"],
-                    @[@"nude", @"xiuren", @"chokmoson", @"feilin", @"huayang", @"imiss", @"mfstar", @"mistar", @"mygirl", @"tuigirl", @"ugirls", @"xiaoyu", @"yalayi", @"youmei", @"youmi"],
-                    @[@"性感美女", @"精品套图", @"高清套图", @"无圣光", @"日韩套图", @"内衣丝袜", @"萌妹萝莉"],
-                    @[@"撸女", @"撸吧", @"推图", @"亚洲", @"欧美", @"日韩"]
-            ];
-            NSArray *allIdArr = @[
-                    @[@"1", @"2", @"3", @"5", @"6"],
-                    @[@"1", @"2", @"3", @"5", @"6", @"8"],
-                    @[@"49", @"71"],
-                    @[@"zhaifuli/list_2_", @"zhainanshe/list_4_", @"luyilu/list_5_", @"MiiTao/list_12_"],
-                    @[@"nude", @"xiuren", @"chokmoson", @"feilin", @"huayang", @"imiss", @"mfstar", @"mistar", @"mygirl", @"tuigirl", @"ugirls", @"xiaoyu", @"yalayi", @"youmei", @"youmi"],
-                    @[@"1", @"18", @"24", @"25", @"2", @"9", @"11"],
-                    @[@"1", @"2", @"5", @"6", @"8", @"9"]
-            ];
+            NSArray<WebsiteBaseModel *> *modelArr = @[[[TwoFourFaModel alloc]init],[[SxChineseModel alloc]init]];
             [sqlTool insertTable:@"website"
                          element:@"name,url,value"
                            value:valueArr[indexPath.row]
                            where:nil];
-            NSArray *titleArr = allTitleArr[indexPath.row];
-            NSArray *idArr = allIdArr[indexPath.row];
+            NSArray *titleArr = modelArr[indexPath.row].CategoryTitleArr;
+            NSArray *idArr = modelArr[indexPath.row].categoryIdsArr;
             for (NSUInteger i = 0; i < titleArr.count; i++) {
                 [sqlTool insertTable:@"category"
                              element:@"website_id,name,value"
@@ -174,15 +156,5 @@
     }
     return NO;
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ImageModel : NSObject
 
 @property (nonatomic, assign)int image_id;
-@property (nonatomic,assign)int website_id;
+@property (nonatomic,assign)NSInteger website_id;
 @property (nonatomic, copy)NSString *image_url;
 @property(nonatomic,assign)int article_id;
 @property (nonatomic, assign)CGFloat width;

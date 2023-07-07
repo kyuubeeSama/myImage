@@ -44,6 +44,10 @@
 		A97975FA24EE4BC90099C518 /* ImgListCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = A97975F924EE4BC90099C518 /* ImgListCollectionView.m */; };
 		A97975FD24EE57AB0099C518 /* ImgDetailTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = A97975FC24EE57AB0099C518 /* ImgDetailTableView.m */; };
 		A982CCB22A579D26001887A6 /* UUTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = A982CCB12A579D26001887A6 /* UUTableView.m */; };
+		A982CCBA2A57B5F9001887A6 /* WebsiteBaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A982CCB92A57B5F9001887A6 /* WebsiteBaseModel.m */; };
+		A982CCBD2A57B6BE001887A6 /* TwoFourFaModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A982CCBC2A57B6BE001887A6 /* TwoFourFaModel.m */; };
+		A982CCC02A57BCBD001887A6 /* SxChineseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A982CCBF2A57BCBD001887A6 /* SxChineseModel.m */; };
+		A982CCC32A57BE3B001887A6 /* PiaoLiangModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A982CCC22A57BE3B001887A6 /* PiaoLiangModel.m */; };
 		A98546422296895500BAEFB1 /* HZWaitingView.m in Sources */ = {isa = PBXBuildFile; fileRef = A985463A2296895500BAEFB1 /* HZWaitingView.m */; };
 		A98546432296895500BAEFB1 /* HZPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = A985463C2296895500BAEFB1 /* HZPhotoBrowser.m */; };
 		A98546442296895500BAEFB1 /* HZPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A985463F2296895500BAEFB1 /* HZPhotoBrowser.bundle */; };
@@ -136,6 +140,15 @@
 		A97975FC24EE57AB0099C518 /* ImgDetailTableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImgDetailTableView.m; sourceTree = "<group>"; };
 		A982CCB02A579D26001887A6 /* UUTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UUTableView.h; sourceTree = "<group>"; };
 		A982CCB12A579D26001887A6 /* UUTableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UUTableView.m; sourceTree = "<group>"; };
+		A982CCB42A57B3C4001887A6 /* WebsiteProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WebsiteProtocol.h; sourceTree = "<group>"; };
+		A982CCB82A57B5F9001887A6 /* WebsiteBaseModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WebsiteBaseModel.h; sourceTree = "<group>"; };
+		A982CCB92A57B5F9001887A6 /* WebsiteBaseModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WebsiteBaseModel.m; sourceTree = "<group>"; };
+		A982CCBB2A57B6BE001887A6 /* TwoFourFaModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TwoFourFaModel.h; sourceTree = "<group>"; };
+		A982CCBC2A57B6BE001887A6 /* TwoFourFaModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TwoFourFaModel.m; sourceTree = "<group>"; };
+		A982CCBE2A57BCBD001887A6 /* SxChineseModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SxChineseModel.h; sourceTree = "<group>"; };
+		A982CCBF2A57BCBD001887A6 /* SxChineseModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SxChineseModel.m; sourceTree = "<group>"; };
+		A982CCC12A57BE3B001887A6 /* PiaoLiangModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PiaoLiangModel.h; sourceTree = "<group>"; };
+		A982CCC22A57BE3B001887A6 /* PiaoLiangModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PiaoLiangModel.m; sourceTree = "<group>"; };
 		A985463A2296895500BAEFB1 /* HZWaitingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HZWaitingView.m; sourceTree = "<group>"; };
 		A985463B2296895500BAEFB1 /* HZPhotoBrowserConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HZPhotoBrowserConfig.h; sourceTree = "<group>"; };
 		A985463C2296895500BAEFB1 /* HZPhotoBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HZPhotoBrowser.m; sourceTree = "<group>"; };
@@ -254,6 +267,7 @@
 		A938825B21C1FB350085958B /* myimage */ = {
 			isa = PBXGroup;
 			children = (
+				A982CCB32A57B3A5001887A6 /* Website */,
 				A9C202D521D49B2A006572DD /* 个人中心 */,
 				A9F63F0F21C220BD00F29893 /* config */,
 				A938826521C1FC320085958B /* Extension */,
@@ -268,10 +282,13 @@
 		A938825C21C1FB610085958B /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				A982CCB42A57B3C4001887A6 /* WebsiteProtocol.h */,
 				A938826221C1FBFF0085958B /* BaseViewController.h */,
 				A938826321C1FBFF0085958B /* BaseViewController.m */,
 				A982CCB02A579D26001887A6 /* UUTableView.h */,
 				A982CCB12A579D26001887A6 /* UUTableView.m */,
+				A982CCB82A57B5F9001887A6 /* WebsiteBaseModel.h */,
+				A982CCB92A57B5F9001887A6 /* WebsiteBaseModel.m */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -327,6 +344,19 @@
 				A98A2EBC259ACB350074755C /* UIButton+SSEdgeInsets.m */,
 			);
 			path = Extension;
+			sourceTree = "<group>";
+		};
+		A982CCB32A57B3A5001887A6 /* Website */ = {
+			isa = PBXGroup;
+			children = (
+				A982CCBB2A57B6BE001887A6 /* TwoFourFaModel.h */,
+				A982CCBC2A57B6BE001887A6 /* TwoFourFaModel.m */,
+				A982CCBE2A57BCBD001887A6 /* SxChineseModel.h */,
+				A982CCBF2A57BCBD001887A6 /* SxChineseModel.m */,
+				A982CCC12A57BE3B001887A6 /* PiaoLiangModel.h */,
+				A982CCC22A57BE3B001887A6 /* PiaoLiangModel.m */,
+			);
+			path = Website;
 			sourceTree = "<group>";
 		};
 		A98546392296895500BAEFB1 /* ptotoBrowser */ = {
@@ -583,6 +613,7 @@
 				A904AC5223BF094C00E3281E /* CollectViewController.m in Sources */,
 				A9146E2F23C30E8D00E94193 /* WebsiteViewController.m in Sources */,
 				A9452AEE25072428003D9CC9 /* SearchResultViewController.m in Sources */,
+				A982CCBD2A57B6BE001887A6 /* TwoFourFaModel.m in Sources */,
 				A938826421C1FBFF0085958B /* BaseViewController.m in Sources */,
 				A9C202E021D49B79006572DD /* UserViewController.m in Sources */,
 				A904AC5B23BF21A500E3281E /* ArticleCollectModel.m in Sources */,
@@ -601,6 +632,7 @@
 				A98546452296895500BAEFB1 /* HZPhotoBrowserView.m in Sources */,
 				A98546432296895500BAEFB1 /* HZPhotoBrowser.m in Sources */,
 				144DF611BA19CE2B9AB5C680 /* FileTool.m in Sources */,
+				A982CCC02A57BCBD001887A6 /* SxChineseModel.m in Sources */,
 				144DF4FC324FB18EA55C73FB /* UIColor+Extension.m in Sources */,
 				A997BD3825E2526200BE52AC /* ImgCategoryListViewController.m in Sources */,
 				A904AC4C23BDE2EA00E3281E /* ImageModel.m in Sources */,
@@ -610,7 +642,9 @@
 				A95C17F52564F79C00AB3E0F /* LocalImgViewController.m in Sources */,
 				A904AC5E23BF289200E3281E /* CollectModel.m in Sources */,
 				144DF4C740C0A3350F1D2BFD /* WebsiteModel.m in Sources */,
+				A982CCBA2A57B5F9001887A6 /* WebsiteBaseModel.m in Sources */,
 				144DF4CB25D2BF02A003CC55 /* CategoryModel.m in Sources */,
+				A982CCC32A57BE3B001887A6 /* PiaoLiangModel.m in Sources */,
 				144DF778A22CB02F93D70BF5 /* ArticleModel.m in Sources */,
 				A91ADD4025761B49004CAD69 /* NSDate+Category.m in Sources */,
 				144DF75AD32A3DAAFA34F25D /* ImgCollectModel.m in Sources */,

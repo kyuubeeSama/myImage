@@ -35,4 +35,7 @@
 #import "UIButton+SSEdgeInsets.h"
 #import "Config.h"
 
+#import "TwoFourFaModel.h"
+#import "SxChineseModel.h"
+
 #endif /* Header_h */

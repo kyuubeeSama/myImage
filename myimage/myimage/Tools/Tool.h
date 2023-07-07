@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)UTFtoGBK:(NSString *)urlStr;
 // 网页内容转换
 + (NSData *)getGBKDataWithData:(NSData *)data;
+// 替换图片中可能包含的域名地址
++ (NSString *)replaceDomain:(NSString *)webUrl urlStr:(NSString *)urlStr;
 @end
 
 NS_ASSUME_NONNULL_END
