@@ -11,7 +11,6 @@
 #import "ImageModel.h"
 #import "CollectModel.h"
 #import "ImgDetailTableView.h"
-#import "WKWebViewController.h"
 #import "NSDate+Category.h"
 
 @interface ImgDetailViewController ()

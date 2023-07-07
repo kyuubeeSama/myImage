@@ -16,7 +16,6 @@ target 'myimage' do
   pod 'hpple'
   # 离屏渲染
   #  pod 'Texture'
-  pod 'Shimmer'
 
   pod 'LYEmptyView'
   
@@ -26,4 +25,13 @@ target 'myimage' do
   use_frameworks!
   pod 'FluentDarkModeKit'
 
+end
+
+post_install do |pi|
+    pi.pods_project.targets.each do |t|
+        t.build_configurations.each do |config|
+            config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+            config.build_settings['ONLY_ACTIVE_ARCH'] = 'NO'
+        end
+    end
 end
