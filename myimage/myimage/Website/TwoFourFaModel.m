@@ -102,6 +102,13 @@
                                where:[NSString stringWithFormat:@"website_id=%lu and detail_url='%@'", (unsigned long)self.type, detail]
                                value:[NSString stringWithFormat:@"category_id=%d", category.category_id]];
             }
+            if (result.aid == 0) {
+                // 更新aid
+                [sqlTool updateTable:@"article"
+                               where:[NSString stringWithFormat:@"website_id=%lu and detail_url='%@'", (unsigned long)self.type, detail]
+                               value:[NSString stringWithFormat:@"aid=%ld", (long)aid]];
+            }
+
         }
         [resultArr addObject:result];
     }

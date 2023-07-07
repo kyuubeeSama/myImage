@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "TFHpple.h"
 #import "WebsiteProtocol.h"
+#import "ArticleModel.h"
+#import "ImageModel.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @interface WebsiteBaseModel : NSObject
