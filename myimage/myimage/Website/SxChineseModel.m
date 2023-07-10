@@ -13,6 +13,7 @@
 {
     self = [super init];
     if (self) {
+        self.name = @"sxchinesegirlz";
         self.CategoryTitleArr = @[@"nude", @"xiuren", @"chokmoson", @"feilin", @"huayang", @"imiss", @"mfstar", @"mistar", @"mygirl", @"tuigirl", @"ugirls", @"xiaoyu", @"yalayi", @"youmei", @"youmi"];
         self.categoryIdsArr = @[@"nude", @"xiuren", @"chokmoson", @"feilin", @"huayang", @"imiss", @"mfstar", @"mistar", @"mygirl", @"tuigirl", @"ugirls", @"xiaoyu", @"yalayi", @"youmei", @"youmi"];
     }
@@ -35,14 +36,13 @@
     }
     NSMutableArray *resultArr = [[NSMutableArray alloc] init];
     TFHpple *xpathDoc = [[TFHpple alloc] initWithHTMLData:data];
-    // 获取漂亮网红图的搜索地址
     NSArray<TFHppleElement *> *titleNodeArr = [xpathDoc searchWithXPathQuery:titleXpath];
     NSArray<TFHppleElement *> *detailNodeArr = [xpathDoc searchWithXPathQuery:detailXpath];
     NSArray<TFHppleElement *> *picNodeArr = [xpathDoc searchWithXPathQuery:picXpath];
     // 循环获取内容
     for (NSUInteger i = 0; i < titleNodeArr.count; ++i) {
         NSString *title = titleNodeArr[i].text;
-        NSString *picPath = @"";
+        NSString *picPath = picNodeArr[i].text;
         NSString *detail = detailNodeArr[i].text;
         
         // 获取id
@@ -51,8 +51,6 @@
         detail = [Tool replaceDomain:self.urlStr urlStr:detail];
         // 存数据库
         SqliteTool *sqlTool = [SqliteTool sharedInstance];
-        // 当前流程是，先查询是否存在，存在去判断是否需要更新分类，如果不存在，就存储，存储完后返回
-        // 推荐修改流程：使用replace，如果存在就更新，如果不存在就插入，缺点是遇到24fa这种不带封面的，需要每次都去详情获取封面
         ArticleModel *result = (ArticleModel *) [sqlTool findDataFromTable:@"article"
                                                                      where:[NSString stringWithFormat:@"website_id = %lu and detail_url = '%@'", (unsigned long)self.type, detail]
                                                                      field:@"*"
@@ -152,8 +150,6 @@
         });
     }
     dispatch_group_notify(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        //TODO:对已获取的文件进行排序
-        
         //操作结束，block返回数据
         dispatch_semaphore_signal(groupSemaphore);
     });

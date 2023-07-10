@@ -10,9 +10,6 @@
 #import "ArticleModel.h"
 #import "ImageModel.h"
 #import "TFHpple.h"
-#import "TwoFourFaModel.h"
-#import "SxChineseModel.h"
-#import "PiaoLiangModel.h"
 
 @implementation DataManager
 /// MARK: 获取写真列表
@@ -40,6 +37,18 @@
         model.type = websiteModel.value;
         NSMutableArray *listArr = [model getDataWithPageNum:PageNum category:category];
         success(listArr);
+    }else if(websiteModel.value == WebsiteTypeAmetart){
+        AmetartModel *model = [[AmetartModel alloc]init];
+        model.urlStr = websiteModel.url;
+        model.type = websiteModel.value;
+        NSMutableArray *listArr = [model getDataWithPageNum:PageNum category:category];
+        success(listArr);
+    }else if(websiteModel.value == WebsiteTypeSexyAsianGirl){
+        SexyAsianModel *model = [[SexyAsianModel alloc]init];
+        model.urlStr = websiteModel.url;
+        model.type = websiteModel.value;
+        NSMutableArray *listArr = [model getDataWithPageNum:PageNum category:category];
+        success(listArr);
     }
 }
 /// MARK: 获取写真详情图片列表
@@ -63,6 +72,18 @@
         success(listArr);
     }else if (websiteModel.value == websiteTypePiaoLiang) {
         PiaoLiangModel *model = [[PiaoLiangModel alloc]init];
+        model.urlStr = websiteModel.url;
+        model.type = websiteModel.value;
+        NSMutableArray *listArr = [model getImageDetailWithDetailUrl:detailUrl];
+        success(listArr);
+    }else if (websiteModel.value == WebsiteTypeAmetart) {
+        AmetartModel *model = [[AmetartModel alloc]init];
+        model.urlStr = websiteModel.url;
+        model.type = websiteModel.value;
+        NSMutableArray *listArr = [model getImageDetailWithDetailUrl:detailUrl];
+        success(listArr);
+    }else if (websiteModel.value == WebsiteTypeSexyAsianGirl) {
+        SexyAsianModel *model = [[SexyAsianModel alloc]init];
         model.urlStr = websiteModel.url;
         model.type = websiteModel.value;
         NSMutableArray *listArr = [model getImageDetailWithDetailUrl:detailUrl];
@@ -95,6 +116,14 @@
         model.type = websiteModel.value;
         NSMutableArray *listArr = [model getSearchResultWithPageNum:pageNum keyword:keyword];
         success(listArr);
+    }else if (websiteModel.value == WebsiteTypeAmetart) {
+        AmetartModel *model = [[AmetartModel alloc]init];
+        model.urlStr = websiteModel.url;
+        model.type = websiteModel.value;
+        NSMutableArray *listArr = [model getSearchResultWithPageNum:pageNum keyword:keyword];
+        success(listArr);
+    }else{
+        success(@[].mutableCopy);
     }
 }
 

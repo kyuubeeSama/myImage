@@ -1,30 +1,29 @@
 //
-//  PiaoLiangModel.m
+//  AmetartModel.m
 //  myimage
 //
-//  Created by Galaxy on 2023/7/7.
+//  Created by Galaxy on 2023/7/10.
 //  Copyright © 2023 liuqingyuan. All rights reserved.
 //
 
-#import "PiaoLiangModel.h"
+#import "AmetartModel.h"
 
-@implementation PiaoLiangModel
+@implementation AmetartModel
 - (instancetype)init
 {
     self = [super init];
     if (self) {
-        self.name = @"漂亮网红图";
-        self.CategoryTitleArr = @[@"性感美女", @"精品套图", @"高清套图", @"无圣光", @"日韩套图", @"内衣丝袜", @"萌妹萝莉"];
-        self.categoryIdsArr = @[@"1", @"18", @"24", @"25", @"2", @"9", @"11"];
+        self.name = @"ametart";
+        self.CategoryTitleArr = @[@"默认"];
+        self.categoryIdsArr = @[@"0"];
     }
     return self;
 }
 - (nonnull NSMutableArray *)getDataWithPageNum:(NSInteger)PageNum category:(nonnull CategoryModel *)category {
     //    拼接域名
-    NSString *urlStr = [NSString stringWithFormat:@"%@/jin/caitup/%@_%ld.html", self.urlStr, category.value, (long) PageNum];
-    NSString *titleXpath = @"//*[@id=\"list\"]/ul/li/a/@title";//标题
-    NSString *detailXpath = @"//*[@id=\"list\"]/ul/li/a/@href";//详情
-    NSString *picXpath = @"//*[@id=\"list\"]/ul/li/a/img/@src";//封面
+    NSString *urlStr = [NSString stringWithFormat:@"%@/?s=%ld", self.urlStr, (long) PageNum];
+    NSString *detailXpath = @"/html/body/div[2]/div/div[2]/div/a/@href";//详情
+    NSString *picXpath = @"/html/body/div[2]/div/div[2]/div/a/img/@src";//封面
     NSLog(@"网址是%@", urlStr);
     // 获取数据
     NSError *error = nil;
@@ -35,25 +34,12 @@
         return @[].mutableCopy;
     }
     NSMutableArray *resultArr = [[NSMutableArray alloc] init];
-    // 需要将GBK转换为可识别类型
-    data = [Tool getGBKDataWithData:data];
     TFHpple *xpathDoc = [[TFHpple alloc] initWithHTMLData:data];
-    // 获取漂亮网红图的搜索地址
-    NSString *searchXPath = @"//*[@id=\"search\"]/center/form/@action";
-    NSArray <TFHppleElement *> *searchNodeArr = [xpathDoc searchWithXPathQuery:searchXPath];
-    if ([searchNodeArr count]) {
-        // 存在搜索地址
-        // 获取搜索地址域名地址
-        NSString *domainUrlStr = [Tool getDataWithRegularExpression:@"((http://)|(https://))[^\\.]*\\.(?<domain>[^/|?]*)" content:searchNodeArr[0].content][0];
-        // 将该地址存起来
-        [[NSUserDefaults standardUserDefaults] setObject:domainUrlStr forKey:@"plwhtSearchUrlStr"];
-    }
-    NSArray<TFHppleElement *> *titleNodeArr = [xpathDoc searchWithXPathQuery:titleXpath];
     NSArray<TFHppleElement *> *detailNodeArr = [xpathDoc searchWithXPathQuery:detailXpath];
     NSArray<TFHppleElement *> *picNodeArr = [xpathDoc searchWithXPathQuery:picXpath];
     // 循环获取内容
-    for (NSUInteger i = 0; i < titleNodeArr.count; ++i) {
-        NSString *title = titleNodeArr[i].text;
+    for (NSUInteger i = 0; i < detailNodeArr.count; ++i) {
+        NSString *title = @"相册名";
         NSString *picPath = picNodeArr[i].text;
         NSString *detail = detailNodeArr[i].text;
         // 获取id
@@ -103,14 +89,11 @@
 - (nonnull NSMutableArray *)getImageDetailWithDetailUrl:(nonnull NSString *)detailUrl {
     NSString *urlStr = detailUrl;
     if (![detailUrl containsString:@"http"] || ![detailUrl containsString:@"https"]) {
-        urlStr = [NSString stringWithFormat:@"%@/%@", self.urlStr, detailUrl];
+        urlStr = [NSString stringWithFormat:@"%@%@", self.urlStr, detailUrl];
     }
-    NSString *imageXPath = @"//*[@id=\"picg\"]/p/a/img/@src";
-    NSString *pageNumXPath = @"/html/body/div[4]/div[2]/p/b/a";
+    NSString *imageXPath = @"/html/body/div[2]/div/div[2]/div/a/@href";
     NSError *error = nil;
-    //TODO:此处发生网络错误，仍然后重复请求，应该针对发生网络错误的时候，及时停止请求，防止进一步消耗内存
     NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlStr] options:NSDataReadingUncached error:&error];
-    data = [Tool getGBKDataWithData:data];
     if (error) {
         // 网页加载错误
         NSLog(@"错误信息是%@", error.localizedDescription);
@@ -119,57 +102,21 @@
     // 获取总页码数量
     TFHpple *xpathDoc = [[TFHpple alloc] initWithHTMLData:data];
     NSArray *imgNodeArr = [xpathDoc searchWithXPathQuery:imageXPath];
-    NSArray *pageNumArr = [xpathDoc searchWithXPathQuery:pageNumXPath];
-    NSLog(@"本页图片%lu,总页数%lu", (unsigned long) imgNodeArr.count, (unsigned long) pageNumArr.count);
-    NSInteger pageNum = pageNumArr.count;
+    NSLog(@"本页图片%lu", (unsigned long) imgNodeArr.count);
     NSMutableArray *imageArr = @[].mutableCopy;
-    dispatch_semaphore_t groupSemaphore = dispatch_semaphore_create(0);
-    // 使用group设置同时访问量
-    dispatch_group_t group = dispatch_group_create();
-    __block NSString *blockUrlStr = urlStr;
-    // 使用信号量设置同时可以运行的线程数量
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(3);
-    for (NSUInteger i = 1; i <= pageNum; i++) {
-        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-        dispatch_group_enter(group);
-        dispatch_async(queue, ^{
-            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-            // 地址累加获取所有图片
-            if (i != 1) {
-                blockUrlStr = [urlStr stringByReplacingOccurrencesOfString:@".html" withString:[NSString stringWithFormat:@"_%ld.html", i]];
-            }
-            NSError *detailError = nil;
-            NSData *detailData = [NSData dataWithContentsOfURL:[NSURL URLWithString:blockUrlStr] options:NSDataReadingUncached error:&detailError];
-            if (detailError) {
-                // 网页加载错误
-                NSLog(@"错误信息是%@", error.localizedDescription);
-            } else {
-                    detailData = [Tool getGBKDataWithData:detailData];
-                TFHpple *detailXpathDoc = [[TFHpple alloc] initWithHTMLData:detailData];
-                NSArray *detailImgNodeArr = [detailXpathDoc searchWithXPathQuery:imageXPath];
-                for (TFHppleElement *element in detailImgNodeArr) {
-                    ImageModel *model = [[ImageModel alloc] init];
-                    NSString *image_url = element.text;
-                    model.image_url = [Tool replaceDomain:self.urlStr urlStr:image_url];
-                    model.website_id = self.type;
-                    [imageArr addObject:model];
-                }
-            }
-            dispatch_semaphore_signal(semaphore);
-            dispatch_group_leave(group);
-        });
+    for (TFHppleElement *element in imgNodeArr) {
+        ImageModel *model = [[ImageModel alloc] init];
+        NSString *image_url = element.text;
+        model.image_url = [Tool replaceDomain:self.urlStr urlStr:image_url];
+        model.website_id = self.type;
+        [imageArr addObject:model];
     }
-    dispatch_group_notify(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        dispatch_semaphore_signal(groupSemaphore);
-    });
-    dispatch_semaphore_wait(groupSemaphore, DISPATCH_TIME_FOREVER);
     return imageArr;
 }
 
 - (nonnull NSMutableArray *)getSearchResultWithPageNum:(NSInteger)pageNum keyword:(nonnull NSString *)keyword {
-    NSString *urlStr = [NSString stringWithFormat:@"%@/s.asp?page=%ld&keyword=%@", self.urlStr, (long) pageNum, keyword];
+    NSString *urlStr = [NSString stringWithFormat:@"%@/search/?s=%ld&q=%@", self.urlStr, (long) pageNum, keyword];
     NSMutableArray *resultArr = [[NSMutableArray alloc] init];
-    urlStr = [Tool UTFtoGBK:urlStr];
     NSLog(@"搜索地址是%@", urlStr);
     NSError *error;
     NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlStr] options:NSDataReadingUncached error:&error];
@@ -178,25 +125,20 @@
         NSLog(@"错误信息是%@", error.localizedDescription);
         return @[].mutableCopy;
     }
-    data = [Tool getGBKDataWithData:data];
     TFHpple *xpathDoc = [[TFHpple alloc] initWithHTMLData:data];
-    NSString *titleXpath = @"//*[@id=\"list\"]/ul/li/div/a/@title";
-    NSString *detailXpath = @"//*[@id=\"list\"]/ul/li/div/a/@href";
-    NSString *imgXpath = @"//*[@id=\"list\"]/ul/li/a/img/@src";
-    NSArray<TFHppleElement *> *titleNodeArr = [xpathDoc searchWithXPathQuery:titleXpath];
+    NSString *detailXpath = @"/html/body/div[2]/div/div[1]/div/a/@href";
+    NSString *imgXpath = @"/html/body/div[2]/div/div[1]/div/a/img/@src";
     NSArray<TFHppleElement *> *detailNodeArr = [xpathDoc searchWithXPathQuery:detailXpath];
     NSArray<TFHppleElement *> *imgNodeArr = [xpathDoc searchWithXPathQuery:imgXpath];
     SqliteTool *sqlTool = [SqliteTool sharedInstance];
-    for (NSUInteger i = 0; i < titleNodeArr.count; i++) {
-        NSString *title = titleNodeArr[i].text;
-        title = [Tool filterHTML:title];
+    for (NSUInteger i = 0; i < imgNodeArr.count; i++) {
         NSString *detail = detailNodeArr[i].text;
         ArticleModel *result = [[ArticleModel alloc] init];
-        result.name = title;
         result.detail_url = [Tool replaceDomain:self.urlStr urlStr:detail];
         NSString *imgPath = imgNodeArr[i].text;
         result.img_url = imgPath;
         result.website_id = self.type;
+        result.name = @"相册名";
         result.aid = 0;
         if ([sqlTool insertTable:@"article"
                          element:@"website_id,category_id,name,detail_url,img_url,aid"

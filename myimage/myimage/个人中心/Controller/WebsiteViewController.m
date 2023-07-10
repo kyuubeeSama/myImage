@@ -12,16 +12,22 @@
 
 @interface WebsiteViewController () <UITableViewDataSource, UITableViewDelegate>
 @property(nonatomic, strong) UITableView *mainTable;
-@property(nonatomic, copy) NSArray *listArr;
 @property(nonatomic, strong) NSMutableArray *websiteArr;
+@property(nonatomic,copy) NSArray<WebsiteBaseModel *> *websiteModelArr;
 
 @end
 @implementation WebsiteViewController
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.listArr = @[];
     self.websiteArr = [[NSMutableArray alloc] init];
+    self.websiteModelArr = @[
+        [[AmetartModel alloc]init],
+        [[SexyAsianModel alloc]init],
+        [[TwoFourFaModel alloc]init],
+        [[SxChineseModel alloc]init],
+        [[PiaoLiangModel alloc]init]
+    ];
     [self setNav];
     [self getData];
 }
@@ -34,9 +40,9 @@
     for (WebsiteModel *model  in webArr) {
         [self.websiteArr addObject:model.name];
     }
-    self.listArr = @[@"24fa", @"sxchinesegirlz", @"漂亮网红图"];
     [self.mainTable reloadData];
 }
+
 - (UITableView *)mainTable {
     if (!_mainTable) {
         _mainTable = [[UITableView alloc] initWithFrame:CGRectMake(0, 45, screenW, screenH - (TOP_HEIGHT) - 45) style:UITableViewStylePlain];
@@ -55,15 +61,15 @@
     return _mainTable;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.listArr.count;
+    return self.websiteModelArr.count;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     WebSiteTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (!cell) {
         cell = [[NSBundle mainBundle] loadNibNamed:@"WebSiteTableViewCell" owner:nil options:nil][0];
     }
-    cell.titleLab.text = self.listArr[(NSUInteger) indexPath.row];
-    cell.switchBtn.on = [self.websiteArr containsObject:self.listArr[(NSUInteger) indexPath.row]] ? YES : NO;
+    cell.titleLab.text = self.websiteModelArr[(NSUInteger) indexPath.row].name;
+    cell.switchBtn.on = [self.websiteArr containsObject:self.websiteModelArr[(NSUInteger) indexPath.row].name] ? YES : NO;
     cell.switchValueChange = ^(BOOL value) {
         if (value) {
             // 添加
@@ -75,13 +81,12 @@
             for (NSArray *array1 in array) {
                 [valueArr addObject:[array1 componentsJoinedByString:@","]];
             }
-            NSArray<WebsiteBaseModel *> *modelArr = @[[[TwoFourFaModel alloc]init],[[SxChineseModel alloc]init]];
             [sqlTool insertTable:@"website"
                          element:@"name,url,value"
                            value:valueArr[indexPath.row]
                            where:nil];
-            NSArray *titleArr = modelArr[indexPath.row].CategoryTitleArr;
-            NSArray *idArr = modelArr[indexPath.row].categoryIdsArr;
+            NSArray *titleArr = self.websiteModelArr[indexPath.row].CategoryTitleArr;
+            NSArray *idArr = self.websiteModelArr[indexPath.row].categoryIdsArr;
             for (NSUInteger i = 0; i < titleArr.count; i++) {
                 [sqlTool insertTable:@"category"
                              element:@"website_id,name,value"
@@ -94,7 +99,7 @@
             SqliteTool *sqlTool = [SqliteTool sharedInstance];
             // FIXME:需要删除三个表中的相关数据,联表删除
             if ([sqlTool deleteDataFromTable:@"website"
-                                       where:[NSString stringWithFormat:@"name = '%@'", self.listArr[(NSUInteger) indexPath.row]]]
+                                       where:[NSString stringWithFormat:@"name = '%@'", self.websiteModelArr[(NSUInteger) indexPath.row].name]]
                     &&
                     [sqlTool deleteDataFromTable:@"category"
                                            where:[NSString stringWithFormat:@"website_id = %ld", indexPath.row + 1]]

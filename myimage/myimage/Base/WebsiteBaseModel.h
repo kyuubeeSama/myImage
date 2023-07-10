@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,copy) NSArray *categoryIdsArr;
 @property(nonatomic,copy) NSString *urlStr;
 @property(nonatomic,assign) WebsiteType type;
+@property(nonatomic,copy) NSString *name;
 
 @end
 

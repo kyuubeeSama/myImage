@@ -15,6 +15,7 @@
 {
     self = [super init];
     if (self) {
+        self.name = @"24fa";
         self.CategoryTitleArr = @[@"美女", @"欧美"];
         self.categoryIdsArr = @[@"49", @"71"];
     }
@@ -50,8 +51,6 @@
         detail = [Tool replaceDomain:self.urlStr urlStr:detail];
         // 存数据库
         SqliteTool *sqlTool = [SqliteTool sharedInstance];
-        // 当前流程是，先查询是否存在，存在去判断是否需要更新分类，如果不存在，就存储，存储完后返回
-        // 推荐修改流程：使用replace，如果存在就更新，如果不存在就插入，缺点是遇到24fa这种不带封面的，需要每次都去详情获取封面
         ArticleModel *result = (ArticleModel *) [sqlTool findDataFromTable:@"article"
                                                                      where:[NSString stringWithFormat:@"website_id = %ld and detail_url = '%@'", (long)self.type, detail]
                                                                      field:@"*"

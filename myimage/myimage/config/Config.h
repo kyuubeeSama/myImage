@@ -8,6 +8,8 @@
 @interface Config : NSObject
 // 网站类别
 typedef enum : NSUInteger {
+    WebsiteTypeAmetart = 1,
+    WebsiteTypeSexyAsianGirl = 2,
     WebsiteType24Fa = 3,
     WebsiteTypeSxChinese = 5,
     websiteTypePiaoLiang = 6

@@ -48,6 +48,8 @@
 		A982CCBD2A57B6BE001887A6 /* TwoFourFaModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A982CCBC2A57B6BE001887A6 /* TwoFourFaModel.m */; };
 		A982CCC02A57BCBD001887A6 /* SxChineseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A982CCBF2A57BCBD001887A6 /* SxChineseModel.m */; };
 		A982CCC32A57BE3B001887A6 /* PiaoLiangModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A982CCC22A57BE3B001887A6 /* PiaoLiangModel.m */; };
+		A982CCCC2A5B9F25001887A6 /* AmetartModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A982CCCB2A5B9F25001887A6 /* AmetartModel.m */; };
+		A982CCCF2A5BA7CE001887A6 /* SexyAsianModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A982CCCE2A5BA7CE001887A6 /* SexyAsianModel.m */; };
 		A98546422296895500BAEFB1 /* HZWaitingView.m in Sources */ = {isa = PBXBuildFile; fileRef = A985463A2296895500BAEFB1 /* HZWaitingView.m */; };
 		A98546432296895500BAEFB1 /* HZPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = A985463C2296895500BAEFB1 /* HZPhotoBrowser.m */; };
 		A98546442296895500BAEFB1 /* HZPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A985463F2296895500BAEFB1 /* HZPhotoBrowser.bundle */; };
@@ -149,6 +151,10 @@
 		A982CCBF2A57BCBD001887A6 /* SxChineseModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SxChineseModel.m; sourceTree = "<group>"; };
 		A982CCC12A57BE3B001887A6 /* PiaoLiangModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PiaoLiangModel.h; sourceTree = "<group>"; };
 		A982CCC22A57BE3B001887A6 /* PiaoLiangModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PiaoLiangModel.m; sourceTree = "<group>"; };
+		A982CCCA2A5B9F25001887A6 /* AmetartModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmetartModel.h; sourceTree = "<group>"; };
+		A982CCCB2A5B9F25001887A6 /* AmetartModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AmetartModel.m; sourceTree = "<group>"; };
+		A982CCCD2A5BA7CE001887A6 /* SexyAsianModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SexyAsianModel.h; sourceTree = "<group>"; };
+		A982CCCE2A5BA7CE001887A6 /* SexyAsianModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SexyAsianModel.m; sourceTree = "<group>"; };
 		A985463A2296895500BAEFB1 /* HZWaitingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HZWaitingView.m; sourceTree = "<group>"; };
 		A985463B2296895500BAEFB1 /* HZPhotoBrowserConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HZPhotoBrowserConfig.h; sourceTree = "<group>"; };
 		A985463C2296895500BAEFB1 /* HZPhotoBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HZPhotoBrowser.m; sourceTree = "<group>"; };
@@ -355,6 +361,10 @@
 				A982CCBF2A57BCBD001887A6 /* SxChineseModel.m */,
 				A982CCC12A57BE3B001887A6 /* PiaoLiangModel.h */,
 				A982CCC22A57BE3B001887A6 /* PiaoLiangModel.m */,
+				A982CCCA2A5B9F25001887A6 /* AmetartModel.h */,
+				A982CCCB2A5B9F25001887A6 /* AmetartModel.m */,
+				A982CCCD2A5BA7CE001887A6 /* SexyAsianModel.h */,
+				A982CCCE2A5BA7CE001887A6 /* SexyAsianModel.m */,
 			);
 			path = Website;
 			sourceTree = "<group>";
@@ -614,6 +624,7 @@
 				A9146E2F23C30E8D00E94193 /* WebsiteViewController.m in Sources */,
 				A9452AEE25072428003D9CC9 /* SearchResultViewController.m in Sources */,
 				A982CCBD2A57B6BE001887A6 /* TwoFourFaModel.m in Sources */,
+				A982CCCF2A5BA7CE001887A6 /* SexyAsianModel.m in Sources */,
 				A938826421C1FBFF0085958B /* BaseViewController.m in Sources */,
 				A9C202E021D49B79006572DD /* UserViewController.m in Sources */,
 				A904AC5B23BF21A500E3281E /* ArticleCollectModel.m in Sources */,
@@ -644,6 +655,7 @@
 				144DF4C740C0A3350F1D2BFD /* WebsiteModel.m in Sources */,
 				A982CCBA2A57B5F9001887A6 /* WebsiteBaseModel.m in Sources */,
 				144DF4CB25D2BF02A003CC55 /* CategoryModel.m in Sources */,
+				A982CCCC2A5B9F25001887A6 /* AmetartModel.m in Sources */,
 				A982CCC32A57BE3B001887A6 /* PiaoLiangModel.m in Sources */,
 				144DF778A22CB02F93D70BF5 /* ArticleModel.m in Sources */,
 				A91ADD4025761B49004CAD69 /* NSDate+Category.m in Sources */,

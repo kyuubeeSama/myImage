@@ -37,5 +37,8 @@
 
 #import "TwoFourFaModel.h"
 #import "SxChineseModel.h"
+#import "PiaoLiangModel.h"
+#import "AmetartModel.h"
+#import "SexyAsianModel.h"
 
 #endif /* Header_h */
