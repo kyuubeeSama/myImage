@@ -49,6 +49,18 @@
         model.type = websiteModel.value;
         NSMutableArray *listArr = [model getDataWithPageNum:PageNum category:category];
         success(listArr);
+    }else if(websiteModel.value == WebsiteTypeElitebabes){
+        ElitebabesModel *model = [[ElitebabesModel alloc]init];
+        model.urlStr = websiteModel.url;
+        model.type = websiteModel.value;
+        NSMutableArray *listArr = [model getDataWithPageNum:PageNum category:category];
+        success(listArr);
+    }else if(websiteModel.value == websiteTypeOmegaProject){
+        OmegaProjectModel *model = [[OmegaProjectModel alloc]init];
+        model.urlStr = websiteModel.url;
+        model.type = websiteModel.value;
+        NSMutableArray *listArr = [model getDataWithPageNum:PageNum category:category];
+        success(listArr);
     }
 }
 /// MARK: 获取写真详情图片列表
@@ -84,6 +96,18 @@
         success(listArr);
     }else if (websiteModel.value == WebsiteTypeSexyAsianGirl) {
         SexyAsianModel *model = [[SexyAsianModel alloc]init];
+        model.urlStr = websiteModel.url;
+        model.type = websiteModel.value;
+        NSMutableArray *listArr = [model getImageDetailWithDetailUrl:detailUrl];
+        success(listArr);
+    }else if (websiteModel.value == WebsiteTypeElitebabes) {
+        ElitebabesModel *model = [[ElitebabesModel alloc]init];
+        model.urlStr = websiteModel.url;
+        model.type = websiteModel.value;
+        NSMutableArray *listArr = [model getImageDetailWithDetailUrl:detailUrl];
+        success(listArr);
+    }else if (websiteModel.value == websiteTypeOmegaProject) {
+        OmegaProjectModel *model = [[OmegaProjectModel alloc]init];
         model.urlStr = websiteModel.url;
         model.type = websiteModel.value;
         NSMutableArray *listArr = [model getImageDetailWithDetailUrl:detailUrl];

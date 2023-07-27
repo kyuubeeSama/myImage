@@ -40,5 +40,7 @@
 #import "PiaoLiangModel.h"
 #import "AmetartModel.h"
 #import "SexyAsianModel.h"
+#import "ElitebabesModel.h"
+#import "OmegaProjectModel.h"
 
 #endif /* Header_h */

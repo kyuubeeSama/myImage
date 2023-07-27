@@ -3,29 +3,39 @@
 <plist version="1.0">
 <array>
 	<array>
-		<string>&apos;ametart&apos;</string>
-		<string>&apos;https://www.ametart.com&apos;</string>
+		<string>'ametart'</string>
+		<string>'https://www.ametart.com'</string>
 		<string>1</string>
 	</array>
 	<array>
-		<string>&apos;sexyAsianGirl&apos;</string>
-		<string>&apos;https://www.sexyasiangirl.xyz&apos;</string>
+		<string>'sexyAsianGirl'</string>
+		<string>'https://www.sexyasiangirl.xyz'</string>
 		<string>2</string>
 	</array>
 	<array>
-		<string>&apos;24fa&apos;</string>
-		<string>&apos;https://www.177w.cc&apos;</string>
+		<string>'24fa'</string>
+		<string>'https://www.177w.cc'</string>
 		<string>3</string>
 	</array>
 	<array>
-		<string>&apos;sxchinesegirlz&apos;</string>
-		<string>&apos;https://sxchinesegirlz.one&apos;</string>
+		<string>'elitebabes'</string>
+		<string>'https://www.elitebabes.com'</string>
+		<string>4</string>
+	</array>
+	<array>
+		<string>'sxchinesegirlz'</string>
+		<string>'https://sxchinesegirlz.one'</string>
 		<string>5</string>
 	</array>
 	<array>
-		<string>&apos;漂亮网红图&apos;</string>
-		<string>&apos;http://www.plwht.com&apos;</string>
+		<string>'漂亮网红图'</string>
+		<string>'http://www.plwht.com'</string>
 		<string>6</string>
+	</array>
+	<array>
+		<string>'omegaproject'</string>
+		<string>'https://www.theomegaproject.org/galleries'</string>
+		<string>7</string>
 	</array>
 </array>
 </plist>

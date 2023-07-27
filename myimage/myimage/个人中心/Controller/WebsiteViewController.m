@@ -13,7 +13,7 @@
 @interface WebsiteViewController () <UITableViewDataSource, UITableViewDelegate>
 @property(nonatomic, strong) UITableView *mainTable;
 @property(nonatomic, strong) NSMutableArray *websiteArr;
-@property(nonatomic,copy) NSArray<WebsiteBaseModel *> *websiteModelArr;
+@property(nonatomic, copy) NSArray<WebsiteBaseModel *> *websiteModelArr;
 
 @end
 @implementation WebsiteViewController
@@ -22,11 +22,13 @@
     // Do any additional setup after loading the view.
     self.websiteArr = [[NSMutableArray alloc] init];
     self.websiteModelArr = @[
-        [[AmetartModel alloc]init],
-        [[SexyAsianModel alloc]init],
-        [[TwoFourFaModel alloc]init],
-        [[SxChineseModel alloc]init],
-        [[PiaoLiangModel alloc]init]
+            [[AmetartModel alloc] init],
+            [[SexyAsianModel alloc] init],
+            [[TwoFourFaModel alloc] init],
+            [[ElitebabesModel alloc] init],
+            [[SxChineseModel alloc] init],
+            [[PiaoLiangModel alloc] init],
+            [[OmegaProjectModel alloc] init]
     ];
     [self setNav];
     [self getData];
@@ -42,7 +44,6 @@
     }
     [self.mainTable reloadData];
 }
-
 - (UITableView *)mainTable {
     if (!_mainTable) {
         _mainTable = [[UITableView alloc] initWithFrame:CGRectMake(0, 45, screenW, screenH - (TOP_HEIGHT) - 45) style:UITableViewStylePlain];

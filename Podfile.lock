@@ -15,29 +15,39 @@ PODS:
   - AFNetworking/UIKit (4.0.1):
     - AFNetworking/NSURLSession
   - CWLateralSlide (1.6.5)
-  - FLAnimatedImage (1.0.16)
+  - FLAnimatedImage (1.0.17)
   - FluentDarkModeKit (1.0.4)
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
-  - GKPhotoBrowser (2.3.7):
-    - GKPhotoBrowser/SD (= 2.3.7)
-  - GKPhotoBrowser/Core (2.3.7)
-  - GKPhotoBrowser/SD (2.3.7):
+  - GKPhotoBrowser (2.6.0):
+    - GKPhotoBrowser/Default (= 2.6.0)
+  - GKPhotoBrowser/AVPlayer (2.6.0):
+    - GKPhotoBrowser/Core
+    - GKSliderView
+  - GKPhotoBrowser/Core (2.6.0)
+  - GKPhotoBrowser/Default (2.6.0):
+    - GKPhotoBrowser/AVPlayer
+    - GKPhotoBrowser/Progress
+    - GKPhotoBrowser/SD
+  - GKPhotoBrowser/Progress (2.6.0):
+    - GKPhotoBrowser/Core
+    - GKSliderView
+  - GKPhotoBrowser/SD (2.6.0):
     - GKPhotoBrowser/Core
     - SDWebImage (~> 5.0)
+  - GKSliderView (1.1.0)
   - hpple (0.2.0)
-  - JXCategoryView (1.5.9)
+  - JXCategoryView (1.6.1)
   - LYEmptyView (1.3.1)
   - Masonry (1.1.0)
   - MBProgressHUD (1.2.0)
   - MJExtension (3.4.1)
   - MJRefresh (3.7.5)
   - ReactiveObjC (3.1.1)
-  - SDWebImage (5.12.5):
-    - SDWebImage/Core (= 5.12.5)
-  - SDWebImage/Core (5.12.5)
-  - Shimmer (1.0.2)
+  - SDWebImage (5.16.0):
+    - SDWebImage/Core (= 5.16.0)
+  - SDWebImage/Core (5.16.0)
 
 DEPENDENCIES:
   - AFNetworking
@@ -55,7 +65,6 @@ DEPENDENCIES:
   - MJRefresh
   - ReactiveObjC
   - SDWebImage
-  - Shimmer
 
 SPEC REPOS:
   https://gitee.com/mirrors/CocoaPods-Specs.git:
@@ -65,6 +74,7 @@ SPEC REPOS:
     - FluentDarkModeKit
     - FMDB
     - GKPhotoBrowser
+    - GKSliderView
     - hpple
     - JXCategoryView
     - LYEmptyView
@@ -74,26 +84,25 @@ SPEC REPOS:
     - MJRefresh
     - ReactiveObjC
     - SDWebImage
-    - Shimmer
 
 SPEC CHECKSUMS:
-  AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
+  AFNetworking: 3bd23d814e976cd148d7d44c3ab78017b744cd58
   CWLateralSlide: 8939c8dea91a24e40d0793553118cb57cd67f64b
-  FLAnimatedImage: 8f3e854ebf9680b71f0b6e700939687fc4d82b4b
+  FLAnimatedImage: bbf914596368867157cc71b38a8ec834b3eeb32b
   FluentDarkModeKit: b6317653a00329564582884772ec57c4eaad1a1f
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  GKPhotoBrowser: 518e66eda2f421f8c255c1312e0a29b79876be70
+  GKPhotoBrowser: af17e9f772335be7c3827d41f429ef31115c7920
+  GKSliderView: b5fc3b68bbfdb05ee403303377921d6564de61a9
   hpple: 3b765f96fc2cd56ad1a49aef6f7be5cb2aa64b57
-  JXCategoryView: 2ef9ecfd3735158d009ce02d1f29811aa822da65
+  JXCategoryView: 7b1ee69ede4843c581688afe84d0f047723262f2
   LYEmptyView: b6d418cfa38b78df0cf243f9a9c25ccbdc399922
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
   MJExtension: 21c5f6f8c4d5d8844b7ae8fbae08fed0b501f961
   MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
   ReactiveObjC: 011caa393aa0383245f2dcf9bf02e86b80b36040
-  SDWebImage: 0905f1b7760fc8ac4198cae0036600d67478751e
-  Shimmer: c5374be1c2b0c9e292fb05b339a513cf291cac86
+  SDWebImage: 2aea163b50bfcb569a2726b6a754c54a4506fcf6
 
-PODFILE CHECKSUM: 0bd2e51fac824a12e8d1f6f3c4dd1629fdee8f15
+PODFILE CHECKSUM: 38a44d193f16bcd5ef27a29390a93cb2f398df77
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.12.1
