@@ -13,8 +13,9 @@ typedef enum : NSUInteger {
     WebsiteType24Fa = 3,
     WebsiteTypeElitebabes = 4,
     WebsiteTypeSxChinese = 5,
-    websiteTypePiaoLiang = 6,
-    websiteTypeOmegaProject = 7
+    WebsiteTypePiaoLiang = 6,
+    WebsiteTypeOmegaProject = 7,
+    WebsiteTypeGyrls = 8
 } WebsiteType;
 
 @end

@@ -31,7 +31,7 @@
         model.type = websiteModel.value;
         NSMutableArray *listArr = [model getDataWithPageNum:PageNum category:category];
         success(listArr);
-    }else if(websiteModel.value == websiteTypePiaoLiang){
+    }else if(websiteModel.value == WebsiteTypePiaoLiang){
         PiaoLiangModel *model = [[PiaoLiangModel alloc]init];
         model.urlStr = websiteModel.url;
         model.type = websiteModel.value;
@@ -55,8 +55,14 @@
         model.type = websiteModel.value;
         NSMutableArray *listArr = [model getDataWithPageNum:PageNum category:category];
         success(listArr);
-    }else if(websiteModel.value == websiteTypeOmegaProject){
+    }else if(websiteModel.value == WebsiteTypeOmegaProject){
         OmegaProjectModel *model = [[OmegaProjectModel alloc]init];
+        model.urlStr = websiteModel.url;
+        model.type = websiteModel.value;
+        NSMutableArray *listArr = [model getDataWithPageNum:PageNum category:category];
+        success(listArr);
+    }else if(websiteModel.value == WebsiteTypeGyrls){
+        GyrlsModel *model = [[GyrlsModel alloc]init];
         model.urlStr = websiteModel.url;
         model.type = websiteModel.value;
         NSMutableArray *listArr = [model getDataWithPageNum:PageNum category:category];
@@ -82,7 +88,7 @@
         model.type = websiteModel.value;
         NSMutableArray *listArr = [model getImageDetailWithDetailUrl:detailUrl];
         success(listArr);
-    }else if (websiteModel.value == websiteTypePiaoLiang) {
+    }else if (websiteModel.value == WebsiteTypePiaoLiang) {
         PiaoLiangModel *model = [[PiaoLiangModel alloc]init];
         model.urlStr = websiteModel.url;
         model.type = websiteModel.value;
@@ -106,8 +112,14 @@
         model.type = websiteModel.value;
         NSMutableArray *listArr = [model getImageDetailWithDetailUrl:detailUrl];
         success(listArr);
-    }else if (websiteModel.value == websiteTypeOmegaProject) {
+    }else if (websiteModel.value == WebsiteTypeOmegaProject) {
         OmegaProjectModel *model = [[OmegaProjectModel alloc]init];
+        model.urlStr = websiteModel.url;
+        model.type = websiteModel.value;
+        NSMutableArray *listArr = [model getImageDetailWithDetailUrl:detailUrl];
+        success(listArr);
+    }else if (websiteModel.value == WebsiteTypeGyrls) {
+        GyrlsModel *model = [[GyrlsModel alloc]init];
         model.urlStr = websiteModel.url;
         model.type = websiteModel.value;
         NSMutableArray *listArr = [model getImageDetailWithDetailUrl:detailUrl];
@@ -134,7 +146,7 @@
         model.type = websiteModel.value;
         NSMutableArray *listArr = [model getSearchResultWithPageNum:pageNum keyword:keyword];
         success(listArr);
-    }else if (websiteModel.value == websiteTypePiaoLiang) {
+    }else if (websiteModel.value == WebsiteTypePiaoLiang) {
         PiaoLiangModel *model = [[PiaoLiangModel alloc]init];
         model.urlStr = websiteModel.url;
         model.type = websiteModel.value;
@@ -142,6 +154,12 @@
         success(listArr);
     }else if (websiteModel.value == WebsiteTypeAmetart) {
         AmetartModel *model = [[AmetartModel alloc]init];
+        model.urlStr = websiteModel.url;
+        model.type = websiteModel.value;
+        NSMutableArray *listArr = [model getSearchResultWithPageNum:pageNum keyword:keyword];
+        success(listArr);
+    }else if (websiteModel.value == WebsiteTypeGyrls) {
+        GyrlsModel *model = [[GyrlsModel alloc]init];
         model.urlStr = websiteModel.url;
         model.type = websiteModel.value;
         NSMutableArray *listArr = [model getSearchResultWithPageNum:pageNum keyword:keyword];

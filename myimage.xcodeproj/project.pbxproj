@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -60,6 +60,7 @@
 		A98A2EBD259ACB350074755C /* UIButton+SSEdgeInsets.m in Sources */ = {isa = PBXBuildFile; fileRef = A98A2EBC259ACB350074755C /* UIButton+SSEdgeInsets.m */; };
 		A997BD3825E2526200BE52AC /* ImgCategoryListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A997BD3725E2526200BE52AC /* ImgCategoryListViewController.m */; };
 		A9C202E021D49B79006572DD /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C202DF21D49B79006572DD /* UserViewController.m */; };
+		A9CCC34A2AB04A86005E1456 /* GyrlsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CCC3492AB04A86005E1456 /* GyrlsModel.m */; };
 		A9CDD3062473E8180045C370 /* NSObject+Tool.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CDD3052473E8180045C370 /* NSObject+Tool.m */; };
 		A9F4ABA521C23EB100FE84E9 /* ImgListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F4ABA421C23EB100FE84E9 /* ImgListViewController.m */; };
 		A9F4ABA821C23EBC00FE84E9 /* ImgDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F4ABA721C23EBC00FE84E9 /* ImgDetailViewController.m */; };
@@ -178,6 +179,8 @@
 		A997BD3725E2526200BE52AC /* ImgCategoryListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImgCategoryListViewController.m; sourceTree = "<group>"; };
 		A9C202DE21D49B79006572DD /* UserViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserViewController.h; sourceTree = "<group>"; };
 		A9C202DF21D49B79006572DD /* UserViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserViewController.m; sourceTree = "<group>"; };
+		A9CCC3482AB04A86005E1456 /* GyrlsModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GyrlsModel.h; sourceTree = "<group>"; };
+		A9CCC3492AB04A86005E1456 /* GyrlsModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GyrlsModel.m; sourceTree = "<group>"; };
 		A9CDD3012473D2C80045C370 /* myimage-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "myimage-Bridging-Header.h"; sourceTree = "<group>"; };
 		A9CDD3042473E8180045C370 /* NSObject+Tool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+Tool.h"; sourceTree = "<group>"; };
 		A9CDD3052473E8180045C370 /* NSObject+Tool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Tool.m"; sourceTree = "<group>"; };
@@ -375,6 +378,8 @@
 				A923640C2A71F54C00728129 /* ElitebabesModel.m */,
 				144DF2F68C30DF892ED871F8 /* OmegaProjectModel.m */,
 				144DF5E8C17DF455EC42C442 /* OmegaProjectModel.h */,
+				A9CCC3482AB04A86005E1456 /* GyrlsModel.h */,
+				A9CCC3492AB04A86005E1456 /* GyrlsModel.m */,
 			);
 			path = Website;
 			sourceTree = "<group>";
@@ -641,6 +646,7 @@
 				A904AC5B23BF21A500E3281E /* ArticleCollectModel.m in Sources */,
 				A938825421C1F8EA0085958B /* main.m in Sources */,
 				6992404527D8E0110094BF43 /* CycleProgressView.m in Sources */,
+				A9CCC34A2AB04A86005E1456 /* GyrlsModel.m in Sources */,
 				A91E39002229245700A11EC6 /* Tool.m in Sources */,
 				A904AC5623BF0C8900E3281E /* ImgCollectionViewCell.m in Sources */,
 				A94296DB23BAE625003391B5 /* DataManager.m in Sources */,

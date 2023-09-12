@@ -28,7 +28,8 @@
             [[ElitebabesModel alloc] init],
             [[SxChineseModel alloc] init],
             [[PiaoLiangModel alloc] init],
-            [[OmegaProjectModel alloc] init]
+            [[OmegaProjectModel alloc] init],
+            [[GyrlsModel alloc] init]
     ];
     [self setNav];
     [self getData];
