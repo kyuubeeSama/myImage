@@ -131,36 +131,57 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     QYFileModel *model = self.listArr[(NSUInteger) indexPath.row];
-    /*
-    NSMutableArray *photoArr = [[NSMutableArray alloc]init];
     GKPhoto *photo = [[GKPhoto alloc]init];
     photo.url = [NSURL fileURLWithPath:model.filePath];
-    [photoArr addObject:photo];
-    GKPhotoBrowser *browser = [GKPhotoBrowser photoBrowserWithPhotos:photoArr currentIndex:0];
+    GKPhotoBrowser *browser = [GKPhotoBrowser photoBrowserWithPhotos:@[photo] currentIndex:0];
     browser.showStyle = GKPhotoBrowserShowStyleZoom;
     [browser showFromVC:self];
-    */
-    HZPhotoBrowser *browser = [[HZPhotoBrowser alloc] init];
-    browser.isFullWidthForLandScape = YES;
-    browser.isNeedLandscape = YES;
-    browser.currentImageIndex = 0;
-    browser.imageType = 1;
-    browser.btnArr = @[@"删除"];
-    browser.imageArray = @[model.filePath];
-    [browser show];
-    WeakSelf(browser)
-    browser.otherBtnBlock = ^(NSInteger index) {
-        if (index == 0) {
-            // 删除本地图片
-            if ([FileTool deleteLocalFileWithPath:model.filePath]) {
-                [weakbrowser showTip:@"删除文件成功"];
-                [weakbrowser hidePhotoBrowser];
-                [self getData];
-            }else{
-                [weakbrowser showTip:@"删除失败"];
-            }
+    
+    UIStackView *stackView = [[UIStackView alloc]init];
+    stackView.spacing = 20;
+    stackView.axis = UILayoutConstraintAxisHorizontal;
+    [browser.contentView addSubview:stackView];
+    [stackView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(@20);
+        make.bottom.equalTo(browser.contentView.mas_safeAreaLayoutGuideBottom).offset(-40);
+    }];
+    
+    UIButton *saveBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [stackView addArrangedSubview:saveBtn];
+    [saveBtn setTitle:@"保存" forState:UIControlStateNormal];
+    [saveBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    saveBtn.bounds = CGRectMake(0, 0, 60, 30);
+    [[saveBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(__kindof UIControl * _Nullable x) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSData *data = [NSData dataWithContentsOfURL:[NSURL fileURLWithPath:model.filePath]];
+            [FileTool saveImgWithImageData:data result:^(BOOL success, NSError * _Nonnull error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (error){
+                        [self alertWithTitle:@"相册保存失败"];
+                    }else{
+                        [self alertWithTitle:@"相册保存成功"];
+                    }
+                });
+            }];
+        });
+    }];
+    
+    
+    UIButton *deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [stackView addArrangedSubview:deleteBtn];
+    [deleteBtn setTitle:@"删除" forState:UIControlStateNormal];
+    [deleteBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    deleteBtn.bounds = CGRectMake(0, 0, 60, 30);
+    [[deleteBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(__kindof UIControl * _Nullable x) {
+        // 删除本地图片
+        if ([FileTool deleteLocalFileWithPath:model.filePath]) {
+            [self alertWithTitle:@"删除文件成功"];
+            [browser dismiss];
+            [self getData];
+        }else{
+            [self alertWithTitle:@"删除失败"];
         }
-    };
+    }];
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {

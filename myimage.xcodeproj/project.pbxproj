@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -52,10 +52,6 @@
 		A982CCC32A57BE3B001887A6 /* PiaoLiangModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A982CCC22A57BE3B001887A6 /* PiaoLiangModel.m */; };
 		A982CCCC2A5B9F25001887A6 /* AmetartModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A982CCCB2A5B9F25001887A6 /* AmetartModel.m */; };
 		A982CCCF2A5BA7CE001887A6 /* SexyAsianModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A982CCCE2A5BA7CE001887A6 /* SexyAsianModel.m */; };
-		A98546422296895500BAEFB1 /* HZWaitingView.m in Sources */ = {isa = PBXBuildFile; fileRef = A985463A2296895500BAEFB1 /* HZWaitingView.m */; };
-		A98546432296895500BAEFB1 /* HZPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = A985463C2296895500BAEFB1 /* HZPhotoBrowser.m */; };
-		A98546442296895500BAEFB1 /* HZPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A985463F2296895500BAEFB1 /* HZPhotoBrowser.bundle */; };
-		A98546452296895500BAEFB1 /* HZPhotoBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = A98546402296895500BAEFB1 /* HZPhotoBrowserView.m */; };
 		A98A2EB9259AC93D0074755C /* EditBottomView.m in Sources */ = {isa = PBXBuildFile; fileRef = A98A2EB8259AC93D0074755C /* EditBottomView.m */; };
 		A98A2EBD259ACB350074755C /* UIButton+SSEdgeInsets.m in Sources */ = {isa = PBXBuildFile; fileRef = A98A2EBC259ACB350074755C /* UIButton+SSEdgeInsets.m */; };
 		A997BD3825E2526200BE52AC /* ImgCategoryListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A997BD3725E2526200BE52AC /* ImgCategoryListViewController.m */; };
@@ -162,14 +158,6 @@
 		A982CCCB2A5B9F25001887A6 /* AmetartModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AmetartModel.m; sourceTree = "<group>"; };
 		A982CCCD2A5BA7CE001887A6 /* SexyAsianModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SexyAsianModel.h; sourceTree = "<group>"; };
 		A982CCCE2A5BA7CE001887A6 /* SexyAsianModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SexyAsianModel.m; sourceTree = "<group>"; };
-		A985463A2296895500BAEFB1 /* HZWaitingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HZWaitingView.m; sourceTree = "<group>"; };
-		A985463B2296895500BAEFB1 /* HZPhotoBrowserConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HZPhotoBrowserConfig.h; sourceTree = "<group>"; };
-		A985463C2296895500BAEFB1 /* HZPhotoBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HZPhotoBrowser.m; sourceTree = "<group>"; };
-		A985463D2296895500BAEFB1 /* HZPhotoBrowserView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HZPhotoBrowserView.h; sourceTree = "<group>"; };
-		A985463E2296895500BAEFB1 /* HZWaitingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HZWaitingView.h; sourceTree = "<group>"; };
-		A985463F2296895500BAEFB1 /* HZPhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HZPhotoBrowser.bundle; sourceTree = "<group>"; };
-		A98546402296895500BAEFB1 /* HZPhotoBrowserView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HZPhotoBrowserView.m; sourceTree = "<group>"; };
-		A98546412296895500BAEFB1 /* HZPhotoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HZPhotoBrowser.h; sourceTree = "<group>"; };
 		A98A2EB7259AC93D0074755C /* EditBottomView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EditBottomView.h; sourceTree = "<group>"; };
 		A98A2EB8259AC93D0074755C /* EditBottomView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EditBottomView.m; sourceTree = "<group>"; };
 		A98A2EBB259ACB350074755C /* UIButton+SSEdgeInsets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+SSEdgeInsets.h"; sourceTree = "<group>"; };
@@ -331,7 +319,6 @@
 		A938826121C1FBB00085958B /* Tools */ = {
 			isa = PBXGroup;
 			children = (
-				A98546392296895500BAEFB1 /* ptotoBrowser */,
 				A9F63F1A21C22F4100F29893 /* SqliteTool.h */,
 				A9F63F1B21C22F4100F29893 /* SqliteTool.m */,
 				144DFB19A6686DE9CF1F21AB /* FileTool.h */,
@@ -382,21 +369,6 @@
 				A9CCC3492AB04A86005E1456 /* GyrlsModel.m */,
 			);
 			path = Website;
-			sourceTree = "<group>";
-		};
-		A98546392296895500BAEFB1 /* ptotoBrowser */ = {
-			isa = PBXGroup;
-			children = (
-				A985463F2296895500BAEFB1 /* HZPhotoBrowser.bundle */,
-				A98546412296895500BAEFB1 /* HZPhotoBrowser.h */,
-				A985463C2296895500BAEFB1 /* HZPhotoBrowser.m */,
-				A985463B2296895500BAEFB1 /* HZPhotoBrowserConfig.h */,
-				A985463D2296895500BAEFB1 /* HZPhotoBrowserView.h */,
-				A98546402296895500BAEFB1 /* HZPhotoBrowserView.m */,
-				A985463E2296895500BAEFB1 /* HZWaitingView.h */,
-				A985463A2296895500BAEFB1 /* HZWaitingView.m */,
-			);
-			path = ptotoBrowser;
 			sourceTree = "<group>";
 		};
 		A9C202D521D49B2A006572DD /* 个人中心 */ = {
@@ -572,7 +544,6 @@
 				A93F765E2462A0E1005E9E51 /* WebSiteTableViewCell.xib in Resources */,
 				A904AC5723BF0C8900E3281E /* ImgCollectionViewCell.xib in Resources */,
 				A961719A262EB0D700CDB64D /* website.plist in Resources */,
-				A98546442296895500BAEFB1 /* HZPhotoBrowser.bundle in Resources */,
 				A938825121C1F8EA0085958B /* LaunchScreen.storyboard in Resources */,
 				A938824E21C1F8EA0085958B /* Assets.xcassets in Resources */,
 				A938824C21C1F8E90085958B /* Main.storyboard in Resources */,
@@ -634,7 +605,6 @@
 				A9F63F1C21C22F4100F29893 /* SqliteTool.m in Sources */,
 				A9F4ABA821C23EBC00FE84E9 /* ImgDetailViewController.m in Sources */,
 				A9CDD3062473E8180045C370 /* NSObject+Tool.m in Sources */,
-				A98546422296895500BAEFB1 /* HZWaitingView.m in Sources */,
 				A904AC5223BF094C00E3281E /* CollectViewController.m in Sources */,
 				A923640D2A71F54C00728129 /* ElitebabesModel.m in Sources */,
 				A9146E2F23C30E8D00E94193 /* WebsiteViewController.m in Sources */,
@@ -657,8 +627,6 @@
 				A9F4ABC421C3AE0D00FE84E9 /* ImgDetailTableViewCell.m in Sources */,
 				A93F765D2462A0E1005E9E51 /* WebSiteTableViewCell.m in Sources */,
 				A938826821C1FD3C0085958B /* IndexViewController.m in Sources */,
-				A98546452296895500BAEFB1 /* HZPhotoBrowserView.m in Sources */,
-				A98546432296895500BAEFB1 /* HZPhotoBrowser.m in Sources */,
 				144DF611BA19CE2B9AB5C680 /* FileTool.m in Sources */,
 				A982CCC02A57BCBD001887A6 /* SxChineseModel.m in Sources */,
 				144DF4FC324FB18EA55C73FB /* UIColor+Extension.m in Sources */,

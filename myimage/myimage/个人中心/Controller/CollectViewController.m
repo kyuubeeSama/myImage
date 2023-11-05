@@ -156,11 +156,6 @@
     } else {
         ImgCollectModel *model = self.listArr[(NSUInteger) indexPath.row];
         if (model.width > 0 && model.height>0) {
-            HZPhotoBrowser *browser = [[HZPhotoBrowser alloc] init];
-            browser.isFullWidthForLandScape = YES;
-            browser.isNeedLandscape = YES;
-            browser.currentImageIndex = 0;
-            browser.btnArr = @[@"取消收藏"];
             NSString *img_url;
             if([model.image_url containsString:@"http"] || [model.image_url containsString:@"https"]){
                 img_url = model.image_url;
@@ -171,20 +166,55 @@
             if (model.website_id == 4) {
                 img_url = model.image_url;
             }
-            browser.imageArray = @[img_url];
-            [browser show];
-            WeakSelf(browser)
-            browser.otherBtnBlock = ^(NSInteger index) {
-                if (index == 0) {
-                    SqliteTool *sqlTool = [SqliteTool sharedInstance];
-                    if ([sqlTool deleteDataFromTable:@"collect" where:[NSString stringWithFormat:@"value = %d and type = 2", model.image_id]]) {
-                        [self.listArr removeObjectAtIndex:(NSUInteger) indexPath.row];
-                        [weakbrowser showTip:@"取消收藏成功"];
-                        [weakbrowser hidePhotoBrowser];
-                        [self.mainCollect reloadData];
-                    }
+            GKPhoto *photo = [[GKPhoto alloc]init];
+            photo.url = [NSURL URLWithString:img_url];
+            GKPhotoBrowser *browser = [GKPhotoBrowser photoBrowserWithPhotos:@[photo] currentIndex:0];
+            browser.showStyle = GKPhotoBrowserShowStyleZoom;
+            [browser showFromVC:self];
+            
+            UIStackView *stackView = [[UIStackView alloc]init];
+            stackView.spacing = 20;
+            stackView.axis = UILayoutConstraintAxisHorizontal;
+            [browser.contentView addSubview:stackView];
+            [stackView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.equalTo(@20);
+                make.bottom.equalTo(browser.contentView.mas_safeAreaLayoutGuideBottom).offset(-40);
+            }];
+            
+            UIButton *saveBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+            [stackView addArrangedSubview:saveBtn];
+            [saveBtn setTitle:@"保存" forState:UIControlStateNormal];
+            [saveBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            saveBtn.bounds = CGRectMake(0, 0, 60, 30);
+            [[saveBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(__kindof UIControl * _Nullable x) {
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:img_url]];
+                    [FileTool saveImgWithImageData:data result:^(BOOL success, NSError * _Nonnull error) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            if (error){
+                                [self alertWithTitle:@"相册保存失败"];
+                            }else{
+                                [self alertWithTitle:@"相册保存成功"];
+                            }
+                        });
+                    }];
+                });
+            }];
+            
+            UIButton *deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+            [stackView addArrangedSubview:deleteBtn];
+            [deleteBtn setTitle:@"取消收藏" forState:UIControlStateNormal];
+            [deleteBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            deleteBtn.bounds = CGRectMake(0, 0, 100, 30);
+            [[deleteBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(__kindof UIControl * _Nullable x) {
+                SqliteTool *sqlTool = [SqliteTool sharedInstance];
+                if ([sqlTool deleteDataFromTable:@"collect" where:[NSString stringWithFormat:@"value = %d and type = 2", model.image_id]]) {
+                    [self.listArr removeObjectAtIndex:(NSUInteger) indexPath.row];
+                    [self alertWithTitle:@"取消收藏成功"];
+                    [browser dismiss];
+                    [self.mainCollect reloadData];
                 }
-            };
+            }];
         }
     }
 }

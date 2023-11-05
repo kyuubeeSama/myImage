@@ -193,5 +193,44 @@
     NSFileManager *fileManager = [NSFileManager defaultManager];
     return [fileManager removeItemAtPath:path error:nil];
 }
++(void)saveImgWithImageData:(NSData *)data result:(void (^)(BOOL, NSError * _Nonnull))result {
+    // 1. 获取相片库对象
+    PHPhotoLibrary *library = [PHPhotoLibrary sharedPhotoLibrary];
+    // 2. 调用changeBlock
+    [library performChanges:^{
+        // 2.1 创建一个相册变动请求
+        PHAssetCollectionChangeRequest *collectionRequest;
+        // 2.2 取出指定名称的相册
+        PHAssetCollection *assetCollection = [[FileTool new] getCurrentPhotoCollectionWithTitle:@"pornhub"];
+        // 2.3 判断相册是否存在
+        if (assetCollection) { // 如果存在就使用当前的相册创建相册请求
+            collectionRequest = [PHAssetCollectionChangeRequest changeRequestForAssetCollection:assetCollection];
+        } else { // 如果不存在, 就创建一个新的相册请求
+            collectionRequest = [PHAssetCollectionChangeRequest creationRequestForAssetCollectionWithTitle:@"pornhub"];
+        }
+        
+        // 2.4 根据传入的相片, 创建相片变动请求
+        PHAssetChangeRequest *assetRequest = [PHAssetChangeRequest creationRequestForAssetFromImage:[UIImage imageWithData:data]];
+        // 2.4 创建一个占位对象
+        PHObjectPlaceholder *placeholder = [assetRequest placeholderForCreatedAsset];
+        // 2.5 将占位对象添加到相册请求中
+        [collectionRequest addAssets:@[placeholder]];
+    } completionHandler:^(BOOL success, NSError * _Nullable error) {
+        // 3. 判断是否出错, 如果报错, 声明保存不成功
+        result(success,error);
+    }];
+}
+
+- (PHAssetCollection *)getCurrentPhotoCollectionWithTitle:(NSString *)collectionName {
+    // 1. 创建搜索集合
+    PHFetchResult *result = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
+    // 2. 遍历搜索集合并取出对应的相册
+    for (PHAssetCollection *assetCollection in result) {
+        if ([assetCollection.localizedTitle containsString:collectionName]) {
+            return assetCollection;
+        }
+    }
+    return nil;
+}
 
 @end

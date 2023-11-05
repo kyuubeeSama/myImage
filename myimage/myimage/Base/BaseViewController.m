@@ -45,7 +45,7 @@
 }
 
 - (void)alertWithTitle:(NSString *)string {
-        UIWindow *windows = [UIApplication sharedApplication].windows[0];
+    UIWindow *windows = [UIApplication sharedApplication].windows[0];
     MBProgressHUD *alert = [MBProgressHUD showHUDAddedTo:windows animated:YES];
     alert.label.text = string;
     [alert hideAnimated:YES afterDelay:1];

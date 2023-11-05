@@ -42,6 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(NSMutableArray *)getLocalImage;
 // 删除本地文件
 +(BOOL)deleteLocalFileWithPath:(NSString *)path;
++(void)saveImgWithImageData:(NSData *)data result:(void(^)(BOOL success,NSError *error))result;
 @end
 
 NS_ASSUME_NONNULL_END
